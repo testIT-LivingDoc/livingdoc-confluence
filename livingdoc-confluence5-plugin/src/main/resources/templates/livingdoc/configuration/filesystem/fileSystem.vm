@@ -1,0 +1,23 @@
+#if(!$action.fileRepositories.isEmpty())
+	<table id="fileSystemEdit" class="aui">
+		<thead>
+			<tr>
+				<th id="th_project">$action.getText('livingdoc.filesystem.project')</th>
+				<th id="th_name">$action.getText('livingdoc.filesystem.name')</th>
+				<th id="th_path">$action.getText('livingdoc.filesystem.path')</th>
+			</tr>
+		</thead>
+		<tbody>
+			#foreach($repository in $action.fileRepositories)
+				#set($index = $velocityCount - 1)
+				<tr>
+					<td id="fileSystemEdit_project_$index" headers="th_project">$repository.project.name</td>
+					<td id="fileSystemEdit_name_$index" headers="th_name">$repository.name</td>
+					<td id="fileSystemEdit_url_$index" headers="th_path">$repository.baseTestUrl</td>
+				</tr>
+			#end
+		</tbody>
+	</table>
+#else
+	<p id="fileSystemEdit_none" class="sp_configNoOutput">$action.getText('livingdoc.filesystem.none')</p>
+#end

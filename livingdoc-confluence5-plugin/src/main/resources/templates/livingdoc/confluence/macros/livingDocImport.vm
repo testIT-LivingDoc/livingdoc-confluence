@@ -1,0 +1,10 @@
+<table style="display:none">
+	<tr>
+		<td>Import</td>
+	</tr>
+	#foreach($import in $imports)
+		<tr>
+			<td>$import</td>
+		</tr>
+	#end
+</table>

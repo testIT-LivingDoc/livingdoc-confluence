@@ -1,0 +1,58 @@
+/* PDL doc-theme.css */
+body.theme-documentation {
+    &.dashboard,
+    &.spaces,
+    &.people {
+        h1#title-heading.with-breadcrumbs img.logo {
+            margin-top: -10px;
+        }
+    }
+
+    &.view-blogposts-mode #content {
+        overflow: auto;
+    }
+
+    h1#title-heading.with-breadcrumbs img.logo,
+    .space-logo img.logo {
+        width: 48px;
+        height: 48px;
+    }
+    #space-list .space-logo img.logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    h1#title-heading.with-breadcrumbs {
+        .userLogoLink img.logo,
+        .space-logo img.logo {
+            margin-top: 0;
+        }
+    }
+    #header {
+        .aui-header {
+            float: none;
+        }
+        br.clear {
+            display: none;
+        }
+    }
+    #footer {
+        border-top: 1px solid #ccc;
+
+        .footer-body {
+            padding: 5px 10px;
+            background: none;
+            margin: 0;
+        }
+
+        #footer-logo {
+            display:none;
+        }
+    }
+    &.login #footer {
+        border-top: 0;
+        margin: 20px 0;
+        padding: 0 0 65px 0;
+    }
+}
+/* End PDL doc-theme.css */

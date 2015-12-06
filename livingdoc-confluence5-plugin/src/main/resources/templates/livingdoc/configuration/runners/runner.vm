@@ -1,0 +1,54 @@
+<form class="aui long-label sp_configItemView">
+	<div class="field-group">
+	    <label for="select-example" class="sp_configSubTitle">$action.getText('livingdoc.runners.runnerlist')</label>
+	    #if($action.runners.isEmpty())
+			<div class="sp_configNoOutput">$action.getText('livingdoc.runners.none')</div>
+		#else
+		    <select class="select" id="selectedRunner" onchange="ldProperties.getRunner('$action.spaceKey');" name="select-runner">
+		      	<option value="none" class="sp_configNoOption" #if(!$action.selectedRunnerName)selected#end>$action.getText('livingdoc.runners.selection')</option>
+				#foreach($runner in $action.runners)
+					<option value="$runner.name" #if($action.selectedRunnerName && $action.selectedRunnerName.equals($runner.name))selected#end>$runner.name</option>
+				#end
+	    	</select>
+	    #end	
+	    #if(!$action.editPropertiesMode && !$action.editClasspathsMode)
+		<span class="sp_configTxt" #if(!$action.selectedRunnerName)style="display:none"#end>
+			<button type="button" id="runners_edit" class="aui-button" onclick="ldProperties.editRunnerProperties('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.runners.edit')</button>
+			<button type="button" id="runners_remove" class="aui-button aui-button-link" onclick="ldProperties.removeRunner('$action.spaceKey');">$action.getText('livingdoc.runners.delete')</button>
+		</span>
+#end
+	</div>
+</form>
+	
+
+#if(!$action.selectedRunnerName && !($errors.isEmpty()) && !$errorDisplayed)
+	#set($errorDisplayed = true)
+	<div id="runnersPaneError_display" class="aui-message aui-message-error">
+		<p class="title">
+			<strong>Error!</strong>
+		</p>
+		#foreach($error in $action.errors.keySet())
+			<p class="ldErrMsg">$action.getText($action.errors.get($error))</p>
+		#end
+	</div>
+#end
+#if($action.selectedRunnerName)
+	<div class="sp_configItem">
+			#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+				#set($errorDisplayed = true)
+                <div id="runnersPaneError_display" class="aui-message aui-message-error sp_configError">
+                   <p class="title">
+                       <strong>Error!</strong>
+                   </p>
+                   <p class="ldErrMsg">$action.getText($error)</p>
+               </div>
+			#end
+			<div class="sp_configSubItemView">
+				#if(!$action.editPropertiesMode)
+					#parse('templates/livingdoc/configuration/runners/properties.vm')
+				#else
+					#parse('templates/livingdoc/configuration/runners/propertiesEdit.vm')					
+				#end				
+			</div>
+	</div>
+#end

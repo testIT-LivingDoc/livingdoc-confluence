@@ -1,0 +1,8 @@
+<html>
+	<head>
+		<meta name="decorator" content="none">
+	</head>
+	<body>
+		#parse('templates/livingdoc/confluence/execution/children-execution.vm')
+	</body>
+</html>

@@ -1,0 +1,10 @@
+<div id="conf_group_$bulkUID" width="100%" style="display:inline;">
+	<span id="conf_exeButton_$bulkUID" class="conf_button"><button type="button" class="aui-button aui-button-primary" onclick="conf_livingDoc.runBulk('$bulkUID');">$action.getText('livingdoc.execution.execute')</button></span><span id="conf_exeButton_shadow_$bulkUID" style="display:none"><button type="button" class="aui-button aui-button-primary" aria-disabled="true" disabled>$action.getText('livingdoc.execution.executing')</button></span>
+	<span id="conf_executionTitle_$bulkUID" class="conf_executionTitle">
+		#if($title)$title
+		#else$livingDoc.getText('livingdoc.group.group')&nbsp;$bulkUID
+		#end
+	</span>
+	<span id="conf_waiting_display_$bulkUID" style="display:; padding: 0px 15px; vertical-align:bottom;"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/wait.gif" alt="" border="0"></span>
+	<script language="JavaScript" type="text/javascript">addLoadEvent("LD.View.fade('conf_waiting_display_$bulkUID', 0.3);");</script>
+</div>

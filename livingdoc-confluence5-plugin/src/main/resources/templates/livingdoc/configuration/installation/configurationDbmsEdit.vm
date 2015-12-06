@@ -1,0 +1,54 @@
+#if (!$action.actionErrors.isEmpty())
+<div id="dbmsEdit_errMsg" class="aui-message error ldErrMsg">
+    <p class="title">
+        <span class="aui-icon icon-error"></span>
+        <strong>Error!</strong>
+    </p>
+   	#foreach($error in $action.actionErrors)
+   		<p>$action.getText($error)<br></p>
+	#end
+</div>
+#end
+
+<form class="aui long-label sp_configItemView">
+    <div class="field-group">
+        <label for="dbms" class="sp_configSubTitle">        
+            $action.getText('livingdoc.install.dbms')
+        </label>
+        #if($action.isCustomSetup)
+	        <select class="select sp_configInput" id="dbms">
+	            #foreach($dialect in $action.dialects)
+	                <option value="$dialect.className" class="sp_configSelectOption" #if($!action.hibernateDialect && $dialect.className.equals($!action.hibernateDialect)) selected #end>$dialect&nbsp;&nbsp;&nbsp;</option>
+	            #end
+	        </select>
+        #else
+            <span class="field-value sp_configInput">
+                HSQL
+            </span>    
+        #end
+    </div>
+    #if($action.isCustomSetup)
+	    <div class="field-group">
+	        <label for="jndi_txtfield" class="sp_configSubTitle">
+	            $action.getText('livingdoc.install.jndiurl')
+	            <span class="aui-icon icon-required">(required)</span>
+	        </label>
+	        <input class="text sp_configInput" type="text" id="jndi_txtfield" value="$!action.jndiUrl">
+	        #if($action.isCustomSetup())
+	    		<span id="testConnection_display"></span>
+	 		#end  
+	        <div class="description">$action.getText('livingdoc.install.jndiurl.hint')</div>
+	    </div>
+	#end
+	<div class="buttons-container">
+		#if($action.isCustomSetup())
+	        <span id="dbsmEdit_test"><button type="button" class="aui-button" onclick="ldProperties.testDbmsConnection();">$action.getText('livingdoc.configuration.testconnection')</button></span>
+	    #end
+	    #if($action.isCustomSetup())
+	        <span id="dbmsEdit_updateCustom"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.updateCustomDbmsConfiguration();">$action.getText('livingdoc.configuration.save')</button></span>
+	    #else
+	        <span id="dbmsEdit_updateQuick"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.updateQuickDbmsConfiguration();">$action.getText('livingdoc.configuration.save')</button></span>
+	    #end
+	    <span id="dbmsEdit_cancel"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.getDbmsConfigPane();">$action.getText('livingdoc.configuration.cancel')</button></span>
+	</div>  
+</form>

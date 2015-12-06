@@ -1,0 +1,53 @@
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+	 <div id="runnersPaneError_display"
+       class="aui-message error">
+       <p class="title">
+       		<span class="aui-icon icon-error"></span>
+           <strong>Error!</strong>
+       </p>
+       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+           $action.getText($error) #end</p>
+   </div>
+#end
+<div class="steptitle">
+	<h3>
+		$action.getText('livingdoc.runners.newrunner')
+	</h3>
+</div>
+<form class="aui long-label">
+	<div class="field-group">
+	    <label for="runnerName" class="sp_configLabels">$action.getText('livingdoc.runners.name')<span class="aui-icon icon-required"> required</span></label>
+	    <input class="text sp_configInput" type="text" id="runnerName" value="$action.newRunnerName" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="40">
+	</div>
+	<div class="field-group">
+    	<label for="serverName" class="sp_configLabels">$action.getText('livingdoc.runners.servername')<span class="aui-icon icon-required"> required</span></label>
+    	<input class="text sp_configInput" type="text" id="serverName" value="$!action.newServerName" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="40">
+		<div class="description">$action.getText('livingdoc.runners.servername.description')</div>
+	</div>
+	<div class="field-group">
+   		<label for="serverPort" class="sp_configLabels">$action.getText('livingdoc.runners.serverport')</label>
+    	<input class="text sp_configInput" type="text" id="serverPort" value="$!action.newServerPort" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="20">
+		<div class="description">$action.getText('livingdoc.runners.serverport.description')</div>
+	</div>
+	<fieldset class="group">
+	       <legend><span class="sp_configLabels"></span></legend>
+		    <div class="checkbox">
+		        <input class="checkbox sp_configInput" type="checkbox" id="secured" #if($action.secured) checked="checked" #end size="20">
+		        <label for="secured">$action.getText('livingdoc.runners.secured')</label>
+		        <div class="description">$action.getText('livingdoc.runners.secured.desc')</div>
+		    </div> 
+	</fieldset>
+	<div class="field-group">
+		<label for="editClasspathInput">$action.ClasspathTitle</label>
+	    <textarea class="textarea full-width-field" rows="15" id="editClasspathInput" name="editClasspathInput"></textarea>
+		<div class="description">$action.getText('livingdoc.classpath.info')</div>    
+	</div>	
+	<div class="buttons-container">
+		<span class="sp_configTxt">
+			<button type="button" id="runners_save" class="aui-button aui-button-primary" onclick="ldProperties.addRunner('$action.spaceKey');">$action.getText('livingdoc.runners.save')</button>
+			<button type="button" id="runners_cancel" class="aui-button aui-button-link" onclick="ldProperties.getRunnersPane('$action.spaceKey');">$action.getText('livingdoc.runners.cancel')</button>		
+		</span>
+	</div>
+</form>				
+				

@@ -1,0 +1,38 @@
+<div class="stepTitle"><h2>$action.getText('livingdoc.demo.title')</h2></div>
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+    <div id="runnersPaneError_display"
+       class="aui-message error">
+       <p class="title">
+       		<span class="aui-icon icon-error"></span>
+           <strong>Error!</strong>
+       </p>
+       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+           $action.getText($error) #end</p>
+   </div>
+#end
+#if($action.isServerReady)
+	<p>$action.getText('livingdoc.demo.description')</p>
+	#if($action.isDemoSpaceExist())
+		<div class="demo_spaceButtons">
+			<span id="demo_viewSpace"><button type="button" class="aui-button" onclick="document.location.href='$action.demoSpaceUrl';"><span class="aui-icon aui-icon-small aui-iconfont-view">View</span> $action.getText('livingdoc.demo.viewspace')</button></span>
+			<span id="demo_removeSpace"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.removeDemoSpace();">$action.getText('livingdoc.demo.removespace')</button></span>
+		</div>
+	#else
+		<form class="aui long-label">
+			<fieldset>
+				<div class="field-group">
+				    <label for="username" class="sp_configLabels">$action.getText('livingdoc.demo.username')#if(!$action.allowRemoteApiAnonymous)<span class="aui-icon icon-required"> required</span>#end</label>
+				    <input class="text sp_configInput" type="text" id="username" name="username" value="$!action.username" size="15" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+				</div>
+				<div class="field-group">
+				    <label for="pwd" class="sp_configLabels">$action.getText('livingdoc.demo.password')</label>
+				    <input class="text sp_configInput" type="password" id="pwd" name="pwd" value="$!action.pwd" size="15" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+				</div>
+				<div class="buttons-container">
+					<span id="demo_createSpace"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.createDemoSpace(#if($action.allowRemoteApiAnonymous)'false'#else'true'#end);">$action.getText('livingdoc.demo.createspace')</button></span>
+				</div>
+			</fieldset>			
+		</form>
+	#end
+#end

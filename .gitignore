@@ -1,0 +1,13 @@
+# IntelliJ
+**.idea/
+**.iml
+**.ipr
+**.iws
+
+# Eclipse
+**.settings/
+**target/
+**.project
+**.classpath
+**.eclipse-pmd
+

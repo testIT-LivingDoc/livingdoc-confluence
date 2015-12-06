@@ -1,0 +1,53 @@
+#if (!$action.actionErrors.isEmpty())
+	<div id="dbmsEdit_errMsg" class="ldErrMsg">
+		#foreach($error in $action.actionErrors)
+			<span>$action.getText($error)</span><br>
+		#end
+	</div>
+#end
+
+<form class="aui long-label">
+    <div class="field-group">
+        <label for="dbmsView_type" class="sp_configSubTitle">
+            $action.getText('livingdoc.install.installtypelabel')
+        </label>
+        <span id="dbmsView_type" class="field-value sp_configOutput">    
+               #if($action.isCustomSetup())
+                    $action.getText('livingdoc.install.custom')
+                #else
+                    $action.getText('livingdoc.install.quick')
+                #end
+        </span>
+    </div>
+    <div class="field-group">
+        <label for="dbmsView_dialect" class="sp_configSubTitle">
+            $action.getText('livingdoc.install.dbms')
+        </label>
+        <span id="dbmsView_dialect" class="field-value sp_configOutput">
+            #if($action.isCustomSetup())
+                #foreach($dialect in $action.dialects)
+                    #if($dialect.className.equals($!action.hibernateDialect))$dialect&nbsp;&nbsp;&nbsp;#end
+                #end
+            #else
+                <span class="field-value sp_configOutput">HSQL</span>
+            #end
+        </span>
+    </div>
+    #if($action.isCustomSetup)
+    <div class="field-group">
+        <label for="dbmsView_jndi" class="sp_configSubTitle">
+            $action.getText('livingdoc.install.jndiurl')
+        </label>
+        <span id="dbmsView_jndi" class="field-value sp_configOutput">
+            $!action.jndiUrl
+        </span>
+        <div class="description">
+            $action.getText('livingdoc.install.jndiurl.hint')
+        </div>    
+    </div>
+    #end
+    <div class="buttons-container">
+		#if(!$action.editMode)<button type="button" id="dbmsView_edit" class="aui-button" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.filesystem.edit')</button>#end
+	</div>
+</form>
+	

@@ -1,0 +1,46 @@
+<table id="fileSystemEdit" class="aui">
+	<thead>
+		<tr>
+			<th id="th_project">$action.getText('livingdoc.filesystem.project')</th>
+			<th id="th_name">$action.getText('livingdoc.filesystem.name')</th>
+			<th id="th_path">$action.getText('livingdoc.filesystem.path')</th>
+			<th id="th_control"></th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($repository in $action.fileRepositories)
+			<tr>
+				#set($index = $velocityCount - 1)
+				<td id="fileSystemEdit_project_$index" headers="th_project">$repository.project.name</td>
+				<td id="fileSystemEdit_name_$index" headers="th_name">$repository.name</td>
+				<td id="fileSystemEdit_url_$index" headers="th_path">$repository.baseTestUrl</td>
+				<td headers="th_control"><span id="fileSystemEdit_remove_$index"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.removeFileSystem('$repository.uid');">$action.getText('livingdoc.filesystem.remove')</button></span></td>
+			</tr>
+		#end
+		
+		<tr>
+			<td headers="th_project">
+				<select class="select" id="newProjectName">
+					#foreach($project in $action.Projects)
+						<option value="$project.name">$project.name</option>
+					#end	
+				</select>
+			</td>
+			<td headers="th_name">
+				<input type="text" id="newFileSystemName" class="text sp_configInput" value="$!action.newRepository.name" size="30"/>
+			</td>
+			<td headers="th_path">
+				<input type="text" id="newFileSystemUrl" class="text full-width-field sp_configInput" value="$!action.newRepository.baseTestUrl" size="40"/>
+			</td>
+			<td headers="th_control" style="text-align: right">
+				<span id="fileSystemEdit_add"><button type="button" class="aui-button" onclick="ldProperties.addFileSystem();"><span class="aui-icon aui-icon-small aui-iconfont-add">Add</span> $action.getText('livingdoc.filesystem.add')</button></span>				
+			</td>
+		</tr>
+	</tbody>
+	<tfoot>
+    	<tr style="border-bottom: none;">
+        	<td colspan="4" style="text-align: right"><span id="fileSystemEdit_done"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.getFileSystemRegistration();">$action.getText('livingdoc.filesystem.done')</button></span></td>
+        </tr>
+    </tfoot>
+</table>
+	

@@ -1,0 +1,544 @@
+/**** GLOBAL ****/
+.ldTitle {
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: #003366;
+}
+
+.ldSubTitle {
+    text-align: left;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: #003366;
+}
+
+.ldSmallText {
+    color: #666666;
+    font-size: 11px;
+}
+
+.ldErrMsg {   
+}
+
+.centeredImage {
+    display: inline;
+    vertical-align: middle;
+}
+
+.conf_macroErrMsg {
+    color: #cc0000;
+    background-color: #ffcccc;
+    border: 1px solid #cc0000;
+    margin: 0px;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    width: 100%;
+}
+
+.conf_links {
+    color: #666666;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: underline;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+/**** PAGE ****/
+.conf_smallErrMsg {
+    color: #cc0000;
+    margin: 0px;
+    padding: 1px 5px;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 100%;
+}
+
+.conf_pageMacro {
+    border-spacing: 0px;
+    border-top: 1px solid #E8E8E8;
+    border-right: 2px solid #D8D8D8;
+    border-left: 1px solid #E8E8E8;
+    border-bottom: 2px solid #D8D8D8;
+    width: 100%;
+    text-align: left;
+    vertical-align: top;
+}
+
+.conf_pageLDHeaderItem {
+    width: 100%;
+    background-color: #F8F8F8;
+}
+
+.conf_wikiErrMsg {
+    color: #cc0000;
+    background-color: #ffcccc;
+    border: 1px solid #cc0000;
+    margin: 16px 0px 16px 0px;
+    padding: 1px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    width: auto;
+}
+
+.conf_livingTitle {
+    font-family: Arial, sans-serif;
+    padding: 0px 0px 0px 3px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #003300;
+}
+
+.conf_docTitle {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #8CC06D;
+    padding: 0px 3px 0px 0px;
+}
+
+.conf_waiting {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: top;
+    padding: 0px 2px 0px 3px;
+    white-space: nowrap;
+}
+
+/**** ExecutionPane ****/
+.conf_executionTitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #003366;
+    padding: 4px 5px;
+}
+
+.conf_executionPane {
+    width: 100%;
+}
+
+.conf_executionDetails {
+    padding: 0px;
+    margin: 0;
+}
+
+.conf_button {
+    color: #660000;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.conf_smallLinks {
+    color: #660000;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.conf_smallGroupLinks {
+    color: #666666;
+    font-size: 11px;
+    padding: 0px 5px;
+    white-space: nowrap;
+}
+
+.conf_EditButton {
+    border: 0px solid #000000;
+    color: #666666;
+    background-color: rgb(255, 255, 204);
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.conf_ImplementedButton {
+    background-color: #FFFFCC;
+    border: 0px solid #000000;
+    color: #666666;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0px 10px;
+}
+
+.conf_RedImplementedButton {
+    background-color: #FF9797;
+    border: 0px solid #000000;
+    color: #666666;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0px 10px;
+}
+
+.conf_implementedBanner {
+    background-color: #6699cc;
+    padding: 2px 0px;
+    margin: 5px 0px 0px;
+    text-align: center;
+    width: 100%;
+}
+
+.conf_implementedBannerTxt {
+    color: #FFFFFF;
+    font-family: Arial,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 0px 15px;
+}
+
+.conf_exeLabel {
+    color: #989898;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-style: oblique;
+    text-align: left;
+    padding: 0px 0px 0px 3px;
+    white-space: nowrap;
+}
+
+.conf_exeItem {
+    color: #666666;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: left;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.conf_exeGroupLabel {
+    color: #989898;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: left;
+    padding: 0px 0px 2px 3px;
+    white-space: nowrap;
+}
+
+.conf_exeGroupItem {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: left;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.conf_exeLink, children_show a {
+    vertical-align: middle;
+    color: #666666;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    text-align: center;
+    padding: 0px 0px 0px 3px;
+    white-space: nowrap;
+}
+
+.conf_exeSpacer {
+    margin: 0;
+    padding: 0px 3px;
+}
+
+.conf_keySelect {
+    vertical-align: middle;
+    padding: 0px;
+    padding: 0px 3px 0px 3px;
+}
+
+.conf_selectedOption {
+    color: #000;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    font-weight: bold;
+    padding: 0px;
+    background-color: #FFFFE3;
+}
+
+.conf_configPopup {
+    width: 350px;
+    background-color: #fff;
+    border: 3px solid #bbbbbb;
+    border-spacing: 0px;
+}
+
+.conf_configTitle {
+    color: #003366;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.conf_configItem {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: left;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.conf_configLink {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.conf_configListOddRow {
+    background-color: #F1FEED;
+}
+
+/**** Specification ****/
+.conf_specificationListPane {
+    width: 100%;
+}
+
+.conf_specificationList {
+    border-spacing: 0px;
+    padding: 5px 5px;
+    margin: 0px;
+    width: 100%;
+}
+
+.conf_specificationListEvenRow {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-color: #F1FEED;
+}
+
+.conf_specificationListOddRow {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.conf_specificationOutputTable {
+    border-spacing: 0px;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.conf_blankBullet {
+    border-bottom: 2px solid #bbbbbb;
+    border-right: 2px solid #bbbbbb;
+    background-color: #FFFFFF;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 3%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.conf_failedBullet {
+    border-right: 2px solid #cc0000;
+    border-bottom: 2px solid #cc0000;
+    background-color: #ffcccc;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 3%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.conf_successBullet {
+    border-right: 2px solid #339999;
+    border-bottom: 2px solid #339999;
+    background-color: #aaffaa;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 3%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.conf_ignoredBullet {
+    border-bottom: 2px solid #bbbbbb;
+    border-right: 2px solid #bbbbbb;
+    background-color: #F0F0F0;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 3%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.conf_specListText {
+    color: #666666;
+    padding: 0px 3px 0px 0px;
+    font-style: oblique;
+    font-weight: normal;
+}
+
+.conf_page {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    vertical-align: middle;
+    width: 50%;
+    margin: 0px;
+    padding: 0px 4px 0px 8px;
+    white-space: nowrap;
+}
+
+.conf_exeDetails {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    width: 30%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.conf_specificationLinks {
+    color: #666666;
+    font-size: 11px;
+    text-align: right;
+    margin: 0px;
+    padding: 0px 5px 0px 0px;
+    white-space: nowrap;
+}
+
+.conf_results {
+    padding: 0px 0px 0px 15px;
+    text-align: left;
+}
+
+/**** Reference List ****/
+.conf_referenceListTitle {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: top;
+    padding: 0px 2px 0px 3px;
+    white-space: nowrap;
+}
+
+.conf_linksLabel {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: top;
+    padding: 0px 2px 0px 0px;
+    white-space: nowrap;
+}
+
+.conf_linksText {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: top;
+    padding: 0px 2px 0px 0px;
+    white-space: nowrap;
+}
+
+.conf_linksTextEdit {
+    color: #666666;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: top;
+    padding: 0px 2px 0px 0px;
+    white-space: nowrap;
+    background-color: #f0f0f0;
+}
+
+.conf_inputTestDiv {
+    margin: 20px 0px 10px 0px;
+    width: 100%;
+}
+
+.conf_inputTestTable {
+    background-color: #f0f0f0;
+    border-spacing: 0px;
+    border: 1px solid #bbbbbb;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    width: 90%;
+    padding: 20px 0px 20px 0px;
+}
+
+.conf_inputTestLabel {
+    color: #666666;
+    vertical-align: bottom;
+    font-weight: bold;
+    padding: 0px 0px 0px 2px;
+}
+
+.conf_inputTestDesc {
+    font-size: 11px;
+}
+
+.conf_selectionLabel {
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    font-family: Arial, sans-serif;
+    color: #003366;
+    padding: 0px 5px 0px 0px;
+}
+
+/**** BulkExternPane ****/
+.jira_bulkExtern {
+    width: 100%;
+    border: 2px solid #bbbbbb;
+    padding: 5px;
+}
+
+.jira_bulkErrMsg {
+    color: #cc0000;
+    background-color: #ffcccc;
+    border: 1px solid #cc0000;
+    margin: 0px;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    width: 100%;
+}

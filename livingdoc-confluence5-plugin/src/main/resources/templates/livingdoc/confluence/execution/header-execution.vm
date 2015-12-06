@@ -1,0 +1,38 @@
+<script language="JavaScript" type="text/javascript">conf_livingDoc.registerSpecification('$action.bulkUID', '$action.executionUID', '$req.contextPath', '$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/', '$action.spaceKey', '$action.page.id', '0', LD.ConfluenceActions, true);</script>
+<div width="100%">
+	<table class="conf_executionPane" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="conf_executionDetails" width="75%">
+				<span id="conf_exeButton_${action.bulkUID}_${action.executionUID}" class="conf_button"><button type="button" class="aui-button aui-button-primary" onclick="#if($implemented) conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').run(true);#else conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').runAll();#end">$action.getText('livingdoc.execution.execute')</button></span><span id="conf_exeButton_shadow_${action.bulkUID}_${action.executionUID}" style="display:none"><button type="button" class="aui-button aui-button-primary" aria-disabled="true" disabled>$action.getText('livingdoc.execution.executing')</button></span>
+				<span class="conf_exeLabel">$action.getText('livingdoc.execution.for')&nbsp;</span>
+				<span id="conf_sut_display_${action.bulkUID}_${action.executionUID}_0">
+					#parse('/templates/livingdoc/confluence/execution/systemUnderTest.vm')
+				</span>
+				#if($action.hasChildren)
+					<input type="checkbox" id="conf_childrenInput" #if(!$action.canEdit)disabled="true"#end #if($action.doExecuteChildren)checked="checked"#end onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '0').updateExecuteChildren();" style="vertical-align:middle;">
+					<span class=#if($action.doExecuteChildren)"conf_exeItem"#else"conf_exeLabel"#end>$action.getText('livingdoc.execution.exechildren')</span>	
+					#if($action.doExecuteChildren)
+						#set($numbPages = $action.executableList.size() + 1)
+						<span class="conf_exeLabel">(</span>
+						<span class="conf_exeLabel" id="conf_childrenPageCount" >$numbPages</span>
+						<span class="conf_exeLabel">$action.getText('livingdoc.execution.pages')&nbsp;)</span>
+						<span style="white-space: nowrap;">
+							<span id="conf_expand_${action.bulkUID}_${action.executionUID}" class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').show();" #if($action.showList)style="display:none"#end><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/expand.gif" alt="" title="$action.getText('livingdoc.execution.showlist')" border="0"></span>
+							<span id="conf_colapse_${action.bulkUID}_${action.executionUID}" class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').hide();" #if(!$action.showList)style="display:none"#end><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/colapse.gif" alt="" title="$action.getText('livingdoc.execution.hidelist')" border="0"></span>
+							<span id="conf_refresh_${action.bulkUID}_${action.executionUID}" class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').refresh();"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/refresh.gif" alt="" title="$action.getText('livingdoc.execution.refreshlist')" border="0"></span>
+						</span>
+					#end
+				#end
+			</td>
+			<td id="conf_statusbar_${action.bulkUID}_${action.executionUID}" align="right" width="25%" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').statusBar.switchView();" style="cursor:pointer;"></td>
+		</tr>
+		#if($action.doExecuteChildren)
+			<tr>
+				<td id="conf_specificationList_display_${action.bulkUID}_${action.executionUID}" #if(!$action.showList && !$action.isPrintableVersion())style="display:none"#end class="conf_specificationListPane" colspan="2">
+					#parse('/templates/livingdoc/confluence/execution/specificationList.vm')
+				</td>
+			</tr>
+		#end
+	</table>
+</div>
+<script language="JavaScript" type="text/javascript">LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);;</script>

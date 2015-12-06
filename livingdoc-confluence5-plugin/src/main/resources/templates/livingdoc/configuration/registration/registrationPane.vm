@@ -1,0 +1,37 @@
+#if($action.readonly)<span id="readonly" style="display:none"></span>#end
+	<div class="steptitle"><h3>$action.getText('livingdoc.registration.title')
+		#if($action.isServerReady)
+			#if(!$action.editMode && !$action.registered)<span id="registrationPane_register"><button type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.editRegistration('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-add">Register</span> $action.getText('livingdoc.registration.register')</button></span>#end
+			#if($action.registered && !$action.editMode)<span id="registrationPane_edit"><button type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.editRegistration('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.registration.edit')</button></span>#end
+		#end
+	</h3>
+	</div>
+	#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+		#set($errorDisplayed = true)
+	    <div id="runnersPaneError_display"
+	       class="aui-message error">
+	       <p class="title">
+	       		<span class="aui-icon icon-error"></span>
+	           <strong>Error!</strong>
+	       </p>
+	       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+	           $action.getText($error) #end</p>
+	   </div>
+	#end
+	#if($action.isServerReady)
+		#if($action.editMode)
+			<span class="stepdesc">$action.getText('livingdoc.registration.desc.edit')</span>
+		#else
+			<span class="stepdesc">$action.getText('livingdoc.registration.desc')</span>
+		#end
+	#end
+</div>
+<div class="sp_configItemPane">
+	#if($action.isServerReady)
+		#if($action.editMode)
+			#parse('templates/livingdoc/configuration/registration/registrationEdit.vm')
+		#else
+			#parse('templates/livingdoc/configuration/registration/registration.vm')
+		#end
+	#end
+</div>

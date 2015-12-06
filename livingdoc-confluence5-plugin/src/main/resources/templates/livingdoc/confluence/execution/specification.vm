@@ -1,0 +1,33 @@
+<script language="JavaScript" type="text/javascript">conf_livingDoc.registerSpecification('$action.bulkUID', '$action.executionUID', '$req.contextPath', '$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/', '$aPage.spaceKey', '$aPage.id', '$fieldId', LD.ConfluenceActions);</script>
+<table id="conf_specification_${action.bulkUID}_${action.executionUID}_$fieldId" class="conf_specificationOutputTable" cellspacing="0" cellpadding="0">
+	<tr>
+		#set($bulletIndex = $fieldId + 1)
+		<td id="conf_statusBullet_${action.bulkUID}_${action.executionUID}_$fieldId" class="conf_blankBullet">${bulletIndex}.</td>
+		<td class="conf_page">
+			#contentIcon($aPage)
+			
+			#if($openInSameWindow)
+				<span class="conf_exeItem"><a href='$req.contextPath$aPage.urlPath'>$aPage.title</a></span>
+			#else
+				<span class="conf_exeItem"><a href="#conf_specification_${action.bulkUID}_${action.executionUID}_$fieldId" onclick="conf_livingDoc.openWindow('$req.contextPath$aPage.urlPath');">$aPage.title</a></span>
+			#end
+			
+			<span class="conf_exeLabel">$action.getText('livingdoc.execution.on')&nbsp;</span>
+			<span class="conf_exeItem">$aPage.spaceKey</span>
+			<span class="conf_exeLabel">$action.getText('livingdoc.execution.space')</span>
+		</td>
+		<td class="conf_exeDetails">
+			<span class="conf_exeLabel">$action.getText('livingdoc.execution.for')&nbsp;</span>
+			<span id="conf_sut_display_${action.bulkUID}_${action.executionUID}_$fieldId">
+				#parse('/templates/livingdoc/confluence/execution/systemUnderTest.vm')
+			</span>
+		</td>
+		<td class="conf_specificationLinks">
+			<span id="conf_showResult_link_${action.bulkUID}_${action.executionUID}_$fieldId" class="conf_button" style="display:none;" onclick="javascript:conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$fieldId').showResults();">$action.getText('livingdoc.execution.viewresults')</span>
+			<span id="conf_hideResult_link_${action.bulkUID}_${action.executionUID}_$fieldId" class="conf_button" style="display:none;" onclick="javascript:conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$fieldId').hideResults();">$action.getText('livingdoc.execution.hideresults')</span>
+		</td>
+	</tr>
+	<tr align="center">
+		<td id="conf_results_${action.bulkUID}_${action.executionUID}_$fieldId" align="left" colspan="4" class="conf_specificationOutputTable" #if(!$action.isPrintableVersion())style="display:none;"#end></td>
+	</tr>
+</table>

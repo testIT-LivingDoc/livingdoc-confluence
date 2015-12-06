@@ -1,0 +1,37 @@
+<div>
+	<div class="steptitle">
+		<h2>
+		$action.getText('livingdoc.install.dbms.title')
+		</h2>
+	</div>
+	#if($action.editMode)<p>	$action.getText('livingdoc.install.maindesc')</p>#end
+	<form id="installPreference" class="aui long-label">
+			#if($action.editMode)
+				<div class="field-group">
+					<label for="installType_Cmb">$action.getText('livingdoc.install.installtypelabel')</label>
+					<select class="select" id="installType_Cmb" onchange="AJS.$('#installPreference div[id]').each(function(){$(this).hide();});AJS.$('#'+this.value).show();ldProperties.changeInstallationType();" #if(!$action.editMode)disabled="disabled"#end>
+						<option value="quickInstall" #if(!$action.isCustomSetup)selected="selected"#end>$action.getText('livingdoc.install.quick')</option>
+						<option value="customInstall" #if($action.isCustomSetup)selected="selected"#end>$action.getText('livingdoc.install.custom')</option>
+					</select>
+					<div class="description" id="quickInstall" #if($action.isCustomSetup)style="display:none"#end>
+						$action.getText('livingdoc.install.quickdescription')</br>
+						$action.getText('livingdoc.install.hsql.notice')
+					</div>
+					<div class="description" id="customInstall" #if(!$action.isCustomSetup)style="display:none"#end>
+						$action.getText('livingdoc.install.customdescription')
+						$action.getText('livingdoc.install.jdbc.drivers.notice')						
+					</div>					
+				</div>
+				<div class="buttons-container">
+					#if(!$action.editMode)<button id="dbmsView_edit" class="aui-button sp_configButtonRight" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.filesystem.edit')</button>#end
+				</div>
+          #end
+	</form>
+	<div id="dbmsChoice_display" class="sp_configItemPane">
+		#if($action.editMode)
+			#parse('templates/livingdoc/configuration/installation/configurationDbmsEdit.vm')
+		#else
+			#parse('templates/livingdoc/configuration/installation/configurationDbmsView.vm')
+		#end
+	</div>
+</div>

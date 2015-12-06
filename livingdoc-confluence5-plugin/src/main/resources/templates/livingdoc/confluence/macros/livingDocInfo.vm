@@ -1,0 +1,14 @@
+<table style="display:none">
+	<tr>
+		<td>Begin Info</td>
+	</tr>
+</table>
+<div style="padding:0px; margin:0px; #if($bgcolor)background-color:$bgcolor;#end">
+	#if($title)<span class="conf_executionTitle">$title</span><br>#end
+	$body
+</div>
+<table style="display:none">
+	<tr>
+		<td>End Info</td>
+	</tr>
+</table>

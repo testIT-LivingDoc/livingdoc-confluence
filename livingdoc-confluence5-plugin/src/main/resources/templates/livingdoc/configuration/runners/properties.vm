@@ -1,0 +1,54 @@
+<form class="aui long-label">
+	<fieldset>
+		<div class="field-group">
+		    <label for="runnerServerName" class="sp_configSubTitle">
+		    	$action.getText('livingdoc.runners.servername')
+		    </label>
+		    <span id="runnerServerName" class="field-value #if(!$action.selectedRunner.serverName) sp_configNoOutput #else sp_configOutput #end" name="runnerServerName">    
+				#if(!$action.selectedRunner.serverName)
+					$action.getText('livingdoc.runners.none')			
+				#else
+					$action.selectedRunner.serverName
+				#end
+	        </span>
+	        <div class="description">$action.getText('livingdoc.runners.servername.description')</div>
+		</div>
+		<div class="field-group">
+		    <label for="runnerServerPort" class="sp_configSubTitle">
+		    	$action.getText('livingdoc.runners.serverport')
+		    </label>
+		    <span id="runnerServerPort" class="field-value #if(!$action.selectedRunner.serverPort) sp_configNoOutput #else sp_configOutput #end" name="runnerServerPort">    
+				#if(!$action.selectedRunner.serverPort)
+					$action.getText('livingdoc.runners.none')			
+				#else
+					$action.selectedRunner.serverPort
+				#end
+	        </span>
+	        <div class="description">$action.getText('livingdoc.runners.serverport.description')</div>
+		</div>
+		<div class="field-group">
+		    <label for="runnerServerSecured" class="sp_configSubTitle">
+		    	$action.getText('livingdoc.runners.secured'):
+		    </label>
+		    <span id="runnerServerSecured" class="field-value sp_configOutput" name="runnerServerSecured">    
+				#if($action.selectedRunner.secured)
+					$action.getText('livingdoc.runners.on')	
+				#else
+					$action.getText('livingdoc.runners.off')
+				#end
+	        </span>
+	        <div class="description">$action.getText('livingdoc.runners.secured.desc')</div>
+		</div>
+		<div class="field-group">
+		    <label for="runnerClasspathsEdit" class="sp_configSubTitle">
+		        $action.getText('livingdoc.runners.classpath')
+		    </label>
+ 			<ol class="field-value" style="padding-left: 1.3em; padding-top: 0em; list-style-type:disc; list-style-position:outside;">
+ 				#foreach($runnerClasspath in $action.selectedRunner.classpaths)
+					#set($index = $velocityCount - 1)
+					<li id="runnerClasspath_$index">$runnerClasspath</li>
+				#end
+ 			</ol>
+		</div>
+	</fieldset>
+</form>

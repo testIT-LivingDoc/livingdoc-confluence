@@ -1,0 +1,66 @@
+<div class="sp_configItemView">
+	<form class="aui long-label">
+		<h3>$action.getText('livingdoc.suts.header')</h3>
+		<fieldset>
+		    <div class="field-group">
+		        <label for="suts_list" class="sp_configSubTitle">
+		            $action.getText('livingdoc.suts.list')
+		        </label>
+		        <span id="suts_list" class="#if(!$action.systemUnderTests || $action.systemUnderTests.isEmpty()) sp_configNoOutput #else sp_configOutput #end" name="suts_list">    
+					#if(!$action.systemUnderTests || $action.systemUnderTests.isEmpty())
+						$action.getText('livingdoc.suts.none')
+					#else
+						<select class="select" id="selectedSut" onchange="ldProperties.getSut('$action.spaceKey', '$action.projectName');">
+							#foreach($sut in $action.systemUnderTests)
+								<option value="$sut.name" #if($action.selectedSutName && $action.selectedSutName.equals($sut.name))selected#end>$sut.name#if($sut.isDefault())&nbsp;&nbsp;&nbsp;&nbsp;$action.getText('livingdoc.suts.default')#end</option>
+							#end
+						</select>
+						#if(!$action.readonly && !$action.editPropertiesMode && !$action.editClasspathsMode && !$action.editFixturesMode)
+							#if(!$action.selectedSut.isDefault())
+								<span id="systemUnderTestEdit_setasdefault"><button type="button" class="aui-button" onclick="ldProperties.setSutAsDefault('$action.spaceKey', '$action.projectName');">$action.getText('livingdoc.suts.setasdefault')</button></span>
+							#end
+							<span id="systemUnderTestEdit_edit"><button type="button" class="aui-button" onclick="ldProperties.editSutProperties('$action.spaceKey', '$action.projectName');"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.suts.edit')</button></span>
+							<span id="systemUnderTestEdit_delete"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.removeSut('$action.spaceKey', '$action.projectName');">$action.getText('livingdoc.suts.delete')</button></span>
+						#end						
+					#end
+		        </span>
+		    </div>
+		    <div class="field-group">
+		        <label for="suts_list" class="sp_configSubTitle">            
+		        </label>
+				#if(!$action.readonly && !$action.editPropertiesMode)<span id="systemUnderTest_add"><button type="button" class="aui-button" onclick="ldProperties.showSutInputs('$action.spaceKey', '$action.projectName');"><span class="aui-icon aui-icon-small aui-iconfont-add">Add</span> $action.getText('livingdoc.suts.add')</button></span>#end
+			</div>
+			#if (!$action.selectedSut && !$action.actionErrors.isEmpty() && !$errorDisplayed)
+				#set($errorDisplayed = true)
+			    <div id="sutsPaneError_display"
+			       class="aui-message error">
+			       <p class="title">
+			       		<span class="aui-icon icon-error"></span>
+			           <strong>Error!</strong>
+			       </p>
+			       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+			           $action.getText($error) #end</p>
+			   </div>
+			#end
+			#if ($action.selectedSutName && !$action.actionErrors.isEmpty() && !$errorDisplayed)
+				#set($errorDisplayed = true)
+			    <div id="sutsPaneError_display"
+			       class="aui-message error">
+			       <p class="title">
+			       		<span class="aui-icon icon-error"></span>
+			           <strong>Error!</strong>
+			       </p>
+			       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+			           $action.getText($error) #end</p>
+			   </div>
+			#end
+			#if($action.selectedSutName)
+				#if(!$action.editPropertiesMode)
+					#parse('templates/livingdoc/configuration/suts/properties.vm')										
+				#else
+					#parse('templates/livingdoc/configuration/suts/propertiesEdit.vm')										
+				#end				
+			#end
+	    </fieldset>
+	</form>
+</div>

@@ -1,0 +1,12 @@
+<table class="jira_bulkExtern">
+	<tr style="display: none;">
+		<td>Begin Info</td>
+	</tr>
+	<tr>
+		<td id="conf_macroErrMsg" class="conf_macroErrMsg">
+			$livingDoc.getText($macroId)<br>
+			$livingDoc.getText($errorId)
+		</td>
+	</tr>
+</table>
+<table style="display:none"><tr><td>End Info</td></tr></table>

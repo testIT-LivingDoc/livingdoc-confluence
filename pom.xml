@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.novatec.testit</groupId>
+		<artifactId>livingdoc-plugin</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>livingdoc-confluence</artifactId>
+	<name>${project.title} - Confluence</name>
+	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
+	<packaging>pom</packaging>
+
+	<scm>
+		<connection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</connection>
+		<developerConnection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</developerConnection>
+		<url>git@github.com:testIT-LivingDoc/livingdoc-confluence.git</url>
+	</scm>
+
+	<properties>
+		<confluence.version>5.6.5</confluence.version>
+		<confluence.data.version>5.6.5</confluence.data.version>
+		<amps.version>5.0.9</amps.version>
+	</properties>
+
+	<!-- - LivingDoc modules -->
+	<modules>
+		<module>livingdoc-confluence5-demo</module>
+		<module>livingdoc-confluence5-plugin</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.codehaus.xfire</groupId>
+				<artifactId>xfire-core</artifactId>
+				<version>1.2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.xfire</groupId>
+				<artifactId>xfire-aegis</artifactId>
+				<version>1.2.6</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>maven-confluence-plugin</artifactId>
+				<version>${amps.version}</version>
+				<configuration>
+					<enableFastdev>false</enableFastdev>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.atlassian.maven.plugins</groupId>
+										<artifactId>maven-confluence-plugin</artifactId>
+										<versionRange>${amps.version}</versionRange>
+										<goals>
+											<goal>filter-plugin-descriptor</goal>
+											<goal>compress-resources</goal>
+											<goal>copy-bundled-dependencies</goal>
+											<goal>generate-manifest</goal>
+											<goal>generate-test-manifest</goal>
+											<goal>filter-test-plugin-descriptor</goal>
+											<goal>copy-test-bundled-dependencies</goal>
+											<goal>generate-rest-docs</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<repositories>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>atlassian-3rdparty</id>
+			<url>https://maven.atlassian.com/3rdparty/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+</project>

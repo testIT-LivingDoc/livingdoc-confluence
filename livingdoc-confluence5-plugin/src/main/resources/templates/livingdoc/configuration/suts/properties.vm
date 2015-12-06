@@ -1,0 +1,61 @@
+<fieldset>
+	<div class="field-group">
+	    <label for="sutRunnerName" class="sp_configSubTitle">
+	       $action.getText('livingdoc.suts.runnername')
+	    </label>
+	    <span id="sutRunnerName" class="field-value #if(!$action.selectedSut.runner.name) sp_configNoOutput #else sp_configOutput #end" name="sutRunnerName">    
+			#if(!$action.selectedSut.runner.name)
+				$action.getText('livingdoc.suts.none')				
+			#else
+				$action.selectedSut.runner.name	
+			#end
+        </span>	   
+	</div>
+	<div class="field-group">
+	    <label for="sutFixtureFactory" class="sp_configSubTitle">
+	       $action.getText('livingdoc.suts.fixturefactory')
+	    </label>
+	    <span id="sutFixtureFactory" class="field-value #if(!$action.selectedSut.fixtureFactory) sp_configNoOutput #else sp_configOutput #end" name="sutFixtureFactory">    
+			#if(!$action.selectedSut.fixtureFactory)
+				$action.getText('livingdoc.suts.none')				
+			#else
+				$action.selectedSut.fixtureFactory
+			#end
+        </span>	    
+	</div>
+	<div class="field-group">
+	    <label for="sutFixtureFactoryArgs" class="sp_configSubTitle">
+	    	$action.getText('livingdoc.suts.fixturefactoryargs')
+	    </label>
+	    <span id="sutFixtureFactoryArgs" class="field-value #if(!$action.selectedSut.fixtureFactoryArgs) sp_configNoOutput #else sp_configOutput #end" name="sutFixtureFactoryArgs">    
+			#if(!$action.selectedSut.fixtureFactoryArgs)
+				$action.getText('livingdoc.suts.none')				
+			#else
+				$action.selectedSut.fixtureFactoryArgs
+			#end
+        </span>
+	</div>
+	<div class="field-group">
+	    <label for="sutProjectDependencyDescriptor" class="sp_configSubTitle">
+	    	$action.getText('livingdoc.suts.projectdependencydescriptor')
+	    </label>
+	    <span id="sutProjectDependencyDescriptor" class="field-value #if(!$action.selectedSut.projectDependencyDescriptor) sp_configNoOutput #else sp_configOutput #end" name="sutProjectDependencyDescriptor">    
+			#if(!$action.selectedSut.projectDependencyDescriptor)
+				$action.getText('livingdoc.suts.none')				
+			#else
+				$action.selectedSut.projectDependencyDescriptor
+			#end
+        </span>
+	</div>	
+	<div class="field-group">
+	    <label for="sutClasspathsEdit" class="sp_configSubTitle">
+	        $action.getText('livingdoc.suts.classpath')
+	    </label>
+	    <ol class="field-value" style="padding-left: 1.3em; padding-top: 0em; list-style-type:disc; list-style-position:outside;">
+			#foreach($classPath in $action.selectedSut.sutClasspaths)
+				#set($index = $velocityCount - 1)
+				<li id="sutClasspaths_path_$index">$classPath</li>
+			#end
+	    </ol>	    
+	</div>
+</fieldset>

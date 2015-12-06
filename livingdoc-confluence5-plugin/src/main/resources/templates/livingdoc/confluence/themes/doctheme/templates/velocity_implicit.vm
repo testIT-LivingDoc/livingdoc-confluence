@@ -1,0 +1,21 @@
+#* @implicitly included *#
+#### Variable declarations in IDEA's syntax
+## Standard context things from Confluence
+#* @vtlvariable name="req" type="javax.servlet.http.HttpServletRequest" *#
+#* @vtlvariable name="action" type="com.atlassian.confluence.core.ConfluenceActionSupport" *#
+#* @vtlvariable name="sitemeshPage" type="com.opensymphony.module.sitemesh.Page" *#
+#* @vtlvariable name="stringUtils" type="org.apache.commons.lang.StringUtils" *#
+#* @vtlvariable name="textUtil" type="com.opensymphony.util.TextUtils" *#
+#* @vtlvariable name="generalUtil" type="com.atlassian.confluence.util.GeneralUtil" *#
+#* @vtlvariable name="webwork" type="com.opensymphony.webwork.util.VelocityWebWorkUtil" *#
+#* @vtlvariable name="inlineWikiStyleRenderer" type="com.atlassian.confluence.userstatus.InlineWikiStyleRenderer" *#
+#* @vtlvariable name="settingsManager" type="com.atlassian.confluence.setup.settings.SettingsManager" *#
+#* @vtlvariable name="webInterfaceManager" type="com.atlassian.confluence.plugin.descriptor.web.ConfluenceWebInterfaceManager" *#
+#* @vtlmacrolibrary path="../../../../../../../../confluence-core/confluence-webapp/src/main/webapp/template/includes/macros.vm" *#
+
+
+## Helper provided by this plugin
+#* @vtlvariable name="docThemeHelper" type="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper" *#
+
+## Title from sitemesh
+#* @vtlvariable name="title" type="java.lang.String" *#

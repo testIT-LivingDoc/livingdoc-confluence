@@ -1,0 +1,4 @@
+<span>
+	<span id="includeTitle_${executionUID}" style="cursor:pointer;color:blue;font-weight:bold;text-decoration:underline;" onclick="document.getElementById('${executionUID}').style.display='block'">$title</span>
+	<div id="${executionUID}" width="100%" style="cursor:pointer;padding:0px 2px;border: 1px solid #cc0000;display:#if(${expanded}) block#else none#end;" onclick="document.getElementById('${executionUID}').style.display='none'">$includeHtml</div>
+</span>

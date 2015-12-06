@@ -1,0 +1,5 @@
+#if(!$action.addMode)
+	#parse('templates/livingdoc/configuration/suts/systemUnderTest.vm')
+#else
+	#parse('templates/livingdoc/configuration/suts/systemUnderTestInputs.vm')
+#end

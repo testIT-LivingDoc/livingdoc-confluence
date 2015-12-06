@@ -1,0 +1,45 @@
+<div class="sp_configItemView">
+	<form class="aui long-label">
+		<fieldset>
+			<div class="field-group">
+			    <label for="projectName" class="sp_configLabels">$action.getText('livingdoc.project.name')</label>
+			    <select class="select" id="projectName" class="sp_configSelectOption" onchange="ldProperties.editRegistration('$action.spaceKey');" name="projectName">
+					#foreach($project in $action.projects)
+						<option value="$project.name" #if($action.projectName && $project.name.equals($action.projectName)) selected #end>$project.name&nbsp;&nbsp;&nbsp;</option>
+					#end
+				</select>
+			</div>
+			#if($action.isWithNewProject())
+				<div class="field-group">
+					<label for="newProjectName" class="sp_configLabels">$action.getText('livingdoc.project.name')<span class="aui-icon icon-required"> required</span></label>
+					<input class="text sp_configInput" type="text" id="newProjectName" name="newProjectName" #if($action.newProjectName)value="$action.newProjectName" #else value="$action.getText('livingdoc.project.newname')" onfocus="LD.View.inputFocus(this, 'text sp_configInput');"#end onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="40">
+				</div>	
+			#end
+			<div class="field-group">
+			    <label for="repositoryName" class="sp_configLabels">$action.getText('livingdoc.project.alias')<span class="aui-icon icon-required"> required</span></label>
+			    <input class="text sp_configInput" type="text" id="repositoryName" name="repositoryName" value="#if($action.repositoryName)$action.repositoryName#end" size="40" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+			</div>
+			<div class="field-group">
+			    <label for="username" class="sp_configLabels">$action.getText('livingdoc.project.username')</label>
+			    <input class="text sp_configInput" type="text" id="username" name="username" value="$!action.username" size="15" class="sp_configInput" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+			</div>
+			<div class="field-group">
+			    <label for="pwd" class="sp_configLabels">$action.getText('livingdoc.project.password')</label>
+			    <input class="text sp_configInput" type="password" id="pwd" name="pwd" value="$!action.escapedPassword" size="15">
+			</div>	
+			<div class="field-group">
+				#if(!$action.registered)<span id="registrationEdit_save"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.register('$action.spaceKey');">$action.getText('livingdoc.registration.save')</button></span>
+					#else<span id="registrationEdit_update"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.updateRegistration('$action.spaceKey');">$action.getText('livingdoc.registration.update')</button></span>
+					#end
+					<span id="registrationEdit_cancel"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.getRegistration('$action.spaceKey');">$action.getText('livingdoc.registration.cancel')</button></span>							
+			</div>
+		</fieldset>
+	</form>
+	#if(!$action.isWithNewProject() && !$action.systemUnderTests.isEmpty())
+	    <div class="field-group">
+	        <span id="sutsPane_display" width="100%" class="field-value sp_configOutput" name="sutsPane_display">    
+				#parse('templates/livingdoc/configuration/suts/systemUnderTest.vm')
+	        </span>
+	    </div>
+    #end
+</div>

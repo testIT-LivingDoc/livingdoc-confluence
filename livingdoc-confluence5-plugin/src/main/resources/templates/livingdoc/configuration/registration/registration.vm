@@ -1,0 +1,63 @@
+<div class="sp_configItemView">
+	<form class="aui long-label">
+		<fieldset>
+		    <div class="field-group">
+		        <label for="sutsPane_projectName" class="sp_configSubTitle">
+		            $action.getText('livingdoc.project.name')
+		        </label>
+		        <span id="sutsPane_projectName" class="field-value #if(!$action.registered) sp_configNoOutput #else sp_configOutput #end" name="sutsPane_projectName">    
+					#if(!$action.registered)
+						$action.getText('livingdoc.project.none')					
+					#else
+						$action.registeredRepository.project.name						
+					#end
+		        </span>
+		    </div>
+		    <div class="field-group">
+		        <label for="sutsPane_repositoryName" class="sp_configSubTitle">
+		           $action.getText('livingdoc.project.alias')
+		        </label>
+		        <span id="sutsPane_repositoryName" class="field-value #if(!$action.registered) sp_configNoOutput #else sp_configOutput #end" name="sutsPane_repositoryName">    
+					#if(!$action.registered)
+						$action.getText('livingdoc.project.none')		
+					#else
+						$action.registeredRepository.name		
+					#end
+		        </span>
+		    </div>
+		    <div class="field-group">
+		        <label for="sutsPane_repositoryUser" class="sp_configSubTitle">
+		           $action.getText('livingdoc.project.username')
+		        </label>
+		        <span id="sutsPane_repositoryUser" class="field-value #if(!$action.registered || !$action.registeredRepository.username) sp_configNoOutput #else sp_configOutput #end" name="sutsPane_repositoryUser">    
+					#if(!$action.registered || !$action.registeredRepository.username)
+						$action.getText('livingdoc.project.anonymous')
+					#else
+						$action.registeredRepository.username		
+					#end
+		        </span>
+		    </div>
+		    #if($action.registered)
+		    <div class="field-group">
+		        <label for="sutsPane_repositoryUid" class="sp_configSubTitle">
+		        	$action.getText('livingdoc.registration.repouid')
+		        </label>
+		        <span id="sutsPane_repositoryUid" class="field-value sp_configOutput" name="sutsPane_repositoryUid">    
+					$action.registeredRepository.uid
+		        </span>
+		    </div>
+		    #end
+	    </fieldset>
+    </form>
+    #if($action.registered)
+	    <div class="field-group">
+	        <span id="sutsPane_display" width="100%" class="field-value sp_configOutput" name="sutsPane_display">    
+				#if(!$action.addMode)
+					#parse('templates/livingdoc/configuration/suts/systemUnderTest.vm')
+				#else
+					#parse('templates/livingdoc/configuration/suts/systemUnderTestInputs.vm')
+				#end
+	        </span>
+	    </div>
+    #end
+</div>

@@ -1,0 +1,32 @@
+#if($action.isSelfIncluded) #set($fieldId = 0)
+#else #set($fieldId = -1)
+#end
+
+<table class="conf_specificationList" cellspacing="0" cellpadding="0">
+	<input type="hidden" value="$action.sortType" name="sortType" id="sortType_${action.bulkUID}_${action.executionUID}">
+	<input type="hidden" value="$action.reverse" name="reverse" id="reverse_${action.bulkUID}_${action.executionUID}">
+	<input type="hidden" value="$action.openInSameWindow" name="openInSameWindow" id="openInSameWindow_${action.bulkUID}_${action.executionUID}">
+	<span id="conf_forcedSuts_display_${action.bulkUID}_${action.executionUID}" style="display:none;">#if($action.forcedSuts)$action.forcedSuts#end</span>
+	#foreach ($aPage in $action.executableList)
+		#if($action.forcedSystemUnderTests)
+			#foreach($aSut in $livingDoc.getPageSystemsUnderTests($aPage))
+				#if($livingDoc.isInSutList($aSut, $action.forcedSystemUnderTests))
+					<tr>
+						#set ($fieldId = $fieldId + 1)
+						<td class="#if($fieldId%2 == 0)conf_specificationListOddRow #else conf_specificationListEvenRow#end">
+							#parse('/templates/livingdoc/confluence/execution/specification.vm')
+						</td>
+					</tr>
+				#end
+			#end
+		#else
+			<tr>
+				#set ($fieldId = $fieldId + 1)
+				<td class="#if($fieldId%2 == 0)conf_specificationListOddRow #else conf_specificationListEvenRow#end">
+					#set($aSut = $livingDoc.getSelectedSystemUnderTest($aPage))
+					#parse('/templates/livingdoc/confluence/execution/specification.vm')
+				</td>
+			</tr>
+		#end
+	#end
+</table>

@@ -1,0 +1,36 @@
+<div class="steptitle"><h2>$action.getText('livingdoc.spaceSelection.title')</h2></div>
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+    <div id="runnersPaneError_display"
+       class="aui-message error">
+       <p class="title">
+       		<span class="aui-icon icon-error"></span>
+           <strong>Error!</strong>
+       </p>
+       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+           $action.getText($error) #end</p>
+   </div>
+#end
+
+#if($action.isServerReady)
+	<p class="stepdesc">$action.getText('livingdoc.spaceSelection.desc')</p>
+	#if($action.readonly)<span id="readonly" style="display:none"></span>#end
+	<div id="greyBox" class="form-block greyboxfilled">
+		<form class="aui long-label">
+			<div class="field-group">
+				<label for="spaces">$action.getText('livingdoc.spaceSelection.spaceslist')</label>
+				<select class="select" id="spaces" onchange="ldProperties.getRegistration(this.value)" name="spaces">
+					#set($firstSpace = '')
+					#foreach($space in $action.spaces)
+						#if($firstSpace == '')#set($firstSpace=$space.key)#end
+						<option value="$space.key">$space.name</option>
+					#end
+				</select>
+			</div>
+		</form>
+		<div id="registrationPane_display">
+			#if($firstSpace.length()>0)<script language="JavaScript" type="text/javascript">ldProperties.getRegistration('$firstSpace');</script>#end
+		</div>
+		
+	</div>
+#end

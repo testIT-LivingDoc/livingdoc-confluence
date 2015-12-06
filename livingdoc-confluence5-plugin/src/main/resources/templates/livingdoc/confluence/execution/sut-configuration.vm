@@ -1,0 +1,60 @@
+<table width="100%">
+	<tr>
+		<td class="conf_configTitle">
+			$action.getText('livingdoc.page.configtitle')
+		</td>
+		<td align="right">
+			<a href="#" id="conf_sut_closeConfigPopup" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').closeConfigPopup();"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/remove.gif" alt="$action.getText('livingdoc.page.done')" border="0"></a>
+		</td>
+	</tr>
+	<tr><td height="2" colspan="2"></td></tr>
+	#if (!$action.actionErrors.isEmpty())
+		<tr>
+			<td class="ldErrMsg" colspan="2">
+				#foreach($error in $action.actionErrors)
+					<span>$action.getText($error)</span><br>
+				#end
+			</td>
+		</tr>
+		<tr><td height="2" colspan="2"></td></tr>
+	#end
+	#set($counter = 0)
+	#foreach($sut in $action.projectSystemUnderTests)
+		#if($action.isInSpecificationSelection($sut))
+			#set($counter = $counter + 1)
+			<tr class="#if($counter%2 == 0)conf_configListOddRow #end">
+				<td class="conf_configItem" align="left" width="90%">
+					<span id="conf_sut_name_$sut.name">
+						$sut.name
+					</span>
+				</td>
+				<td class="conf_configLink" width="10%">
+					#if($action.specification.targetedSystemUnderTests.size() > 1)<a href="#" id="conf_sut_remove_$sut.name" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').removeSpecSut('$sut.project.name', '$sut.name');">$action.getText('livingdoc.page.remove')</a>
+					#else &nbsp;
+					#end
+				</td>
+			</tr>
+		#end
+	#end
+	#if($action.projectSystemUnderTests.size() != $counter)
+		<tr> <td style="background-color: #003366;" height="2" colspan="2"></td></tr>
+		<tr><td height="2" colspan="2"></td></tr>
+		#foreach($sut in $action.projectSystemUnderTests)
+			#if(!$action.isInSpecificationSelection($sut))
+				#set($counter = $counter + 1)
+				<tr class="#if($counter%2 == 1)conf_configListOddRow #end">
+					<td class="conf_configItem" align="left" width="90%">
+						<span id="conf_sut_name_$sut.name">
+							$sut.name
+						</span>
+					</td>
+					<td class="conf_configLink" width="10%">
+						<a href="#" id="conf_sut_add_$sut.name" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').addSpecSut('$sut.project.name', '$sut.name');">$action.getText('livingdoc.page.add')</a>
+					</td>
+				</tr>
+			#end
+		#end
+	#end
+	<tr><td height="2" colspan="2"></td></tr>
+</table>
+#if($action.refreshAll && $action.actionErrors.isEmpty())<script language="JavaScript" type="text/javascript">conf_livingDoc.refreshAll();</script>#end

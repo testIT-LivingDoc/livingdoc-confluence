@@ -1,0 +1,68 @@
+<span>
+	<span class="conf_referenceListTitle">$action.getText('livingdoc.page.requirement.label'):</span>
+	<img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/vspacer_12.gif" class="centeredImage" alt="" border="0">
+	#if ($action.references && !$action.references.isEmpty())
+		#foreach ($reference in $action.references)
+			<span id="requirement_$velocityCount">
+				<span class=#if($action.isEditMode)"conf_linksTextEdit"#else"conf_linksText"#end>
+					#if(!$action.isEditMode)<a href="$reference.requirement.resolvedName">#end<img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/$reference.requirement.repository.type.name" class="centeredImage" alt="" title="$reference.requirement.resolvedName" border="0"/>#if(!$action.editable)</a>#end
+					#if(!$action.isEditMode)<a href="$reference.requirement.resolvedName" title="$reference.requirement.resolvedName [ $reference.systemUnderTest.name ]">#end$reference.requirement.name#if($action.isEditMode) [ $reference.systemUnderTest.name ]#end#if($reference.sections)&nbsp;($reference.sections)#end#if(!$action.editable)</a>#end
+					#if($action.isEditMode)<a id="removeRequirement_$velocityCount" href="#conf_referenceList_display_${action.bulkUID}_${action.executionUID}_${action.fieldId}" onclick="new Effect.DropOut('requirement_$velocityCount'); conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').removeReference('$reference.requirement.repository.project.name', '$reference.systemUnderTest.name', '$reference.requirement.repository.uid', '$reference.requirement.name', '$!reference.sections');"><img width="8" height="8" border="0" src="$req.contextPath/images/icons/del_16.gif" class="centeredImage" alt="" title="$reference.requirement.resolvedName [ $reference.systemUnderTest.name ]"></a>#end
+				</span>#if($action.isEditMode)<span class="conf_linksText">&nbsp;</span>#end
+			</span>
+		#end
+	#else
+		($action.getText('livingdoc.page.none'))
+	#end
+	#if(!$action.isEditMode && $action.canEdit)<span class="conf_linksLabel">-&nbsp;</span><span id="editSourceRequirements" class="conf_EditButton" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').getReferenceList(true);">$action.getText('livingdoc.page.edit').toUpperCase()</span>#end
+	#if($action.hasErrors() && !$errorDisplayed)
+		#set($errorDisplayed = true)
+		#foreach ($error in $actionErrors)
+			<span class="conf_smallErrMsg" id="conf_referenceList_error" colspan="6">$action.getText($error)#if($velocityCount < $actionErrors.size()),&nbsp;#end</span>
+		#end
+	#end
+</span>
+
+#if($action.isEditMode)
+	<div id="conf_inputs_display" class="conf_inputTestDiv">
+		<table class="conf_inputTestTable" cellpadding="10px" cellspacing="4px">
+			<tr>
+				<td colspan="6" class="formtitle">
+					$action.getText('livingdoc.page.requirement.inputtitle')
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="conf_inputTestLabel">$action.getText('livingdoc.page.sut.name')</span><br>
+					<select name="sut_select" id="sut_select">
+						#foreach ($sut in $action.projectSystemUnderTests)
+							<option value="$sut.project.name@$sut.name" #if($sut.isDefault()) selected #end>$sut.name</option>
+						#end
+					</select>
+				</td>
+				<td>
+					<span class="conf_inputTestLabel">$action.getText('livingdoc.page.repository.name')</span><br>
+					<select name="repository_select" id="repository_select">
+						#foreach($repository in $action.repositories)
+							<option value="$repository.uid">$repository.name</option>
+						#end
+					</select>
+				</td>
+				<td>
+					<span class="conf_inputTestLabel">$action.getText('livingdoc.page.requirement.name')</span><br>
+					<input type="text" name="reqName_field" id="reqName_field" size="22" class="monospaceInput" onkeypress="javascript:return LD.View.verifyKeyCode(event);""/>
+				</td>
+				<td>
+					<span class="conf_inputTestLabel">$action.getText('livingdoc.page.sections')&nbsp;<span class="conf_inputTestDesc">($action.getText('livingdoc.page.commaseperated'))</span></span><br>
+					<input type="text" name="reqSections_field" id="reqSections_field" size="22" class="monospaceInput" onkeypress="javascript:return LD.View.verifyKeyCode(event);"/>
+				</td>
+				<td>
+					<span class="conf_inputTestLabel">&nbsp;</span><br>
+					<input name="return" type="button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').addReference();" value=" $action.getText('livingdoc.page.add') "/>
+					<input name="return" type="button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').getReferenceList(false);" value=" $action.getText('livingdoc.page.done') "/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	#if($action.refreshAll && $action.actionErrors.isEmpty())<script language="JavaScript" type="text/javascript">conf_livingDoc.refreshAll();</script>#end
+#end

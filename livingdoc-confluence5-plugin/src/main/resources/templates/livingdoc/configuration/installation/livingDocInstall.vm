@@ -1,0 +1,62 @@
+<html>
+    <head>
+		<title>$action.getText('livingdoc.install.title')</title>
+		<meta name="decorator" content="atl.admin">
+    </head>
+    <body>
+		<script language="JavaScript" type="text/javascript">
+			var ldProperties = new LDProperties('$req.contextPath', LD.ConfluenceActions);
+			ldProperties.addAjaxListeners();
+		</script>
+		
+		## NT - Changed permission helper
+        #if ($permissionHelper.isConfluenceAdministrator($remoteUser))
+        	#parse ( "/template/includes/actionerrors.vm" )
+        	
+        	#if (!${action.hasActionErrors()})
+				<div id="tab-container" class="aui-tabs horizontal-tabs"">
+			        <ul class="tabs-menu">
+			            <li class="menu-item active-tab">
+			            	<a onclick="ldProperties.getDbmsConfigPane();"
+			            		href="#tabs-dbms-config">$action.getText('livingdoc.install.tabmenu.dbms')</a>
+			            </li>
+			            <li class="menu-item">
+			            	<a onclick="ldProperties.getRunnersPane();"
+			            		href="#tabs-runner">$action.getText('livingdoc.install.tabmenu.runners')</a>
+			            </li>
+			            <li class="menu-item">
+			            	<a onclick="ldProperties.getLdProjectPane();"
+			            		href="#tabs-project">$action.getText('livingdoc.install.tabmenu.ldproject')</a>
+			                </li>
+			             <li class="menu-item">
+			            	<a onclick="ldProperties.getFileSystemRegistration();"	
+			            		href="#tabs-file-system">$action.getText('livingdoc.install.tabmenu.fsregister')</a>
+			               </li>
+			             <li class="menu-item">
+			            	<a onclick="ldProperties.getDemoPane();"
+			            		href="#tabs-demo">$action.getText('livingdoc.install.tabmenu.demo')</a>
+			                </li>
+			        </ul>
+		        	
+			        <div class="tabs-pane active-pane" id="tabs-dbms-config">
+			        	#parse('templates/livingdoc/configuration/installation/livingDocDbmsConfig.vm')	
+			        </div>
+			        <div class="tabs-pane" id="tabs-runner"></div>
+			        <div class="tabs-pane" id="tabs-project"></div>
+			        <div class="tabs-pane" id="tabs-file-system"></div>
+			        <div class="tabs-pane" id="tabs-demo"></div>
+
+			    </div>
+			#end
+			
+			#parse('templates/livingdoc/configuration/poweredByLDFooter.vm')
+			#parse ( "/admin/admin-breadcrumbs.vm" )		
+		#else
+            <div class="errorBox">
+                <p> $action.getText('livingdoc.install.adminuseronly') </p>
+            </div>
+        #end
+	
+	
+    </body>
+</html>

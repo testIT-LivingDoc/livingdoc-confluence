@@ -1,0 +1,31 @@
+<div class="steptitle">
+	<h2>
+		$action.getText('livingdoc.runners.title')
+		#if(!$action.addMode && $action.isServerReady)
+			<button id="runnersPane_add" type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.showRunnerInputs('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-add">Edit</span> $action.getText('livingdoc.runners.add')</button>
+		#end
+	</h2>
+</div>
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+    <div id="runnersPaneError_display"
+       class="aui-message error">
+       <p class="title">
+       		<span class="aui-icon icon-error"></span>
+           <strong>Error!</strong>
+       </p>
+       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+           $action.getText($error) #end</p>
+   </div>
+#end
+
+#if($action.isServerReady)
+	<div class="steptitle"><p>$action.getText('livingdoc.runners.desc')</p></div>
+	<div>
+		#if(!$action.addMode)
+			#parse('templates/livingdoc/configuration/runners/runner.vm')
+		#else
+			#parse('templates/livingdoc/configuration/runners/runnerInputs.vm')
+		#end
+	</div>
+#end

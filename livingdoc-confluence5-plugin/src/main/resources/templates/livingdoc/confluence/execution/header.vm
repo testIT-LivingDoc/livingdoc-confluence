@@ -1,0 +1,87 @@
+<div class="conf_pageLDHeaderItem">
+	<table width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="50%" cellpadding="0" cellspacing="0">
+				<span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle"> enabled</span>
+				<span id="conf_spaceKey_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.spaceKey</span>
+				<span id="conf_pageId_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.id</span>
+				<span id="conf_pageTitle_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.title</span>
+				<span id="conf_implemented_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.implemented</span>
+				<input type="checkbox" id="conf_exeflag" #if($action.implemented || !$action.canEdit)disabled="true"#end #if($action.isExecutable)checked="checked"#end onclick="conf_livingDoc.enableLivingDoc('$req.contextPath', '$action.bulkUID', '$action.executionUID', '$action.spaceKey', '$action.page.id', true);" style="vertical-align:middle;">				
+			</td>
+			<td width="50%" align="right" cellpadding="0" cellspacing="0">
+				#if($action.canEdit && $action.isExecutable)
+					#if($action.implemented)
+						<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
+						<span id="header_implementedVersion" class="ldSmallText">v.${action.implementedVersion}</span>&nbsp;&nbsp;
+						<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
+						<span id="header_workingVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(false);">v.${action.page.version}</span>&nbsp;&nbsp;
+						#if($action.canBeReverted)
+							<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(true);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
+						#end
+					#else
+						#if($action.canBeImplemented)
+							#if($action.implementedVersion)
+								<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
+								<span id="header_implementedVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(true);">v.${action.implementedVersion}</span>&nbsp;&nbsp;
+								<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
+								<span id="header_workingVersion" class="ldSmallText">v.${action.page.version}&nbsp;&nbsp;-&nbsp;</span>
+							#end
+							<span id="header_setasimplemented" class=#if($action.implementationDue)"conf_RedImplementedButton"#else"conf_ImplementedButton"#end onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').setAsImplemented()">$action.getText('livingdoc.page.implement').toUpperCase()</span>
+						#else
+							<span id="header_implementedLabel" class="ldSmallText">$action.getText('livingdoc.page.isimplementedversion')</span>&nbsp;&nbsp;
+							#if($action.canBeReverted)
+								<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(false);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
+							#end
+						#end
+					#end
+				#end
+			</td>
+		</tr>
+	</table>
+</div>
+#if($action.isExecutable)
+	<div id="conf_referenceList_display_${action.bulkUID}_${action.executionUID}_0"  width="100%">
+		#if(!$action.implemented && $action.isExecutable && $action.canEdit)
+				<span class="conf_specificationLinks">$action.getText('livingdoc.page.target.suts.label'):</span>&nbsp;
+				#if($action.specification.targetedSystemUnderTests.size() == 0)
+					($action.getText('livingdoc.page.none'))
+				#else
+					#foreach($sut in $action.specification.targetedSystemUnderTests)
+						<span id="target_sut_name_$sut.name">
+								[$sut.name]
+						</span>
+					#end
+				#end
+				<span class="conf_EditButton" id="conf_SutsPossible" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').openConfigPopup();">$action.getText('livingdoc.page.configure').toUpperCase()</span>
+			#end
+			<span id="conf_waiting_display_${action.bulkUID}_${action.executionUID}" style="display:; padding: 0px 15px; vertical-align:bottom;"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/wait.gif" alt="" border="0"></span>
+			
+			#if(!$action.actionErrors.isEmpty() && !$errorDisplayed)#set($errorDisplayed = true)<span id="conf_actionError_display_${action.bulkUID}_${action.executionUID}" class="conf_smallErrMsg">#foreach($error in $action.actionErrors) $action.getText($error)</span>&nbsp; #end</span> #end
+			<span id="conf_error_display_${action.bulkUID}_${action.executionUID}" class="conf_smallErrMsg" style="display:none"></span>
+			&nbsp;
+			#if(!$action.implemented && $action.isExecutable)
+				<div id="conf_configPopup_${action.bulkUID}_${action.executionUID}_0" class="conf_configPopup" style="display:none; margin:0px; padding:0px;"><span id="conf_configPopup_display_${action.bulkUID}_${action.executionUID}_0"></span></div>					
+			#end
+	</div>	
+	
+	
+	
+	<div id="conf_${action.bulkUID}_${action.executionUID}">
+		#parse('/templates/livingdoc/confluence/execution/header-execution.vm')
+	</div>
+#else
+	<script language="JavaScript" type="text/javascript">LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);</script>
+#end
+#if($action.implemented)
+	<div id="warningBanner" class="conf_implementedBanner">
+		<span class="conf_implementedBannerTxt">$action.getText('livingdoc.page.warning')</span>
+		<span class="conf_implementedBannerTxt">$action.getText('livingdoc.page.implementedBanner')</span>
+		<span class="conf_implementedBannerTxt">$action.getText('livingdoc.page.warning')</span>
+	</div>
+	<script language="JavaScript" type="text/javascript">conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveBody(true);</script>
+#else
+	#if($action.refreshAll && $action.actionErrors.isEmpty())<script language="JavaScript" type="text/javascript">conf_livingDoc.refreshAll('$action.bulkUID', '$action.executionUID');</script>
+	#elseif($action.retrieveBody)<script language="JavaScript" type="text/javascript">conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveBody(false);</script>
+	#end
+#end

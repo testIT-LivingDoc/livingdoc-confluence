@@ -1,0 +1,120 @@
+## PAGE SPECIFIC DECORATOR
+## Here the context is the page. Modes are 'view', 'edit', 'edit-preview', 'view-information', and 'view-attachments'.
+
+#set ($helper = $params.get("helper"))
+#set ($mode = $params.get("mode"))
+#set ($context = $params.get("context"))
+#set ($confPage = $helper.page)
+
+#infoPanelInitFromParams()
+## GENERAL PAGE DECORATING BEGINS
+
+#requireResourcesForContext("page")
+
+#if ($mode != "edit" && $mode != "edit-preview")
+     #parse ("/decorators/includes/content-navigation.vm")
+#end
+
+#if ($infoPanelRequired)
+<content tag="sidebar">
+     #infoPanel(true true true true)
+</content>
+#end
+
+<div id="content" class="page $!mode">
+     #parse("/decorators/includes/page-content-includes.vm")
+
+     ## MODE SPECIFIC DECORATING BEGINS
+     #*
+         Display page based on mode: currently 'view', 'edit', 'preview-edit', 'info' and 'attachments.
+         See the individual page templates (viewpage.vm, editpage.vm, etc.) for the setting of the mode parameter.
+     *#
+     ## VIEW
+
+     #if ($mode == "view")
+
+         #if ($space.personal)
+             #set ($usernameFromSpaceKey = $spaceUtils.getUsernameFromPersonalSpaceKey($spaceKey))
+             #if ($permissionHelper.canView($action.remoteUser, $action.getUser($usernameFromSpaceKey)))
+                 <content tag="personal-sidebar">
+                     #parse ("/template/includes/personal-sidebar-in-context.vm")
+                 </content>
+                 ## Deprecated: needed in case main.vmd hasn't been updated
+                 <content tag="show-personal-sidebar">true</content>
+             #end
+         #end
+
+         #requireResourcesForContext("viewcontent")
+
+         #set ($labelable = $page)
+         #permitSearchEngines()
+
+         #if ($helper.isHistoricalVersion())
+             <content tag="suppressPdfLink">true</content>
+         #end
+
+         #parse ("/decorators/includes/page-metadata.vm")
+         #if ($helper.isHistoricalVersion() || $helper.action.navigatingVersions)
+             #versionInfo()
+         #end
+
+         ## If you choose to move page it's being done from view mode
+         #putMetadata('browse-page-tree-mode', 'view')
+         #putMetadata('parent-page-id', $!parentPage.id)
+
+         ## <div id="content-editable-container" class="wiki-content">
+         ##   $body
+         ## </div>
+         	## LIVINGDOC
+			<table cellspacing="0" width="100%">
+		  		#parse($livingDoc.header)
+			</table>
+			#parse($livingDoc.body) 
+         
+
+         #trackbackRdf ($trackbackUtils.getContentIdentifier($page) $page.title $trackbackUtils.getPingUrl($page))
+
+         #if ($mode != "edit" && $mode != "edit-preview")
+             #parse("/labels/labels-dialog.vm")
+             #parse("/labels/labels-editor.vm")
+         #end
+
+         #renderChildren()
+
+         #applyDecorator("root")
+             #decoratorParam("sitemeshPage" $sitemeshPage)
+             #decoratorParam("page" $page)
+             #decoratorParam("context" "comments")
+         #end
+
+     ## EDIT || PREVIEW-EDIT
+     #elseif ($mode == "edit" || $mode == "edit-preview")
+         $body
+
+     ## INFO
+     #elseif ($mode == "view-information")
+         #requireResourcesForContext("viewinformation") 
+         $body
+
+     ## ATTACHMENTS
+     #elseif ($mode == "view-attachments" || $mode == "move-attachments")
+         #requireResourcesForContext("viewattachments") 
+         $body
+     #elseif ($mode == "view-attachment")
+         #requireResourcesForContext("viewattachments")
+         <content tag="title-text-span">$i18n.getText("properties.attachment", ["$generalUtil.htmlEncode($newFileName)"])</content>
+         $body
+
+     ## FOR CUSTOM WEB-ITEMS
+     #else
+         $body
+
+     #end
+     ## MODE SPECIFIC DECORATING ENDS
+
+</div>
+
+## GENERAL PAGE DECORATING ENDS
+
+#parse ("/pages/page-breadcrumbs.vm")
+#menuMacros_renderBrowseMenu()

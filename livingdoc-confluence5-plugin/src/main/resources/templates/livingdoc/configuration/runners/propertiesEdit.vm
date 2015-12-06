@@ -1,0 +1,35 @@
+<form class="aui long-label">
+	<div class="field-group">
+	    <label for="runnerName" class="sp_configLabels">$action.getText('livingdoc.runners.name')<span class="aui-icon icon-required"> required</span></label>
+	    <input class="text sp_configInput" type="text" id="runnerName" value="$action.selectedRunner.name" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="40">
+	</div>
+	<div class="field-group">
+    	<label for="serverName" class="sp_configLabels">$action.getText('livingdoc.runners.servername')<span class="aui-icon icon-required"> required</span></label>
+    	<input data-aui-validation-field="" data-aui-validation-required="required" class="text sp_configInput" type="text" id="serverName" value="$!action.selectedRunner.serverName" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="40">
+		<div class="description">$action.getText('livingdoc.runners.servername.description')</div>
+	</div>
+	<div class="field-group">
+   		<label for="serverPort" class="sp_configLabels">$action.getText('livingdoc.runners.serverport')</label>
+    	<input class="text sp_configInput" type="text" id="serverPort" value="$!action.selectedRunner.serverPort" onkeypress="javascript:return LD.View.verifyKeyCode(event);" size="20">
+		<div class="description">$action.getText('livingdoc.runners.serverport.description')</div>
+	</div>
+	<fieldset class="group">
+  		<legend><span class="sp_configLabels"></span></legend>
+	    <div class="checkbox">
+	        <input class="checkbox sp_configInput" type="checkbox" id="secured" #if($action.selectedRunner.secured) checked="checked" #end size="20">
+	        <label for="secured">$action.getText('livingdoc.runners.secured')</label>
+	        <div class="description">$action.getText('livingdoc.runners.secured.desc')</div>
+	    </div>
+	    <div class="field-group">
+			<label for="editClasspathInput">$action.ClasspathTitle</label>
+			<textarea class="textarea full-width-field" rows="15" id="editClasspathInput" name="editClasspathInput">$action.classpathsAsTextAreaContent</textarea>
+			<div class="description">$action.getText('livingdoc.classpath.info')</div>    
+		</div> 
+	</fieldset>
+	<div class="buttons-container">
+		<span class="sp_configTxt">
+			<button type="button" id="runners_save" class="aui-button aui-button-primary" onclick="ldProperties.updateRunnerProperties('$action.spaceKey');">$action.getText('livingdoc.runners.save')</button>
+			<button type="button" id="runners_cancel" class="aui-button aui-button-link" onclick="ldProperties.getRunner('$action.spaceKey', '$action.selectedRunnerName');">$action.getText('livingdoc.runners.cancel')</button>
+		</span>
+	</div>	
+</form>

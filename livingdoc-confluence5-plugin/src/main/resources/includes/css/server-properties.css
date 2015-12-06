@@ -1,0 +1,384 @@
+.ldErrMsgTable {
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+.ldErrMsgDiv {
+    color: #cc0000;
+    text-align: left;
+    font-weight: bold;    
+}
+
+.ldErrMsg {
+}
+
+.ldSmallErrMsg {
+    color: #cc0000;
+    font-size: 10px;
+}
+
+.ldSmallText {
+    color: #666666;
+    font-size: 10px;
+    padding: 0px 0px 0px 4px;
+    font-weight: bold;
+}
+
+.centeredImage {
+    display: inline;
+    vertical-align: middle;
+}
+
+.sp_configMenu {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configTab {
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 2px solid #888888;
+    text-align: center;
+    width: 20%;
+    cursor: pointer;
+}
+
+.sp_configSelectedConfTab {
+    padding: 0px;
+    margin: 0px;
+    color: #888888;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 25%;
+    border-right: 2px solid #888888;
+    border-top: 2px solid #888888;
+}
+
+.sp_configSelectedRegTab {
+    padding: 0px;
+    margin: 0px;
+    color: #888888;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 25%;
+    border-right: 2px solid #888888;
+    border-top: 2px solid #888888;
+    border-left: 2px solid #888888;
+}
+
+.sp_configDisabledTab {
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 2px solid #888888;
+    border-spacing: 0px;
+    background-color: #A0A0A0;
+    color: #787878;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: oblique;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 20%;
+}
+
+.sp_configEndTab {
+    padding: 0px;
+    margin: 0px;
+    border-top: 2px solid #bbb;
+    border-bottom: 2px solid #888888;
+    border-spacing: 0px;
+    background-color: #D0D0D0;
+}
+
+.sp_mainPane {
+    border-right: 2px solid #bbbbbb;
+    border-top: 0px solid #bbbbbb;
+    border-left: 2px solid #bbbbbb;
+    border-spacing: 0px;
+    padding: 0px 0px 15px;
+    margin: 0px;
+}
+
+.sp_configPane {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configMenuPane {
+    padding: 0px 0px 5px 0px;
+    margin: 0px;
+}
+
+.sp_configTitlePane {
+    padding: 10px 5px 4px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configTitle {
+    margin: 0px;
+}
+
+.sp_configDesc {
+    padding: 0px 3px;
+}
+
+.sp_configItemPane {
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configItem {
+    padding: 5px 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configItemView {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configSubItemView {
+    padding: 0px;
+    margin: 0px;
+}
+
+.sp_configInputsView {
+}
+
+.sp_configPropertiesView {
+    width: 100%;
+}
+
+.sp_footerPane {
+    border-right: 2px solid #bbbbbb;
+    border-bottom: 2px solid #bbbbbb;
+    border-left: 2px solid #bbbbbb;
+    background-color: #F8F8F8;
+    padding: 2px;
+    margin: 0px;
+}
+
+.sp_footer {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configView {
+    padding: 0px;
+    margin: 0px auto;
+    width: 100%;
+}
+
+.sp_configSubTitle {
+}
+
+.sp_configInputTitle {
+}
+
+.sp_configInputTxt {
+}
+
+.sp_configOutput {
+}
+
+.sp_configSmallOutput {
+}
+
+.sp_configNoOutput {
+    color: #bbbbbb;
+    text-align: left;
+    font-style: oblique;
+    padding: 0px;
+}
+
+.sp_configNoOption {
+    color: #000;
+    background-color: #FFFFE3;
+    text-align: center;
+    font-weight: bold;
+    font-style: oblique;
+    padding: 0px;
+    margin: 0px;
+}
+
+.sp_configSelectOption {
+    color: #000;
+    background-color: #FFFFE3;
+    text-align: left;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+
+.sp_configSmallSelectOption {
+    color: #000;
+    background-color: #FFFFE3;
+    text-align: left;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+
+.sp_configInput {
+}
+
+.sp_configNoInput {
+    color: #bbbbbb;
+    text-align: center;
+    padding: 0px;
+}
+
+.sp_configSmallInput {
+}
+
+.sp_configLabels {
+}
+
+.sp_configClasspathsView {
+    border-right: 0px solid #fff;
+    border-left: 0px solid #fff;
+    border-bottom: 0px solid #fff;
+    border-top: 1px solid #C8C8C8;
+    border-style: dashed;
+    border-spacing: 10px;
+    padding: 0px 0px 5px;
+    margin: 0px;
+    width: 100%;
+}
+
+.sp_configPropertiesView {
+    width: 100%;
+}
+
+.sp_configError {
+    margin: 0px;
+    color: #cc0000;
+    text-align: center;
+    border: 2px solid #cc0000;
+    border-spacing: 0px;
+    font-weight: bold;
+    background-color: #ffcccc;
+    width: 100%;
+}
+
+.sp_classpath {
+    text-align: left;
+    font-weight: normal;
+    font-size: smaller;
+    padding: 0px 10px 5px 10px;
+    white-space: normal;
+}
+
+.sp_cplabels {
+    width: 90%;
+    color: #484848;
+    text-align: left;
+    font-weight: bold;
+    padding: 2px 5px;
+}
+
+.sp_configLinks {
+    color: #666666;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: underline;
+    vertical-align: bottom;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.sp_configTxt {
+    text-align: center;
+    white-space: nowrap;
+    color: #666666;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.sp_configButtonRight {
+	float: right;
+}
+
+.sp_cpInput {
+    text-align: left;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    padding: 0px 0px 0px 10px;
+}
+
+.sp_cpInputClasspath {
+    text-align: left;
+    font-size: 9px;
+    font-family: Arial, sans-serif;
+}
+
+.sp_pathInput {
+    text-align: left;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    padding: 0px;
+}
+
+.sp_cplinksView {
+    width: 10%;
+    text-align: center;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.sp_oddRow {
+    background-color: #f5f5f5;
+}
+
+.sp_powered {
+    color: #000000;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: right;
+    margin: 0px;
+    padding: 0px;
+    width: 50%;
+}
+
+.sp_msg {
+    color: #666666;
+    font-size: 10px;
+    white-space: nowrap;
+    text-align: left;
+    width: 50%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.sp_configMandatory {
+    font-size: 11px;
+    color: #cc0000;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    padding: 0px 0px 0px 4px;
+    cursor: default;
+}
+
+.demo_spaceButtons {
+	margin-top: 10px;
+}
+
+.tabs-pane {
+    padding-top: 10px;
+}

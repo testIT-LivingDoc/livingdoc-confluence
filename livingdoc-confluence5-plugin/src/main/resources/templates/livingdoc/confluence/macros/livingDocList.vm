@@ -1,0 +1,21 @@
+<div class="conf_pageMacro">
+	<table width="100%">
+		<tr style="display:none"><td colspan="2">Begin Info</td></tr>
+		<tr>
+			<td width="60%" class="conf_executionTitle">
+				#if($title)$title &nbsp;
+				#else$action.getText('livingdoc.macros.title')
+				#end
+				<span id="conf_waiting_display_${action.bulkUID}_${action.executionUID}" style="vertical-align:bottom;"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/wait.gif" alt="" border="0"></span><span class="conf_executionTitle">&nbsp;</span>
+				<span id="conf_error_display_${action.bulkUID}_${action.executionUID}" class="conf_smallErrMsg" style="display:none"></span>
+			</td>
+			<td id="conf_statusbar_${action.bulkUID}_${action.executionUID}" align="right" width="40%" cellpadding="0" cellspaceing="0"  onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').statusBar.switchView();" style="display:none; cursor:pointer;"></td>
+		</tr>
+		<tr>
+			<td id="conf_${action.bulkUID}_${action.executionUID}" colspan="2">	
+				#parse($view)
+			</td>
+		</tr>
+	</table>
+	<table style="display:none"><tr><td>End Info</td></tr></table>
+</div>

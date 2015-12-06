@@ -1,0 +1,25 @@
+#if($action.isEditMode)
+	<span class="conf_exeItem">$action.getText('livingdoc.execution.openbraket')</span>
+	<span class="conf_keySelect">
+		<select id="conf_suts_select_${action.bulkUID}_${action.executionUID}_${fieldId}" class="conf_selectedOption" onchange="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$fieldId').updateSelectedSut();">
+			#foreach($sut in $action.specification.targetedSystemUnderTests)
+				<option value="$sut.project.name@$sut.name" #if($action.selectedSystemUnderTestInfo.equals("$sut.project.name@$sut.name")) selected #end>$sut.name</option>
+			#end
+		</select>
+	</span>
+	<span id="conf_sutInfo_cancelEditSelected" class="conf_EditButton" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$fieldId').cancelEditSutSelection();">$action.getText('livingdoc.execution.cancel').toUpperCase()</span>
+	<span class="conf_exeItem">$action.getText('livingdoc.execution.closebraket')</span>
+	<span id="conf_sutInfo_display_${action.bulkUID}_${action.executionUID}_${fieldId}" style="display:none">$sut.project.name@$sut.name</span>
+	<script language="JavaScript" type="text/javascript">LD.View.switchShadowedView('conf_exeButton_shadow_${action.bulkUID}_${action.executionUID}', 'conf_exeButton_${action.bulkUID}_${action.executionUID}');</script>
+#else
+	#if(!$aPage)
+		#set($aPage = $action.page)
+		#set($aSut = $action.selectedSystemUnderTest) 
+	#end
+	<span class="conf_exeItem">$action.getText('livingdoc.execution.openbraket')</span>
+	<span id="conf_sutLabel_${action.bulkUID}_${action.executionUID}_${fieldId}" class="conf_exeItem">$aSut.name</span>
+	#if($action.isSutEditable && $livingDoc.canEdit($aPage)) <span class="conf_EditButton" id="conf_sutInfo_editSelected_${fieldId}" onclick="conf_livingDoc.oneSutEditionAtATime(); conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$fieldId').editSelectedSut();">$action.getText('livingdoc.page.edit').toUpperCase()</span>#end
+	<span class="conf_exeItem">$action.getText('livingdoc.execution.closebraket')</span>
+	<span id="conf_sutInfo_display_${action.bulkUID}_${action.executionUID}_${fieldId}" style="display:none">$aSut.project.name@$aSut.name</span>
+	#if($action.refreshAll && $action.actionErrors.isEmpty())<script language="JavaScript" type="text/javascript">conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').refresh();</script>#end
+#end

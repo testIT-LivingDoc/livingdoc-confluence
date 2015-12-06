@@ -1,0 +1,14 @@
+<table class="sp_footer" cellspacing="0" cellpadding="0">
+	<tr>
+		<td class="sp_msg">
+			<span id="waiting_display" class="ldSmallText" style="display:none">
+				<img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/wait_12.gif" alt="" border="0">
+				&nbsp;$action.getText('livingdoc.properties.working')
+			</span>
+			<span id="systemError_display" class="ldSmallErrMsg" style="display:none;">$action.getText('livingdoc.properties.systemerror')</span>
+		</td>
+		<td class="sp_powered">
+			<span class="sp_powered">$action.getText('livingdoc.properties.poweredby')</span>&nbsp;<a href="http://www.novatec-gmbh.de/dienstleistungen/agile-quality-engineering/" target="_blank"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/nt_logo_16.gif" class="centeredImage" alt="" border="0"></a>
+		</td>
+	</tr>
+</table>

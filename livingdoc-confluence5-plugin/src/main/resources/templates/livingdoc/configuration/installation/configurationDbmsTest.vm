@@ -1,0 +1,9 @@
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+	#foreach($error in $action.actionErrors)
+		#set($msg = $action.getText($error))
+	#end
+	<span class="aui-lozenge aui-lozenge-error">$msg</span>
+#else
+	<span class="aui-lozenge aui-lozenge-success">$action.getText('livingdoc.configuration.connected')</span>	
+#end

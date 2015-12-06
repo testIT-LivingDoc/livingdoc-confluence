@@ -1,0 +1,37 @@
+<fieldset id="sp_configPropertiesView">
+	<div class="field-group">
+		<label for="newSutName" class="sp_configLabels">$action.getText('livingdoc.suts.name')<span class="aui-icon icon-required"> required</span></label>
+		<input class="text sp_configInput" type="text" id="newSutName" name="newSutName" value="$action.selectedSut.name" size="40" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+	</div>	
+	<div class="field-group">
+	    <label for="sutRunnerName" class="sp_configLabels">$action.getText('livingdoc.suts.runnername')</label>
+	    <select class="select" id="sutRunnerName" class="sp_configSelectOption" name="sutRunnerName">
+			#foreach($runner in $action.runners)
+				<option value="$runner.name" #if($runner.name.equals($action.selectedSut.runner.name)) selected #end>$runner.name&nbsp;&nbsp;&nbsp;</option>
+			#end
+		</select>
+	</div>
+	<div class="field-group">
+		<label for="fixtureFactory" class="sp_configLabels">$action.getText('livingdoc.suts.fixturefactory')</label>
+		<input class="text sp_configInput" type="text" id="fixtureFactory" name="fixtureFactory" value="$!action.selectedSut.fixtureFactory" size="85" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+	</div>
+	<div class="field-group">
+		<label for="fixtureFactoryArgs" class="sp_configLabels">$action.getText('livingdoc.suts.fixturefactoryargs')</label>
+		<input class="text sp_configInput" type="text" id="fixtureFactoryArgs" name="fixtureFactoryArgs" value="$!action.selectedSut.fixtureFactoryArgs" size="85" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+	</div>
+	<div class="field-group">
+		<label for="projectDependencyDescriptor" class="sp_configLabels">$action.getText('livingdoc.suts.projectdependencydescriptor')</label>
+		<input class="text sp_configInput" type="text" id="projectDependencyDescriptor" name="projectDependencyDescriptor" value="$!action.selectedSut.projectDependencyDescriptor" size="85">
+	</div>
+	<div class="field-group">
+		<label for="editClasspathInput">$action.ClasspathTitle</label>
+	    <textarea class="textarea full-width-field" rows="15" id="editClasspathInput" name="editClasspathInput">$action.classpathsAsTextAreaContent</textarea>
+		<div class="description">$action.getText('livingdoc.classpath.info')</div>    
+	</div>
+	<div class="buttons-container">
+		#if(!$action.readonly)
+			<span id="systemUnderTestEdit_save"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.updateSutProperties('$action.spaceKey', '$action.projectName');">$action.getText('livingdoc.suts.save')</button></span>
+			<span id="systemUnderTestEdit_cancel"><button type="button" class="aui-button aui-button-link" onclick="ldProperties.getSut('$action.spaceKey', '$action.projectName');">$action.getText('livingdoc.suts.cancel')</button></span>
+		#end
+	</div>
+</fieldset>

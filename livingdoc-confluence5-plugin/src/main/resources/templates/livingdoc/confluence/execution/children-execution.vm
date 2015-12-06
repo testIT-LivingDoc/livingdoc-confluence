@@ -1,0 +1,53 @@
+<script language="JavaScript" type="text/javascript">addLoadEvent("LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);");</script>
+#if (!$action.actionErrors.isEmpty())
+	<div id="conf_actionError_display_${action.bulkUID}_${action.executionUID}" class="ldErrMsg">
+		#foreach($error in $action.actionErrors)
+			<span>$action.getText($error)</span><br>
+		#end
+	</div>
+#end
+<div class="conf_executionDetails" width="100%">
+	<span id="conf_exeButton_${action.bulkUID}_${action.executionUID}" class="conf_button" #if(!$action.executable)style="display:none"#end><button type="button" class="aui-button aui-button-primary" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').runAll();">$action.getText('livingdoc.execution.execute')</button></span><span id="conf_exeButton_shadow_${action.bulkUID}_${action.executionUID}" #if($action.executable)style="display:none"#end><button type="button" class="aui-button aui-button-primary" aria-disabled="true" disabled>$action.getText('livingdoc.execution.executing')</button></span>
+	<span class="conf_exeLabel">
+		$action.getText('livingdoc.execution.for')
+		#if($action.allChildren)$action.getText('livingdoc.children.all')
+		#else $action.getText('livingdoc.children.firstlvl')
+		#end
+		$action.getText('livingdoc.children.childrenof')&nbsp;
+	</span>
+	<span style="white-space: nowrap;">
+		<span class="conf_exeItem">$action.getText('livingdoc.execution.openbraket')</span>
+		<span id="conf_pageId_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.id</span>
+		<span id="conf_pageTitle_display_${action.bulkUID}_${action.executionUID}" class="conf_exeItem">$action.page.title</span>
+		<span class="conf_exeItem">$action.getText('livingdoc.execution.closebraket')</span>
+	</span>
+	<span style="white-space: nowrap;">
+		<span class="conf_exeLabel">$action.getText('livingdoc.labels.spaceson')&nbsp;</span>
+		#if($action.spaceKey)
+			<span id="conf_spaceKey_display_${action.bulkUID}_${action.executionUID}" class="conf_exeItem">$action.spaceKey</span>
+			<span class="conf_exeLabel">$action.getText('livingdoc.labels.space')</span>
+		#else
+			<span class="conf_exeItem">$action.getText('livingdoc.labels.allspaces')</span>
+		#end
+	</span>			
+	#if($action.executable)
+		<span style="white-space: nowrap;">
+			<span class="conf_exeSpacer">&nbsp;</span>	
+			<span id="conf_expand_${action.bulkUID}_${action.executionUID}"  class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').show();" #if($action.showList)style="display:none"#end><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/expand.gif" alt="" title="$action.getText('livingdoc.execution.showlist')" border="0"></span>
+			<span id="conf_colapse_${action.bulkUID}_${action.executionUID}"  class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').hide();" #if(!$action.showList)style="display:none"#end><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/colapse.gif" alt="" title="$action.getText('livingdoc.execution.hidelist')" border="0"></span>
+			<span class="conf_button" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').refresh();"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page/images/refresh.gif" alt="" title="$action.getText('livingdoc.execution.refreshlist')" border="0"></span>
+		</span>
+	#end
+	<br>
+	<span class="conf_exeGroupLabel">
+		( $action.getText('livingdoc.group.member') <span id="conf_exeGroupItem_${action.bulkUID}_${action.executionUID}" class="conf_exeGroupItem">$action.bulkUID</span> )
+		<span id="conf_statusbar_link_${action.bulkUID}_${action.executionUID}" class="conf_smallGroupLinks" style="display:none;">
+			<span id="conf_showAllResult_link_${action.bulkUID}_${action.executionUID}" class="conf_smallLinks" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').showAll();">$action.getText('livingdoc.execution.showall')</span>
+			|
+			<span id="conf_hideAllResult_link_${action.bulkUID}_${action.executionUID}" class="conf_smallLinks" onclick="conf_livingDoc.getList('$action.bulkUID', '$action.executionUID').hideAll();">$action.getText('livingdoc.execution.hideall')</span>
+		</span>
+	</span>
+</div>
+<div id="conf_specificationList_display_${action.bulkUID}_${action.executionUID}" class="conf_specificationListPane" #if(!$action.showList && !$action.isPrintableVersion())style="display:none"#end>
+	#parse('/templates/livingdoc/confluence/execution/specificationList.vm')
+</div>
