@@ -40,16 +40,8 @@ public class LivingDocImport extends AbstractLivingDocMacro {
 
     @SuppressWarnings("rawtypes")
     private List<String> getImportList(Map parameters) {
-        // int index = 0;
-        List<String> imports = new ArrayList<String>();
 
-        // v3
-        // String importParam = (String)parameters.get(""+index);
-        // while(importParam != null)
-        // {
-        // imports.add(ConfluenceLivingDoc.clean(importParam));
-        // importParam = (String)parameters.get(""+ ++index);
-        // }
+        List<String> imports = new ArrayList<String>();
 
         // v4
         String[] values = MacroParametersUtils.extractParameterMultiple(IMPORTS_PARAM, parameters);
