@@ -13,6 +13,7 @@
 	<packaging>atlassian-plugin</packaging>
 
 	<properties>
+		<project.root>..</project.root>
 		<project.plugin.key>info.novatec.testit.livingdoc.confluence.plugin</project.plugin.key>
 		<project.plugin.name>testIT - LivingDoc Plugin</project.plugin.name>
 		<plugin.testrunner.version>1.2.0</plugin.testrunner.version>
