@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<license-lookup xmlns="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup https://source.jasig.org/schemas/maven-notice-plugin/license-lookup/license-lookup-v1.0.xsd">
+	<artifact>
+		<groupId>antlr</groupId>
+		<artifactId>antlr</artifactId>
+		<version>2.7.6</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>asm</groupId>
+		<artifactId>asm</artifactId>
+		<version>1.5.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>asm</groupId>
+		<artifactId>asm-attrs</artifactId>
+		<version>1.5.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>axis</groupId>
+		<artifactId>axis</artifactId>
+		<version>1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>axis</groupId>
+		<artifactId>axis-jaxrpc</artifactId>
+		<version>1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>axis</groupId>
+		<artifactId>axis-saaj</artifactId>
+		<version>1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>cglib</groupId>
+		<artifactId>cglib</artifactId>
+		<version>2.1_3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.bonnie</groupId>
+		<artifactId>lucene-upgrader</artifactId>
+		<version>1.0</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-api</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-common</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-core</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-decoder-api</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-decoder-v2</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.extras</groupId>
+		<artifactId>atlassian-extras-legacy</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.modzdetector</groupId>
+		<artifactId>modz-detector</artifactId>
+		<version>0.8.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.plugins</groupId>
+		<artifactId>atlassian-spring-interceptor-adapter-spi</artifactId>
+		<version>1.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.renderer</groupId>
+		<artifactId>atlassian-renderer-legacy</artifactId>
+		<version>6.2.10</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.security</groupId>
+		<artifactId>atlassian-password-encoder</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.security</groupId>
+		<artifactId>atlassian-secure-random</artifactId>
+		<version>3.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.atlassian.velocity.htmlsafe</groupId>
+		<artifactId>velocity-htmlsafe</artifactId>
+		<version>1.2-fixedscm</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.sun</groupId>
+		<artifactId>jai_codec</artifactId>
+		<version>1.1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>com.sun</groupId>
+		<artifactId>jai_core</artifactId>
+		<version>1.1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>commons-collections</groupId>
+		<artifactId>commons-collections</artifactId>
+		<version>2.1.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>commons-digester</groupId>
+		<artifactId>commons-digester</artifactId>
+		<version>1.5</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>commons-discovery</groupId>
+		<artifactId>commons-discovery</artifactId>
+		<version>0.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>commons-jrcs</groupId>
+		<artifactId>commons-jrcs</artifactId>
+		<version>diff-0.1.7</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
+		<version>1.4-full</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
+		<version>1.6.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>hibernate</groupId>
+		<artifactId>hibernate</artifactId>
+		<version>2.1.8-atlassian-27</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>jakarta-regexp</groupId>
+		<artifactId>jakarta-regexp</artifactId>
+		<version>1.4</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+		<version>1.0.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>javax.media</groupId>
+		<artifactId>jai-core</artifactId>
+		<version>1.1.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>2.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>javax.transaction</groupId>
+		<artifactId>jta</artifactId>
+		<version>1.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>javax.xml.bind</groupId>
+		<artifactId>jaxb-api</artifactId>
+		<version>2.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>jdom</groupId>
+		<artifactId>jdom</artifactId>
+		<version>1.0</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>net.java.dev.stax-utils</groupId>
+		<artifactId>stax-utils</artifactId>
+		<version>20040917</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>net.jcip</groupId>
+		<artifactId>jcip-annotations</artifactId>
+		<version>1.0</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>odmg</groupId>
+		<artifactId>odmg</artifactId>
+		<version>3.0</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>ognl</groupId>
+		<artifactId>ognl</artifactId>
+		<version>2.6.5-atlassian-2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>ognl</groupId>
+		<artifactId>ognl</artifactId>
+		<version>2.7.3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>opensymphony</groupId>
+		<artifactId>oscore</artifactId>
+		<version>2.2.7-atlassian-1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>opensymphony</groupId>
+		<artifactId>propertyset</artifactId>
+		<version>1.3-21Nov03</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>opensymphony</groupId>
+		<artifactId>sitemesh</artifactId>
+		<version>2.5-atlassian-6</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>opensymphony</groupId>
+		<artifactId>webwork</artifactId>
+		<version>2.1.5-atlassian-2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>opensymphony</groupId>
+		<artifactId>xwork</artifactId>
+		<version>1.0.3.6</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.antlr</groupId>
+		<artifactId>antlr-runtime</artifactId>
+		<version>3.4</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.codehaus.xfire</groupId>
+		<artifactId>xfire-aegis</artifactId>
+		<version>1.2.6</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.codehaus.xfire</groupId>
+		<artifactId>xfire-core</artifactId>
+		<version>1.2.6</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.eclipse.core</groupId>
+		<artifactId>runtime</artifactId>
+		<version>20070801</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.hibernate</groupId>
+		<artifactId>ejb3-persistence</artifactId>
+		<version>1.0.1.GA</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.springframework.ldap</groupId>
+		<artifactId>spring-ldap-core</artifactId>
+		<version>1.3.1.RELEASE</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>org.twdata.pkgscanner</groupId>
+		<artifactId>package-scanner</artifactId>
+		<version>0.9.5</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>oro</groupId>
+		<artifactId>oro</artifactId>
+		<version>2.0.8</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>oscache</groupId>
+		<artifactId>oscache</artifactId>
+		<version>2.2</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>osuser</groupId>
+		<artifactId>osuser</artifactId>
+		<version>atl.user</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>radeox</groupId>
+		<artifactId>radeox</artifactId>
+		<version>1.0b2-forked-22Apr2004</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>rome</groupId>
+		<artifactId>rome</artifactId>
+		<version>1.0</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>slide</groupId>
+		<artifactId>slide</artifactId>
+		<version>2.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>velocity-tools</groupId>
+		<artifactId>velocity-tools</artifactId>
+		<version>view-1.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>wsdl4j</groupId>
+		<artifactId>wsdl4j</artifactId>
+		<version>1.5.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>xmlrpc</groupId>
+		<artifactId>xmlrpc</artifactId>
+		<version>2.0+xmlrpc61.1+sbfix</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>xmlrpc</groupId>
+		<artifactId>xmlrpc</artifactId>
+		<version>2.0.1</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>xpp3</groupId>
+		<artifactId>xpp3_min</artifactId>
+		<version>1.1.3.4.O</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+</license-lookup>
