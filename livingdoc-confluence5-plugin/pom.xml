@@ -17,6 +17,8 @@
 		<project.plugin.key>info.novatec.testit.livingdoc.confluence.plugin</project.plugin.key>
 		<project.plugin.name>testIT - LivingDoc Plugin</project.plugin.name>
 		<plugin.testrunner.version>1.2.0</plugin.testrunner.version>
+		<licenses.mapping>./licensing/license-mappings.xml</licenses.mapping>
+		<licenses.template>./licensing/NOTICE.template</licenses.template>
 	</properties>
 
 	<!-- Please read the following guides before making changes: -->
@@ -148,6 +150,13 @@
 					<exclude>**/*.xml</exclude>
 				</excludes>
 			</resource>
+			<resource>
+				<!-- include all generated license information -->
+				<directory>${project.build.directory}/generated-sources/license</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -165,6 +174,28 @@
 			<plugin>
 				<groupId>com.atlassian.lesscss</groupId>
 				<artifactId>lesscss-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>maven-notice-plugin</artifactId>
+				<version>1.0.4</version>
+				<executions>
+					<execution>
+						<!-- Generate NOTICE file to be bundled with the .jar files. -->
+						<id>generate-bundled-notice-file</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<noticeTemplate>${licenses.template}</noticeTemplate>
+							<licenseMapping>
+								<param>${licenses.mapping}</param>
+							</licenseMapping>
+							<outputDir>${project.build.directory}/generated-sources/license</outputDir>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
