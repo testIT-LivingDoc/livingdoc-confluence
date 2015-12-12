@@ -27,8 +27,6 @@ import com.atlassian.user.GroupManager;
 import com.atlassian.user.User;
 import com.atlassian.user.search.page.Pager;
 
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-
 
 public class LivingDocUserGroup {
     private static final Logger log = LoggerFactory.getLogger(LivingDocUserGroup.class);
@@ -59,7 +57,7 @@ public class LivingDocUserGroup {
         }
     }
 
-    public int getNumberOfUserForGroup() throws LivingDocServerException {
+    public int getNumberOfUserForGroup() {
         try {
             final long start = System.currentTimeMillis();
             Iterator<String> itr = getMembers().iterator();

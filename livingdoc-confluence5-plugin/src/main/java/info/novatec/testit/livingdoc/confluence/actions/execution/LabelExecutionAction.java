@@ -63,7 +63,6 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
         if (labelObject != null) {
             return ( List<Page> ) ldUtil.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
                 LabelManager.NO_MAX_RESULTS, labelObject);
-            // return ldUtil.getLabelManager().getContent(labelObject);
         }
 
         return new ArrayList<Page>();

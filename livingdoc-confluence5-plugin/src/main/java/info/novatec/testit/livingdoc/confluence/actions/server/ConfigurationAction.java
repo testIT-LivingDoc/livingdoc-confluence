@@ -51,7 +51,6 @@ public class ConfigurationAction extends LivingDocServerAction {
         ListBuilder<Space> lbGlobalSpace = ldUtil.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(
             SpaceType.GLOBAL).build());
         return lbGlobalSpace.getRange(0, lbGlobalSpace.getAvailableSize() - 1);
-        // return ldUtil.getSpaceManager().getSpacesByType(SpaceType.GLOBAL);
     }
 
     public String getConfiguration() {
