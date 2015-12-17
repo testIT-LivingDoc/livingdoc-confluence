@@ -65,10 +65,10 @@ LDProperties.prototype =
 		var newProjectName = $('#newProjectName') ? $F('newProjectName') : 'NA'; 
 		this.action.register(this.createParams({id:id, repositoryName:$F('repositoryName'), projectName:$F('projectName'), newProjectName:newProjectName, username:$F('username'), pwd:$F('pwd')})); 
 	},
-	updateRegistration:function(id){ 
+	updateRegistration:function(id){
 		if($F('repositoryName') === ''){ return; }
-		var newProjectName = $('#newProjectName') ? $F('newProjectName') : 'NA'; 
-		this.action.updateRegistration(this.createParams({id:id, repositoryName:$F('repositoryName'), projectName:$F('projectName'), newProjectName:newProjectName, username:$F('username'), pwd:$F('pwd')})); 
+		var newProjectName = $('#newProjectName') ? $F('newProjectName') : 'NA';
+		this.action.updateRegistration(this.createParams({id:id, repositoryName:$F('repositoryName'), projectName:$F('projectName'), newProjectName:newProjectName, username:$F('username'), pwd:$F('pwd')}));
 	},
 	getSutsPane:function(id, projectName){ 
 		var readonly = $F('readonly') ? true : false;
@@ -140,6 +140,18 @@ LDProperties.prototype =
 	getLdProjectPane:function(){
 		AJS.tabs.change(AJS.$('a[href=#tabs-project]'));
 		this.action.getLdProjectPane(this.createParams({id:'none'}));
+	},
+
+	updateSettings:function(){
+		if($F('executionTimeout') === ''){ return; }
+		this.action.updateSettings(this.createParams({id:'none', executionTimeout:$F('executionTimeout'), editMode:false}));
+	},
+	editSettings:function(){
+		this.action.editSettings(this.createParams({id:'none', editMode:true}));
+	},
+	getGeneralSettingsPane:function(){
+		AJS.tabs.change(AJS.$('a[href=#tabs-settings]'));
+		this.action.getGeneralSettingsPane(this.createParams({id:'none', editMode:false}));
 	},
 
 	getDemoPane:function() {

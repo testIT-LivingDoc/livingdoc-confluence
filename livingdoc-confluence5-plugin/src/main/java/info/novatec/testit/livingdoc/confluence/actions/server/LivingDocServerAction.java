@@ -1,14 +1,5 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
-import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
-
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.LivingDocServerService;
@@ -18,6 +9,15 @@ import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import info.novatec.testit.livingdoc.util.I18nUtil;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
+import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
 
 @SuppressWarnings("serial")
@@ -73,8 +73,9 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public String getUrl() {
-        if (url != null)
+        if (url != null) {
             return url;
+        }
         url = getNotNullProperty(ServerPropertiesManager.URL);
         return url;
     }
@@ -96,8 +97,9 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public Repository getRegisteredRepository() throws LivingDocServerException {
-        if (registeredRepository != null)
+        if (registeredRepository != null) {
             return registeredRepository;
+        }
         registeredRepository = getService().getRegisteredRepository(getHomeRepository());
         return registeredRepository;
     }
@@ -107,8 +109,9 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public Repository getHomeRepository() throws LivingDocServerException {
-        if (homeRepository != null)
+        if (homeRepository != null) {
             return homeRepository;
+        }
         if (key == null) {
             homeRepository = Repository.newInstance("UNKNOWN_UID");
         } else {
@@ -119,13 +122,16 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public List<SystemUnderTest> getSystemUnderTests() {
-        if ( ! isServerSetupComplete())
+        if ( ! isServerSetupComplete()) {
             return new ArrayList<SystemUnderTest>();
+        }
 
         try {
-            if (projectName == null)
-                if (systemUnderTests != null)
+            if (projectName == null) {
+                if (systemUnderTests != null) {
                     return systemUnderTests;
+                }
+            }
             systemUnderTests = ldUtil.getLDServerService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
@@ -135,10 +141,12 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public boolean isRegistered() {
-        if (isRegistered != null)
+        if (isRegistered != null) {
             return isRegistered;
-        if ( ! isServerReady())
+        }
+        if ( ! isServerReady()) {
             return false;
+        }
 
         try {
             getRegisteredRepository();
@@ -170,15 +178,16 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         return getText("livingdoc.registration.newproject");
     }
 
-    private String getNotNullProperty(String key) {
-        String value = ldUtil.getPageProperty(key, getIdentifier());
+    private String getNotNullProperty(String propertyKey) {
+        String value = ldUtil.getPageProperty(propertyKey, getIdentifier());
         return value == null ? "" : value;
     }
 
     @Override
     public String getSpaceKey() {
-        if (spaceKey == null)
+        if (spaceKey == null) {
             spaceKey = key;
+        }
         return spaceKey;
     }
 
@@ -190,16 +199,16 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     /**
      * Custom I18n. Based on WebWork i18n.
      * 
-     * @param key Key
+     * @param propertyKey Key
      * @return the i18nzed message. If none found key is returned.
      */
     @Override
     @HtmlSafe
-    public String getText(String key) {
-        String text = super.getText(key);
+    public String getText(String propertyKey) {
+        String text = super.getText(propertyKey);
 
-        if (text.equals(key)) {
-            text = I18nUtil.getText(key, getResourceBundle());
+        if (text.equals(propertyKey)) {
+            text = I18nUtil.getText(propertyKey, getResourceBundle());
         }
 
         return text;
@@ -207,11 +216,11 @@ public class LivingDocServerAction extends AbstractSpaceAction {
 
     @Override
     @HtmlSafe
-    public String getText(String key, Object[] args) {
-        String text = super.getText(key, args);
+    public String getText(String propertyKey, Object[] args) {
+        String text = super.getText(propertyKey, args);
 
-        if (text.equals(key)) {
-            text = I18nUtil.getText(key, getResourceBundle(), args);
+        if (text.equals(propertyKey)) {
+            text = I18nUtil.getText(propertyKey, getResourceBundle(), args);
         }
 
         return text;
@@ -233,8 +242,9 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public LinkedList<Project> getProjects() {
-        if (projects != null)
+        if (projects != null) {
             return projects;
+        }
         try {
             projects = new LinkedList<Project>(getService().getAllProjects());
             projectName = projectName == null ? projects.iterator().next().getName() : projectName;

@@ -17,25 +17,29 @@
 				<div id="tab-container" class="aui-tabs horizontal-tabs"">
 			        <ul class="tabs-menu">
 			            <li class="menu-item active-tab">
-			            	<a onclick="ldProperties.getDbmsConfigPane();"
+                            <a onclick="ldProperties.getDbmsConfigPane();"
 			            		href="#tabs-dbms-config">$action.getText('livingdoc.install.tabmenu.dbms')</a>
 			            </li>
 			            <li class="menu-item">
-			            	<a onclick="ldProperties.getRunnersPane();"
+                            <a onclick="ldProperties.getRunnersPane();"
 			            		href="#tabs-runner">$action.getText('livingdoc.install.tabmenu.runners')</a>
 			            </li>
 			            <li class="menu-item">
-			            	<a onclick="ldProperties.getLdProjectPane();"
+                            <a onclick="ldProperties.getLdProjectPane();"
 			            		href="#tabs-project">$action.getText('livingdoc.install.tabmenu.ldproject')</a>
-			                </li>
-			             <li class="menu-item">
-			            	<a onclick="ldProperties.getFileSystemRegistration();"	
+			            </li>
+                        <li class="menu-item">
+                            <a onclick="ldProperties.getGeneralSettingsPane();"
+                               href="#tabs-settings">$action.getText('livingdoc.install.tabmenu.settings')</a>
+                        </li>
+			            <li class="menu-item">
+                            <a onclick="ldProperties.getFileSystemRegistration();"
 			            		href="#tabs-file-system">$action.getText('livingdoc.install.tabmenu.fsregister')</a>
 			               </li>
-			             <li class="menu-item">
-			            	<a onclick="ldProperties.getDemoPane();"
+			            <li class="menu-item">
+							<a onclick="ldProperties.getDemoPane();"
 			            		href="#tabs-demo">$action.getText('livingdoc.install.tabmenu.demo')</a>
-			                </li>
+			            </li>
 			        </ul>
 		        	
 			        <div class="tabs-pane active-pane" id="tabs-dbms-config">
@@ -43,6 +47,7 @@
 			        </div>
 			        <div class="tabs-pane" id="tabs-runner"></div>
 			        <div class="tabs-pane" id="tabs-project"></div>
+            		<div class="tabs-pane" id="tabs-settings"></div>
 			        <div class="tabs-pane" id="tabs-file-system"></div>
 			        <div class="tabs-pane" id="tabs-demo"></div>
 

@@ -11,6 +11,7 @@ import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceType;
 import com.atlassian.confluence.spaces.SpacesQuery;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.ClasspathSet;
@@ -43,19 +44,21 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     private boolean secured;
     private boolean addMode;
+    private boolean editMode = false;
     private boolean editPropertiesMode;
     private boolean editClasspathsMode;
 
     public List<Space> getSpaces() {
         // NT - Fix for getting all Spaces
-        ListBuilder<Space> lbGlobalSpace = ldUtil.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(
-            SpaceType.GLOBAL).build());
+        ListBuilder<Space> lbGlobalSpace =
+            ldUtil.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(SpaceType.GLOBAL).build());
         return lbGlobalSpace.getRange(0, lbGlobalSpace.getAvailableSize() - 1);
     }
 
     public String getConfiguration() {
-        if (isServerReady())
+        if (isServerReady()) {
             doGetRunners();
+        }
         return SUCCESS;
     }
 
@@ -64,8 +67,9 @@ public class ConfigurationAction extends LivingDocServerAction {
     }
 
     public String updateConfiguration() {
-        if (isServerReady())
+        if (isServerReady()) {
             doGetRunners();
+        }
         return SUCCESS;
     }
 
@@ -177,8 +181,8 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String getClasspathsAsTextAreaContent() {
         StringBuilder sb = new StringBuilder();
-        for (String classpath : getClasspaths()) {
-            sb.append(classpath);
+        for (String path : getClasspaths()) {
+            sb.append(path);
             sb.append("\r");
         }
         return sb.toString();
@@ -278,6 +282,24 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String getNewCmdLineTemplate() {
         return newCmdLineTemplate;
+    }
+
+    public String getExecutionTimeout() {
+        return ldUtil.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
+    }
+
+    public void setExecutionTimeout(String executionTimeout) {
+        LivingDocServerConfiguration conf = ldUtil.getLDServerConfigurationActivator().getConfiguration();
+        conf.getProperties().setProperty("executionTimeout", executionTimeout);
+        ldUtil.getLDServerConfigurationActivator().storeConfiguration(conf);
+    }
+
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 
     private void successfullAction() {

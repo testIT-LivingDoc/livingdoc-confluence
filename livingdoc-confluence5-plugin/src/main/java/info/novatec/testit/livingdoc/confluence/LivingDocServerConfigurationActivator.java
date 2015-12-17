@@ -70,6 +70,7 @@ import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
  */
 public class LivingDocServerConfigurationActivator implements InitializingBean, DisposableBean {
     private static final Logger log = LoggerFactory.getLogger(LivingDocServerConfigurationActivator.class);
+    private static final String EXECUTION_TIMEOUT_DEFAULT = "60";
 
     private final BandanaContext bandanaContext = new ConfluenceBandanaContext("_LIVINGDOC");
 
@@ -138,6 +139,9 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
             Properties properties = customConfiguration.getProperties();
 
             properties.setProperty("confluence.home", getConfluenceHome());
+            if(properties.getProperty("executionTimeout")==null){
+                properties.setProperty("executionTimeout", EXECUTION_TIMEOUT_DEFAULT);
+            }
 
             HibernateSessionService sessionService = new HibernateSessionService(properties);
 

@@ -57,6 +57,13 @@ LD.View =
 		target.attr('class', className);
 		target.val('');		
 	},
+	verifyNumericOnly: function(evt){
+		if (evt.which >= 48 && evt.which <= 57){return true;}    //Allows numerics
+		if (evt.keyCode >= 37 && evt.keyCode <=40){return true;} //Allows arrow keys
+		if (evt.keyCode == 8 || evt.keyCode == 46){return true;} //Allows backspace and delete
+		if (evt.keyCode == 9){return true;}                      //Allows tabulator
+		return false;
+	},
 	verifyKeyCode: function(evt){
 		var charCode = (evt.which) ? evt.which : evt.keyCode;
 		if (charCode == 95 || charCode == 33 || charCode == 32 || charCode == 8){ return true; }
