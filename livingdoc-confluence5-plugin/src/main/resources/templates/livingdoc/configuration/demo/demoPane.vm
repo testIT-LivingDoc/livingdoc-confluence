@@ -23,11 +23,11 @@
 			<fieldset>
 				<div class="field-group">
 				    <label for="username" class="sp_configLabels">$action.getText('livingdoc.demo.username')#if(!$action.allowRemoteApiAnonymous)<span class="aui-icon icon-required"> required</span>#end</label>
-				    <input class="text sp_configInput" type="text" id="username" name="username" value="$!action.username" size="15" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+				    <input class="text sp_configInput" type="text" id="username" name="username" value="$!action.username" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
 				</div>
 				<div class="field-group">
 				    <label for="pwd" class="sp_configLabels">$action.getText('livingdoc.demo.password')</label>
-				    <input class="text sp_configInput" type="password" id="pwd" name="pwd" value="$!action.pwd" size="15" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
+				    <input class="text sp_configInput" type="password" id="pwd" name="pwd" value="$!action.pwd" onkeypress="javascript:return LD.View.verifyKeyCode(event);">
 				</div>
 				<div class="buttons-container">
 					<span id="demo_createSpace"><button type="button" class="aui-button aui-button-primary" onclick="ldProperties.createDemoSpace(#if($action.allowRemoteApiAnonymous)'false'#else'true'#end);">$action.getText('livingdoc.demo.createspace')</button></span>
