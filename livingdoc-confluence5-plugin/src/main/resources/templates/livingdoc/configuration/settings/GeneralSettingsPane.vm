@@ -1,0 +1,36 @@
+<div class="steptitle">
+    <h2>$action.getText('livingdoc.settings.title')</h2></div>
+#if($action.isServerReady)
+    #if(!$action.editMode)
+        <span id="registrationPane_register">
+            <button type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.editSettings();">
+                <span class="aui-icon aui-icon-small aui-iconfont-add">Register</span> $action.getText('livingdoc.settings.edit')
+            </button>
+        </span>
+    #end
+#end
+#if (!$action.actionErrors.isEmpty() && !$errorDisplayed)
+	#set($errorDisplayed = true)
+    <div id="runnersPaneError_display"
+       class="aui-message error">
+       <p class="title">
+       		<span class="aui-icon icon-error"></span>
+           <strong>Error!</strong>
+       </p>
+       <p class="ldErrMsg">#foreach($error in $action.actionErrors)
+           $action.getText($error) #end</p>
+   </div>
+#end
+
+#if($action.isServerReady)
+	<p class="stepdesc">$action.getText('livingdoc.settings.desc')</p>
+	#if($action.readonly)<span id="readonly" style="display:none"></span>#end
+	<div id="greyBoxSettings" class="form-block greyboxfilled">
+        #if($action.editMode)
+            #parse('templates/livingdoc/configuration/settings/settingsEdit.vm')
+        #else
+            #parse('templates/livingdoc/configuration/settings/settings.vm')
+        #end
+
+	</div>
+#end

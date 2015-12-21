@@ -1,0 +1,14 @@
+<div class="sp_configItemView">
+	<form class="aui long-label">
+		<fieldset>
+		    <div class="field-group">
+		        <label for="settingsPane_executionTimeout" class="sp_configSubTitle">
+		            $action.getText('livingdoc.settings.executionTimeout')
+		        </label>
+		        <span id="settingsPane_executionTimeout" class="field-value sp_configOutput" name="settingsPane_executionTimeout">
+					$action.executionTimeout
+		        </span>
+		    </div>
+	    </fieldset>
+    </form>
+</div>

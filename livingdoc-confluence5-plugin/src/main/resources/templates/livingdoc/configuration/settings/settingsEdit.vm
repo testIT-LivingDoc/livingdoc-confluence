@@ -1,0 +1,22 @@
+<div class="sp_configItemView">
+    <form class="aui long-label">
+        <fieldset>
+            <div class="field-group">
+                <label for="executionTimeout" class="sp_configLabels">$action.getText('livingdoc.settings.executionTimeout')</label>
+                <input class="text sp_configInput" type="text" id="executionTimeout" name="executionTimeout" value="$!action.executionTimeout" size="15" class="sp_configInput" onkeypress="javascript:return LD.View.verifyNumericOnly(event);">
+            </div>
+            <div class="field-group">
+				<span id="settingsEdit_update">
+					<button type="button" class="aui-button aui-button-primary" onclick="ldProperties.updateSettings();">
+						$action.getText('livingdoc.registration.update')
+					</button>
+				</span>
+                <span id="settingsEdit_cancel">
+					<button type="button" class="aui-button aui-button-link" onclick="ldProperties.getGeneralSettingsPane();">
+						$action.getText('livingdoc.registration.cancel')
+					</button>
+				</span>
+            </div>
+        </fieldset>
+    </form>
+</div>

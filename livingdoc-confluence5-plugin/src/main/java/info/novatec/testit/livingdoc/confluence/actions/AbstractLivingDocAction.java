@@ -1,6 +1,5 @@
 package info.novatec.testit.livingdoc.confluence.actions;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.atlassian.confluence.core.ConfluenceActionSupport;
@@ -72,7 +71,7 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         return this.pageId;
     }
 
-    public void setPageId(Long pageId) throws UnsupportedEncodingException {
+    public void setPageId(Long pageId) {
         page = ldUtil.getPageManager().getPage(pageId);
         this.pageId = pageId;
     }
@@ -101,8 +100,8 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         return pageConent;
     }
 
-    public List<Page> getPermittedChildren(Page page) {
-        return ldUtil.getContentPermissionManager().getPermittedChildren(page, getAuthenticatedUser());
+    public List<Page> getPermittedChildren(Page parentPage) {
+        return ldUtil.getContentPermissionManager().getPermittedChildren(parentPage, getAuthenticatedUser());
     }
 
     @Override
@@ -112,8 +111,9 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     }
 
     public boolean getCanEdit() {
-        if (canEdit != null)
+        if (canEdit != null) {
             return canEdit;
+        }
         canEdit = ldUtil.canEdit(page);
         return canEdit;
     }
@@ -124,7 +124,12 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
 
     @Override
     public void addActionError(String msg) {
-        if ( ! hasActionErrors())
+        if ( ! hasActionErrors()) {
             super.addActionError(msg);
+        }
+    }
+
+    public String getExecutionTimeout() {
+        return ldUtil.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
     }
 }

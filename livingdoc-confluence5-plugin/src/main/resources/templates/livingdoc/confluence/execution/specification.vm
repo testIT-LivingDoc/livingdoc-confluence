@@ -1,4 +1,4 @@
-<script language="JavaScript" type="text/javascript">conf_livingDoc.registerSpecification('$action.bulkUID', '$action.executionUID', '$req.contextPath', '$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/', '$aPage.spaceKey', '$aPage.id', '$fieldId', LD.ConfluenceActions);</script>
+<script language="JavaScript" type="text/javascript">conf_livingDoc.registerSpecification('$action.bulkUID', '$action.executionUID', '$req.contextPath', '$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/', '$aPage.spaceKey', '$aPage.id', '$fieldId', '$action.executionTimeout', LD.ConfluenceActions);</script>
 <table id="conf_specification_${action.bulkUID}_${action.executionUID}_$fieldId" class="conf_specificationOutputTable" cellspacing="0" cellpadding="0">
 	<tr>
 		#set($bulletIndex = $fieldId + 1)

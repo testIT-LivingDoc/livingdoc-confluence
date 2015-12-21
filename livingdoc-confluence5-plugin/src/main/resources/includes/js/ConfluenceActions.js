@@ -29,6 +29,7 @@ LD.ConfluenceActions=
 		    data: preparedParams,
 		    dataType: 'html',
 		    error: obj.notifyError.bind(obj),
+			timeout: obj.params.executionTimeout*1000,
 		    complete: function(jqXHR) {
 		    	obj.notifyDoneWorking();
 		    	AJS.$('#' + elementId).html(jqXHR.responseText);
@@ -68,6 +69,10 @@ LD.ConfluenceActions=
 	editSutFixture:function(params) { this.confQuery("sutsPane_display", "/livingdoc/EditSutFixture.action", params); },
 	setSutAsDefault:function(params){ this.confQuery("sutsPane_display", "/livingdoc/SetAsDefault.action", params); },
 	getLdProjectPane:function(params){this.confQuery("tabs-project", "/livingdoc/GetLdProjectPane.action", params);},
+
+	editSettings:function(params){this.confQuery("tabs-settings", "/livingdoc/GetGeneralSettingsPane.action", params);},
+	updateSettings:function(params){this.confQuery("tabs-settings", "/livingdoc/UpdateSettings.action", params);},
+	getGeneralSettingsPane:function(params){this.confQuery("tabs-settings", "/livingdoc/GetGeneralSettingsPane.action", params);},
 	
 	getInstallWizardPane:function(params){this.confQuery("tabs-dbms-config", "/livingdoc/GetDbmsPane.action", params); },
 	changeInstallationType:function(params){ this.confQuery("dbmsChoice_display", "/livingdoc/ChangeInstallType.action", params); },

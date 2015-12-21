@@ -447,6 +447,16 @@
        		<action name="RemoveFileSystem" class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration" method="doRemoveFileSystem">
            		<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm</result>
        		</action>
+ <!-- Actions managing General Settings -->
+            <action name="GetGeneralSettingsPane" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
+            </action>
+            <action name="EditSettings" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
+            </action>
+            <action name="UpdateSettings" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
+            </action>
 <!-- END -->
             <action name="LivingDocHeader" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="loadHeader">
                 <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm</result>

@@ -63,13 +63,13 @@ var conf_livingDoc = new function()
 		if(!bulk){ bulk = this.registerBulk(bUID, actions); }
 		return bulk.registerList({decorator:'none', bulkUID:bUID, executionUID:exeUID, imgFile:imgFile, ctx:ctx});
 	};
-	this.registerSpecification=function(bUID, exeUID, ctx, imgFile, spaceKey, pageId, fieldId, actions, isMain)
+	this.registerSpecification=function(bUID, exeUID, ctx, imgFile, spaceKey, pageId, fieldId, executionTimeout, actions, isMain)
 	{
 		var bulk = this.getBulk(bUID);
 		if(!bulk){ bulk = this.registerBulk(bUID, actions); }
 		var list = bulk.getList(exeUID); 
 		if(!list){ list = bulk.registerList({decorator:'none', bulkUID:bUID, executionUID:exeUID, imgFile:imgFile, ctx:ctx}); }
-		return list.registerSpecification({spaceKey:spaceKey, pageId:pageId, fieldId:fieldId, isMain:isMain?true:false});
+		return list.registerSpecification({spaceKey:spaceKey, pageId:pageId, fieldId:fieldId,executionTimeout:executionTimeout, isMain:isMain?true:false});
 	};	
 
 	this.getBulk=function(bUID){ return this.bulks[bUID]; };
