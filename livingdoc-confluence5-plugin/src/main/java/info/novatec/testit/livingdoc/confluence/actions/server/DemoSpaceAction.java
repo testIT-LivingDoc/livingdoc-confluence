@@ -85,7 +85,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     public String doGetDemo() {
-        if ( ! ldUtil.isServerReady()) {
+        if ( ! confluenceLivingDoc.isServerReady()) {
             addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
             return SUCCESS;
         }
@@ -104,7 +104,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     public String doCreateDemoSpace() {
         try {
             if (getUsername() != null) {
-                ldUtil.verifyCredentials(getUsername(), getPwd());
+                confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
             }
 
             doImportDemoSite();
@@ -142,7 +142,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
         Project demoProject = getDemoProject();
 
-        String uid = ldUtil.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + demoSpace.getKey();
+        String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + demoSpace.getKey();
 
         demoRepository = Repository.newInstance(uid);
 
@@ -150,13 +150,13 @@ public class DemoSpaceAction extends LivingDocServerAction {
         demoRepository.setType(RepositoryType.newInstance("CONFLUENCE"));
         demoRepository.setName(DEMO_NAME);
         demoRepository.setContentType(ContentType.TEST);
-        demoRepository.setBaseUrl(ldUtil.getBaseUrl());
+        demoRepository.setBaseUrl(confluenceLivingDoc.getBaseUrl());
         demoRepository.setUsername(getUsername());
         demoRepository.setPassword(getPwd());
 
         demoRepository.setBaseRepositoryUrl(getDemoSpaceUrl());
 
-        String baseTestUrl = String.format("%s/rpc/xmlrpc?handler=%s#%s", ldUtil.getBaseUrl(),
+        String baseTestUrl = String.format("%s/rpc/xmlrpc?handler=%s#%s", confluenceLivingDoc.getBaseUrl(),
             RpcServerService.SERVICE_HANDLER, demoSpace.getKey());
         demoRepository.setBaseTestUrl(baseTestUrl);
 
@@ -172,7 +172,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
             demoSut.setRunner(getJavaRunner());
             demoSut.setProject(getDemoProject());
 
-            ldUtil.getLDServerService().createSystemUnderTest(demoSut, demoRepository);
+            confluenceLivingDoc.getLDServerService().createSystemUnderTest(demoSut, demoRepository);
         }
     }
 
@@ -186,12 +186,12 @@ public class DemoSpaceAction extends LivingDocServerAction {
             phoneBookSut.setRunner(getJavaRunner());
             phoneBookSut.setProject(getDemoProject());
 
-            ldUtil.getLDServerService().createSystemUnderTest(phoneBookSut, demoRepository);
+            confluenceLivingDoc.getLDServerService().createSystemUnderTest(phoneBookSut, demoRepository);
         }
     }
 
     private void doEnableLivingDocPage(Space demoSpace, Repository demoRepository) throws LivingDocServerException {
-        List<Page> demoPages = ldUtil.getPageManager().getPages(demoSpace, true);
+        List<Page> demoPages = confluenceLivingDoc.getPageManager().getPages(demoSpace, true);
 
         for (Page demoPage : demoPages) {
             if (demoSpace.getHomePage().getId() != demoPage.getId() && ! demoPage.getTitle().endsWith(".java")) {
@@ -204,31 +204,31 @@ public class DemoSpaceAction extends LivingDocServerAction {
         Specification spec = Specification.newInstance(page.getTitle());
         spec.setRepository(demoRepository);
 
-        spec = ldUtil.getLDServerService().createSpecification(spec);
+        spec = confluenceLivingDoc.getLDServerService().createSpecification(spec);
 
         if (page.getTitle().equals("PhoneBook")) {
             SystemUnderTest phoneBookSut = getSUT(demoRepository, PHONEBOOK_SUT_NAME);
-            ldUtil.getLDServerService().addSpecificationSystemUnderTest(phoneBookSut, spec);
+            confluenceLivingDoc.getLDServerService().addSpecificationSystemUnderTest(phoneBookSut, spec);
 
             SystemUnderTest demoSut = getSUT(demoRepository, DEMO_SUT_NAME);
-            ldUtil.getLDServerService().removeSpecificationSystemUnderTest(demoSut, spec);
+            confluenceLivingDoc.getLDServerService().removeSpecificationSystemUnderTest(demoSut, spec);
         }
     }
 
     private void doAddRemoteUserToLivingDocUserGroup() {
         final User remoteUser = this.getAuthenticatedUser();
 
-        if ( ! ldUtil.getLivingdocUserGroup().hasMembership(remoteUser)) {
-            ldUtil.getLivingdocUserGroup().addMembership(remoteUser);
+        if ( ! confluenceLivingDoc.getLivingdocUserGroup().hasMembership(remoteUser)) {
+            confluenceLivingDoc.getLivingdocUserGroup().addMembership(remoteUser);
         }
     }
 
     private Space getDemoSpace() {
-        return ldUtil.getSpaceManager().getSpace(DEMO_SPACE_KEY);
+        return confluenceLivingDoc.getSpaceManager().getSpace(DEMO_SPACE_KEY);
     }
 
     private SystemUnderTest getSUT(Repository demoRepository, String name) throws LivingDocServerException {
-        List<SystemUnderTest> suts = ldUtil.getLDServerService().getSystemUnderTestsOfAssociatedProject(demoRepository
+        List<SystemUnderTest> suts = confluenceLivingDoc.getLDServerService().getSystemUnderTestsOfAssociatedProject(demoRepository
             .getUid());
 
         for (SystemUnderTest sut : suts) {
@@ -241,7 +241,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     private Repository getDemoRepository() throws LivingDocServerException {
-        List<Repository> repositories = ldUtil.getLDServerService().getAllSpecificationRepositories();
+        List<Repository> repositories = confluenceLivingDoc.getLDServerService().getAllSpecificationRepositories();
 
         for (Repository repository : repositories) {
             if (repository.getName().equals(DEMO_NAME)) {
@@ -253,7 +253,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     private Project getDemoProject() throws LivingDocServerException {
-        List<Project> projects = ldUtil.getLDServerService().getAllProjects();
+        List<Project> projects = confluenceLivingDoc.getLDServerService().getAllProjects();
 
         for (Project project : projects) {
             if (project.getName().equals(DEMO_NAME)) {
@@ -265,7 +265,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     private Runner getJavaRunner() throws LivingDocServerException {
-        List<Runner> runners = ldUtil.getLDServerService().getAllRunners();
+        List<Runner> runners = confluenceLivingDoc.getLDServerService().getAllRunners();
 
         for (Runner runner : runners) {
             if (runner.getName().startsWith("LDCore JAVA v.")) {
@@ -317,10 +317,10 @@ public class DemoSpaceAction extends LivingDocServerAction {
             Space demoSpace = getDemoSpace();
 
             if (demoSpace != null) {
-                ldUtil.getSpaceManager().removeSpace(demoSpace);
+                confluenceLivingDoc.getSpaceManager().removeSpace(demoSpace);
             }
 
-            ldUtil.getLDServerService().removeProject(getDemoProject(), true);
+            confluenceLivingDoc.getLDServerService().removeProject(getDemoProject(), true);
         } catch (Exception ex) {
             addActionError(ex.getMessage());
         }
@@ -331,7 +331,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     public String getDemoSpaceUrl() {
         Space demoSpace = getDemoSpace();
 
-        return String.format("%s/display/%s", ldUtil.getBaseUrl(), demoSpace.getKey());
+        return String.format("%s/display/%s", confluenceLivingDoc.getBaseUrl(), demoSpace.getKey());
     }
 
     /**
@@ -381,11 +381,11 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     public boolean isAllowRemoteApiAnonymous() {
-        return ldUtil.getSettingsManager().getGlobalSettings().isAllowRemoteApiAnonymous();
+        return confluenceLivingDoc.getSettingsManager().getGlobalSettings().isAllowRemoteApiAnonymous();
     }
 
     public String getGeneralConfigSecurityRemoteApiUrl() {
-        return String.format("%s/admin/editgeneralconfig.action#security", ldUtil.getSettingsManager().getGlobalSettings()
+        return String.format("%s/admin/editgeneralconfig.action#security", confluenceLivingDoc.getSettingsManager().getGlobalSettings()
             .getBaseUrl());
     }
 }

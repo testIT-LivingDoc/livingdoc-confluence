@@ -25,12 +25,12 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public String setAsImplemented() {
-        ldUtil.saveImplementedVersion(getPage(), getPage().getVersion());
+        confluenceLivingDoc.saveImplementedVersion(getPage(), getPage().getVersion());
         return loadHeader();
     }
 
     public String revert() {
-        ldUtil.revertImplementation(getPage());
+        confluenceLivingDoc.revertImplementation(getPage());
         return loadHeader();
     }
 
@@ -38,9 +38,9 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         if (enableLivingDoc) {
             try {
                 Specification spec = Specification.newInstance(getPage().getTitle());
-                spec.setRepository(ldUtil.getHomeRepository(spaceKey));
+                spec.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
 
-                specification = ldUtil.getLDServerService().createSpecification(spec);
+                specification = confluenceLivingDoc.getLDServerService().createSpecification(spec);
                 return loadHeader();
             } catch (LivingDocServerException e) {
                 addActionError(e.getId());
@@ -48,13 +48,13 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         } else {
             try {
                 Specification spec = Specification.newInstance(getPage().getTitle());
-                spec.setRepository(ldUtil.getHomeRepository(spaceKey));
+                spec.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
 
                 // Clean spec
-                ldUtil.getLDServerService().removeSpecification(spec);
-                ldUtil.saveExecuteChildren(page, false);
-                ldUtil.saveImplementedVersion(getPage(), null);
-                ldUtil.savePreviousImplementedVersion(getPage(), null);
+                confluenceLivingDoc.getLDServerService().removeSpecification(spec);
+                confluenceLivingDoc.saveExecuteChildren(page, false);
+                confluenceLivingDoc.saveImplementedVersion(getPage(), null);
+                confluenceLivingDoc.savePreviousImplementedVersion(getPage(), null);
                 specification = null;
             } catch (LivingDocServerException e) {
                 addActionError(e.getId());
@@ -66,7 +66,7 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public String updateExecuteChildren() {
-        ldUtil.saveExecuteChildren(page, doExecuteChildren);
+        confluenceLivingDoc.saveExecuteChildren(page, doExecuteChildren);
         return SUCCESS;
     }
 
@@ -76,7 +76,7 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public boolean getCanBeImplemented() {
-        return ldUtil.canBeImplemented(getPage());
+        return confluenceLivingDoc.canBeImplemented(getPage());
     }
 
     public boolean getCanBeReverted() {
@@ -84,23 +84,23 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public Integer getImplementedVersion() {
-        return ldUtil.getImplementedVersion(getPage());
+        return confluenceLivingDoc.getImplementedVersion(getPage());
     }
 
     public Integer getPreviousImplementedVersion() {
-        return ldUtil.getPreviousImplementedVersion(getPage());
+        return confluenceLivingDoc.getPreviousImplementedVersion(getPage());
     }
 
     public String getRenderedContent() {
         String content;
 
         try {
-            content = ldUtil.getPageContent(getPage(), implemented);
+            content = confluenceLivingDoc.getPageContent(getPage(), implemented);
         } catch (LivingDocServerException e) {
             content = "";
         }
 
-        return ldUtil.getViewRenderer().render(content, new DefaultConversionContext(getPage().toPageContext()));
+        return confluenceLivingDoc.getViewRenderer().render(content, new DefaultConversionContext(getPage().toPageContext()));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         if (doExecuteChildren != null)
             return doExecuteChildren;
 
-        doExecuteChildren = getHasChildren() && ldUtil.getExecuteChildren(page);
+        doExecuteChildren = getHasChildren() && confluenceLivingDoc.getExecuteChildren(page);
         return doExecuteChildren;
     }
 
@@ -167,6 +167,6 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public boolean isImplementationDue() {
-        return ldUtil.isImplementationDue(getPage());
+        return confluenceLivingDoc.isImplementationDue(getPage());
     }
 }

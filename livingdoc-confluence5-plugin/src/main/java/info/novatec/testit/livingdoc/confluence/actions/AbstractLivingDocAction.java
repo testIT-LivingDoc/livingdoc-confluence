@@ -12,7 +12,7 @@ import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 
 @SuppressWarnings("serial")
 public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
-    protected ConfluenceLivingDoc ldUtil = StaticAccessor.getConfluenceLivingDoc();
+    protected ConfluenceLivingDoc confluenceLivingDoc = StaticAccessor.getConfluenceLivingDoc();
 
     protected String bulkUID = "PAGE";
     protected String executionUID;
@@ -72,7 +72,7 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     }
 
     public void setPageId(Long pageId) {
-        page = ldUtil.getPageManager().getPage(pageId);
+        page = confluenceLivingDoc.getPageManager().getPage(pageId);
         this.pageId = pageId;
     }
 
@@ -96,25 +96,25 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         if (pageConent != null) {
             return pageConent;
         }
-        pageConent = ldUtil.getPageContent(page);
+        pageConent = confluenceLivingDoc.getPageContent(page);
         return pageConent;
     }
 
     public List<Page> getPermittedChildren(Page parentPage) {
-        return ldUtil.getContentPermissionManager().getPermittedChildren(parentPage, getAuthenticatedUser());
+        return confluenceLivingDoc.getContentPermissionManager().getPermittedChildren(parentPage, getAuthenticatedUser());
     }
 
     @Override
     @HtmlSafe
     public String getText(String key) {
-        return ldUtil.getText(key);
+        return confluenceLivingDoc.getText(key);
     }
 
     public boolean getCanEdit() {
         if (canEdit != null) {
             return canEdit;
         }
-        canEdit = ldUtil.canEdit(page);
+        canEdit = confluenceLivingDoc.canEdit(page);
         return canEdit;
     }
 
@@ -130,6 +130,6 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     }
 
     public String getExecutionTimeout() {
-        return ldUtil.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
+        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
     }
 }

@@ -51,7 +51,7 @@ public class ConfigurationAction extends LivingDocServerAction {
     public List<Space> getSpaces() {
         // NT - Fix for getting all Spaces
         ListBuilder<Space> lbGlobalSpace =
-            ldUtil.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(SpaceType.GLOBAL).build());
+            confluenceLivingDoc.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(SpaceType.GLOBAL).build());
         return lbGlobalSpace.getRange(0, lbGlobalSpace.getAvailableSize() - 1);
     }
 
@@ -285,13 +285,13 @@ public class ConfigurationAction extends LivingDocServerAction {
     }
 
     public String getExecutionTimeout() {
-        return ldUtil.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
+        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
     }
 
     public void setExecutionTimeout(String executionTimeout) {
-        LivingDocServerConfiguration conf = ldUtil.getLDServerConfigurationActivator().getConfiguration();
+        LivingDocServerConfiguration conf = confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration();
         conf.getProperties().setProperty("executionTimeout", executionTimeout);
-        ldUtil.getLDServerConfigurationActivator().storeConfiguration(conf);
+        confluenceLivingDoc.getLDServerConfigurationActivator().storeConfiguration(conf);
     }
 
     public boolean isEditMode() {

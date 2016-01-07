@@ -140,7 +140,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
     public Repository getNewRepository() {
         if (newRepository != null)
             return newRepository;
-        String uid = ldUtil.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getProjectName() + "-F"
+        String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getProjectName() + "-F"
             + fileRepositories.size();
         newRepository = Repository.newInstance(uid);
         return newRepository;

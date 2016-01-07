@@ -25,7 +25,7 @@ public class ChildrenExecutionAction extends AbstractListExecutionAction {
     private void fillExecutableList(Page page) {
         List<Page> pageChildren = getPermittedChildren(page);
         for (Page child : pageChildren) {
-            if (ldUtil.isExecutable(child)) {
+            if (confluenceLivingDoc.isExecutable(child)) {
                 executableList.add(child);
             }
             if (getAllChildren()) {
