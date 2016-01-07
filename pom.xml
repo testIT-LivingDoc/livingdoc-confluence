@@ -23,9 +23,9 @@
 
 	<properties>
 		<project.root>.</project.root>
-		<confluence.version>5.6.5</confluence.version>
-		<confluence.data.version>5.6.5</confluence.data.version>
-		<amps.version>5.0.9</amps.version>
+		<confluence.version>5.9.3</confluence.version>
+		<confluence.data.version>5.9.3</confluence.data.version>
+		<amps.version>6.2.1</amps.version>
 		<testit.livingdoc.core.version>1.0.0</testit.livingdoc.core.version>
 	</properties>
 

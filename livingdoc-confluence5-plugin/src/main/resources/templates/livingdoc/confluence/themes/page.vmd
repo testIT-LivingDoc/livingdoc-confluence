@@ -112,7 +112,7 @@
 
         #trackbackRdf ($trackbackUtils.getContentIdentifier($page) $page.title $trackbackUtils.getPingUrl($page))
 
-        #parse ("/labels/labels-editor.vm")
+        #parse ("/com/atlassian/confluence/plugins/labels/components/labels-editor.vm")
 
         #renderChildren()
 
