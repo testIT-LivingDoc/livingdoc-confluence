@@ -7,6 +7,7 @@ import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
 import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
+import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
 import info.novatec.testit.livingdoc.server.transfer.ExecutionResult;
 
 import java.io.UnsupportedEncodingException;
@@ -152,7 +153,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
     }
 
     @Override
-    public String saveExecutionResult(final String username, final String password, final Vector< ? > args) {
+    public String saveExecutionResult(final String username, final String password, final Vector< Object > args) {
         if (args.size() < 4) {
             return error("Parameters Missing, expecting:[SpaceKey, PageTitle, SUT, Xml Report Data] !");
         }
@@ -164,7 +165,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
 
                 try {
                     ConfluenceUser user = login(username, password);
-                    ExecutionResult executionResult = new ExecutionResult(args);
+                    ExecutionResult executionResult = XmlRpcDataMarshaller.toExecutionResult(args);
                    
                     Page page = ldUtil.getPageManager().getPage(executionResult.getSpaceKey() , executionResult.getPageTitle());
                     

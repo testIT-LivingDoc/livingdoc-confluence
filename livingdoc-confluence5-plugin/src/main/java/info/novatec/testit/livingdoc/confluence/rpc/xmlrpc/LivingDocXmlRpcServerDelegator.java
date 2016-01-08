@@ -283,7 +283,7 @@ public class LivingDocXmlRpcServerDelegator implements RpcClientService {
     }
 
     @Override
-    public String saveExecutionResult(String username, String password, Vector< ? > args) {
+    public String saveExecutionResult(String username, String password, Vector< Object > args) {
         return confluenceServiceDelegator.saveExecutionResult(username, password, args);
     }
 }
