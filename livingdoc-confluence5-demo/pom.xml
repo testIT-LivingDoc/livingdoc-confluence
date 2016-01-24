@@ -23,7 +23,6 @@
 		<dependency>
 			<groupId>info.novatec.testit</groupId>
 			<artifactId>livingdoc-cli</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -32,7 +31,6 @@
 			<plugin>
 				<groupId>info.novatec.testit</groupId>
 				<artifactId>livingdoc-maven</artifactId>
-				<version>${project.version}</version>
 				<configuration>
 					<source>${project.java.version}</source>
 					<target>${project.java.version}</target>

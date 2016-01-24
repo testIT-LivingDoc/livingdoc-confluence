@@ -31,7 +31,6 @@
 		<dependency>
 			<groupId>info.novatec.testit</groupId>
 			<artifactId>livingdoc-cli</artifactId>
-			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
