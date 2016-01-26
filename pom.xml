@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-plugin</artifactId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
@@ -23,10 +23,10 @@
 
 	<properties>
 		<project.root>.</project.root>
-		<confluence.version>5.6.5</confluence.version>
-		<confluence.data.version>5.6.5</confluence.data.version>
-		<amps.version>5.0.9</amps.version>
-		<testit.livingdoc.core.version>1.0.0</testit.livingdoc.core.version>
+		<confluence.version>5.9.3</confluence.version>
+		<confluence.data.version>5.9.3</confluence.data.version>
+		<amps.version>6.2.1</amps.version>
+		<testit.livingdoc.core.version>1.1.0</testit.livingdoc.core.version>
 	</properties>
 
 	<!-- - LivingDoc modules -->
@@ -78,6 +78,13 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
 				<artifactId>maven-confluence-plugin</artifactId>

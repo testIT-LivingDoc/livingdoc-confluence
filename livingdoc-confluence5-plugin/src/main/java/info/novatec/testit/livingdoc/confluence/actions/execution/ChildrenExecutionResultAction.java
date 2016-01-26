@@ -80,7 +80,7 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
 
     public String show() {
         try {
-            specification = ldUtil.getLDServerService().getSpecificationById(getId());
+            specification = confluenceLivingDoc.getLDServerService().getSpecificationById(getId());
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
         }
@@ -90,9 +90,9 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getRenderedContent() {
-        Page page = ldUtil.getPageManager().getPage(spaceKey, getPageTitle());
+        Page page = confluenceLivingDoc.getPageManager().getPage(spaceKey, getPageTitle());
         if (page == null)
-            return ldUtil.getText("livingdoc.children.pagenotfound");
+            return confluenceLivingDoc.getText("livingdoc.children.pagenotfound");
 
         StringBuilder content = new StringBuilder("{livingdoc-historic:");
 
@@ -106,8 +106,8 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
         content.append("}");
 
         // return
-        // ldUtil.getWikiStyleRenderer().convertWikiToXHtml(page.toPageContext(),
+        // confluenceLivingDoc.getWikiStyleRenderer().convertWikiToXHtml(page.toPageContext(),
         // content.toString());
-        return ldUtil.getViewRenderer().render(page);
+        return confluenceLivingDoc.getViewRenderer().render(page);
     }
 }

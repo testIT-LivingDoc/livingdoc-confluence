@@ -26,7 +26,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
     private ResourceBundle resourceBundle;
 
-    protected ConfluenceLivingDoc ldUtil;
+    protected ConfluenceLivingDoc confluenceLivingDoc;
     private List<SystemUnderTest> systemUnderTests;
 
     protected String projectName;
@@ -45,19 +45,19 @@ public class LivingDocServerAction extends AbstractSpaceAction {
      * @param confluenceLivingDoc
      */
     public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
-        this.ldUtil = confluenceLivingDoc;
+        this.confluenceLivingDoc = confluenceLivingDoc;
     }
 
     protected LivingDocServerService getService() {
-        return ldUtil.getLDServerService();
+        return confluenceLivingDoc.getLDServerService();
     }
 
     public boolean isServerSetupComplete() {
-        return ldUtil.isServerSetupComplete();
+        return confluenceLivingDoc.isServerSetupComplete();
     }
 
     public boolean isServerReady() {
-        return ldUtil.isServerReady();
+        return confluenceLivingDoc.isServerReady();
     }
 
     public boolean getIsServerReady() {
@@ -115,7 +115,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         if (key == null) {
             homeRepository = Repository.newInstance("UNKNOWN_UID");
         } else {
-            homeRepository = ldUtil.getHomeRepository(key);
+            homeRepository = confluenceLivingDoc.getHomeRepository(key);
         }
 
         return homeRepository;
@@ -132,7 +132,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
                     return systemUnderTests;
                 }
             }
-            systemUnderTests = ldUtil.getLDServerService().getSystemUnderTestsOfProject(projectName);
+            systemUnderTests = confluenceLivingDoc.getLDServerService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
         }
@@ -179,7 +179,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     private String getNotNullProperty(String propertyKey) {
-        String value = ldUtil.getPageProperty(propertyKey, getIdentifier());
+        String value = confluenceLivingDoc.getPageProperty(propertyKey, getIdentifier());
         return value == null ? "" : value;
     }
 

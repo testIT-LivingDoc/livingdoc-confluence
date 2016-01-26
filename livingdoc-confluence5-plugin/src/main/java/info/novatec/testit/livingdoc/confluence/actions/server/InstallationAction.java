@@ -131,12 +131,12 @@ public class InstallationAction extends LivingDocServerAction {
     }
 
     public boolean isSetupComplete() {
-        return ldUtil.isServerSetupComplete();
+        return confluenceLivingDoc.isServerSetupComplete();
     }
 
     @Override
     public boolean isServerReady() {
-        return ldUtil.isServerReady();
+        return confluenceLivingDoc.isServerReady();
     }
 
     public String editDbmsConfiguration() {
@@ -186,6 +186,6 @@ public class InstallationAction extends LivingDocServerAction {
     }
 
     private LivingDocServerConfigurationActivator getConfigurationActivator() {
-        return ldUtil.getLDServerConfigurationActivator();
+        return confluenceLivingDoc.getLDServerConfigurationActivator();
     }
 }

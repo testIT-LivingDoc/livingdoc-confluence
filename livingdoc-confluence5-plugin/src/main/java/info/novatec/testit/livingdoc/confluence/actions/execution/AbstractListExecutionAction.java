@@ -42,10 +42,10 @@ public abstract class AbstractListExecutionAction extends SpecificationAction {
             if (forcedSystemUnderTests != null)
                 return forcedSystemUnderTests;
             if (StringUtils.isEmpty(forcedSuts))
-                return ldUtil.getSystemsUnderTests(spaceKey);
+                return confluenceLivingDoc.getSystemsUnderTests(spaceKey);
 
             List<SystemUnderTest> forcedSystemUnderTests = new ArrayList<SystemUnderTest>();
-            List<SystemUnderTest> projectSuts = ldUtil.getSystemsUnderTests(spaceKey);
+            List<SystemUnderTest> projectSuts = confluenceLivingDoc.getSystemsUnderTests(spaceKey);
             for (String sutName : forcedSuts.split(",")) {
                 sutName = sutName.trim();
                 for (SystemUnderTest sut : projectSuts) {

@@ -155,30 +155,10 @@ public class ConfluenceLivingDoc {
         return ConfluenceVersion.getCurrentVersion();
     }
 
-    public boolean isConfluenceVersion28() {
-        return getConfluenceVersion().equals(ConfluenceVersion.V28X);
-    }
-
-    public boolean isConfluenceVersion29() {
-        return getConfluenceVersion().equals(ConfluenceVersion.V29X);
-    }
-
-    public boolean isConfluenceMajorVersionLessThan_2_6() {
-        return getConfluenceVersion().compareTo(ConfluenceVersion.V26X) < 0;
-    }
-
-    public boolean isConfluenceMajorVersionLessThan_2_8() {
-        return getConfluenceVersion().compareTo(ConfluenceVersion.V28X) < 0;
-    }
-
-    public boolean isConfluenceMajorVersionGreaterOrEqualThan_2_8() {
-        return getConfluenceVersion().compareTo(ConfluenceVersion.V28X) >= 0;
-    }
-
+    
     /**
      * Custom I18n. Based on WebWork i18n.
      * 
-     * @param key
      * @return the i18nzed message. If none found key is returned.
      */
     @HtmlSafe
@@ -209,7 +189,6 @@ public class ConfluenceLivingDoc {
      * Retrieves the home repository of the confluence space.
      * </p>
      * 
-     * @param spaceKey
      * @return the home repository of the confluence space.
      * @throws LivingDocServerException
      */

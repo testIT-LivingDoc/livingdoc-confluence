@@ -96,10 +96,10 @@ public class RegistrationAction extends LivingDocServerAction {
     public String doRegister() {
         try {
             if (getUsername() != null) {
-                ldUtil.verifyCredentials(getUsername(), getPwd());
+                confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
             }
 
-            String uid = ldUtil.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
+            String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
             registeredRepository = Repository.newInstance(uid);
             registeredRepository.setProject(getProjectForRegistration());
             registeredRepository.setType(RepositoryType.newInstance("CONFLUENCE"));
@@ -110,7 +110,7 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setBaseTestUrl(newTestUrl());
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
-            registeredRepository.setMaxUsers(ldUtil.getNumberOfUserForLivingDocUserGroup());
+            registeredRepository.setMaxUsers(confluenceLivingDoc.getNumberOfUserForLivingDocUserGroup());
 
             getService().registerRepository(registeredRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
@@ -126,10 +126,10 @@ public class RegistrationAction extends LivingDocServerAction {
     public String doUpdateRegistration() {
         try {
             if (getUsername() != null) {
-                ldUtil.verifyCredentials(getUsername(), getPwd());
+                confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
             }
 
-            String uid = ldUtil.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
+            String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
             Repository newRepository = Repository.newInstance(uid);
             newRepository.setProject(getProjectForRegistration());
             newRepository.setType(RepositoryType.newInstance("CONFLUENCE"));
@@ -140,7 +140,7 @@ public class RegistrationAction extends LivingDocServerAction {
             newRepository.setBaseTestUrl(newTestUrl());
             newRepository.setUsername(getUsername());
             newRepository.setPassword(getPwd());
-            newRepository.setMaxUsers(ldUtil.getNumberOfUserForLivingDocUserGroup());
+            newRepository.setMaxUsers(confluenceLivingDoc.getNumberOfUserForLivingDocUserGroup());
 
             getService().updateRepositoryRegistration(newRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
@@ -548,7 +548,7 @@ public class RegistrationAction extends LivingDocServerAction {
     private String getBaseUrl() {
         if (baseUrl != null)
             return baseUrl;
-        baseUrl = ldUtil.getBaseUrl();
+        baseUrl = confluenceLivingDoc.getBaseUrl();
         return baseUrl;
     }
 

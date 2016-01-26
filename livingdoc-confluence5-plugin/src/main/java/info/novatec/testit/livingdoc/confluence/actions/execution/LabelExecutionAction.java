@@ -19,7 +19,7 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
         for (String labelExp : labels.split(",")) {
             List<Page> pages = getExpLabeledPages(labelExp);
             for (Page page : pages) {
-                if (page.getSpaceKey().equals(spaceKey) && ! executableList.contains(page) && ldUtil.isExecutable(page)) {
+                if (page.getSpaceKey().equals(spaceKey) && ! executableList.contains(page) && confluenceLivingDoc.isExecutable(page)) {
                     executableList.add(page);
                 }
             }
@@ -59,9 +59,9 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
 
     @SuppressWarnings("unchecked")
     private List<Page> getLabeledPages(String label) {
-        Label labelObject = ldUtil.getLabelManager().getLabel(label.trim());
+        Label labelObject = confluenceLivingDoc.getLabelManager().getLabel(label.trim());
         if (labelObject != null) {
-            return ( List<Page> ) ldUtil.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
+            return ( List<Page> ) confluenceLivingDoc.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
                 LabelManager.NO_MAX_RESULTS, labelObject);
         }
 

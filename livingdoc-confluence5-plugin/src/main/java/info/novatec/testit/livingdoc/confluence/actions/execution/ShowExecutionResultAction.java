@@ -69,9 +69,9 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
         StringBuilder title = new StringBuilder();
 
-        title.append(useAnchor ? getTitleAnchor() : execution.getSpecification().getName()).append(' ').append(ldUtil
-            .getText("livingdoc.execution.for")).append(' ').append(ldUtil.getText("livingdoc.execution.openbraket")).append(
-                execution.getSystemUnderTest().getName()).append(' ').append(ldUtil.getText(
+        title.append(useAnchor ? getTitleAnchor() : execution.getSpecification().getName()).append(' ').append(confluenceLivingDoc
+            .getText("livingdoc.execution.for")).append(' ').append(confluenceLivingDoc.getText("livingdoc.execution.openbraket")).append(
+                execution.getSystemUnderTest().getName()).append(' ').append(confluenceLivingDoc.getText(
                     "livingdoc.execution.closebraket")).append(" - ").append(getDateFormatter().formatDateTime(execution
                         .getExecutionDate()));
 
@@ -89,9 +89,9 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getStylesheetHtml() {
-        Space space = ldUtil.getSpaceManager().getSpace(getSpaceKey());
+        Space space = confluenceLivingDoc.getSpaceManager().getSpace(getSpaceKey());
         return String.format("<style>\n%s\n</style>\n<base href=\"%s\"/>\n", styleSheetExtractor.renderStyleSheet(space),
-            ldUtil.getBaseUrl());
+            confluenceLivingDoc.getBaseUrl());
     }
 
     public boolean getHasException() {
@@ -120,12 +120,12 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getSectionsHtml() {
-        return String.format("%s : %s", ldUtil.getText("livingdoc.page.sections"), execution.getSections());
+        return String.format("%s : %s", confluenceLivingDoc.getText("livingdoc.page.sections"), execution.getSections());
     }
 
     public String show() {
         try {
-            execution = ldUtil.getLDServerService().getSpecificationExecution(getId());
+            execution = confluenceLivingDoc.getLDServerService().getSpecificationExecution(getId());
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
         }

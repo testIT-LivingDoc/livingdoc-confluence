@@ -7,6 +7,8 @@ import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
 import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
+import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
+import info.novatec.testit.livingdoc.server.transfer.ExecutionResult;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -151,7 +153,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
     }
 
     @Override
-    public String saveExecutionResult(final String username, final String password, final Vector< ? > args) {
+    public String saveExecutionResult(final String username, final String password, final Vector< Object > args) {
         if (args.size() < 4) {
             return error("Parameters Missing, expecting:[SpaceKey, PageTitle, SUT, Xml Report Data] !");
         }
@@ -163,15 +165,17 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
 
                 try {
                     ConfluenceUser user = login(username, password);
-
-                    Page page = ldUtil.getPageManager().getPage(( String ) args.get(0), ( String ) args.get(1));
+                    ExecutionResult executionResult = XmlRpcDataMarshaller.toExecutionResult(args);
+                   
+                    Page page = ldUtil.getPageManager().getPage(executionResult.getSpaceKey() , executionResult.getPageTitle());
+                    
                     if (page == null) {
                         return error(PAGE_NOT_FOUND);
                     }
 
                     checkPermissions(page.getSpace(), user);
 
-                    ldUtil.saveExecutionResult(page, ( String ) args.get(2), XmlReport.parse(( String ) args.get(3)));
+                    ldUtil.saveExecutionResult(page, ( String ) executionResult.getSut(), XmlReport.parse(executionResult.getXmlReport()));
 
                     return LivingDocServerErrorKey.SUCCESS;
                 } catch (NotPermittedException e) {
