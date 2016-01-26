@@ -1,4 +1,6 @@
 [![License](https://img.shields.io/badge/License-GNU%20General%20Public%20License%203.0-brightgreen.svg)](http://www.gnu.org/licenses/gpl-3.0.txt)
+[![Gitter](https://img.shields.io/badge/Gitter-join%20chat-brightgreen.svg)](https://gitter.im/testIT-LivingDoc/livingdoc-core)
+[![Build Status](https://travis-ci.org/testIT-LivingDoc/livingdoc-confluence.svg?branch=master)](https://travis-ci.org/testIT-LivingDoc/livingdoc-confluence)
 
 This repository contains the [testIT LivingDoc](https://github.com/testIT-LivingDoc/livingdoc-core) Confluence Plugin.
 
