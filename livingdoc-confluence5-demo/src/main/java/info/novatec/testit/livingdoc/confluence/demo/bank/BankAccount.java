@@ -18,6 +18,8 @@
  */
 package info.novatec.testit.livingdoc.confluence.demo.bank;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public abstract class BankAccount {
 
     private final AccountType type;
@@ -31,6 +33,17 @@ public abstract class BankAccount {
         this.number = number;
         this.type = accountType;
         this.owner = owner;
+    }
+    
+    /**
+     * No modifier for restricted access to this constructor.
+     */
+    BankAccount(AccountType accountType, String number, Owner owner, Money balance, boolean frozen) {
+        this.type = accountType;
+        this.number = number;
+        this.owner = owner;
+        this.balance = balance;
+        this.frozen = frozen;
     }
 
     public abstract void checkFunds(Money amount) throws Exception;
@@ -54,7 +67,7 @@ public abstract class BankAccount {
 
     private void checkNotFrozen() throws Exception {
         if (frozen) {
-            throw new Exception("Acccount frozen!");
+            throw new Exception("Account frozen!");
         }
     }
 
@@ -89,5 +102,32 @@ public abstract class BankAccount {
 
     public String getOwnerName() {
         return owner.getFullName();
+    }
+    
+    public boolean equals(Object value) {
+        if (value instanceof BankAccount) {
+            BankAccount other = (BankAccount) value;
+            if (type != other.type) {
+                return false;
+            }
+            if (!number.equals(other.number)) {
+                return false;
+            }
+            if (!owner.equals(other.owner)) {
+                return false;
+            }
+            if (!balance.equals(other.balance)) {
+                return false;
+            }
+            if (frozen != other.frozen) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

@@ -26,11 +26,23 @@ public class CheckingAccount extends BankAccount {
         super(AccountType.CHECKING, number, owner);
     }
 
+    /**
+     * No modifier for restricted access to this constructor.
+     */
+    CheckingAccount(String number, Owner owner, Money maxCredit, Money balance, boolean frozen) {
+        super(AccountType.CHECKING, number, owner, balance, frozen);
+        this.maxCredit = maxCredit;
+    }
+
     @Override
     public void checkFunds(Money amount) throws Exception {
         if (getBalance().plus(maxCredit).lowerThan(amount)) {
             throw new Exception("Not enougth credit !");
         }
+    }
+
+    public Money getCreditLine() {
+        return this.maxCredit;
     }
 
     public void setCreditLine(Money credit) {

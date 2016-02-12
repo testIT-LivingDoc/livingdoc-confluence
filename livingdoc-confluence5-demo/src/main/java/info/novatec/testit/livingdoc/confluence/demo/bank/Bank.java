@@ -21,14 +21,23 @@ package info.novatec.testit.livingdoc.confluence.demo.bank;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Bank {
     private final Map<String, BankAccount> accounts;
 
     public Bank() {
         accounts = new HashMap<String, BankAccount>();
+    }
+    
+    /**
+     * No modifier for restricted access to this constructor.
+     */
+    Bank(Map<String, BankAccount> accounts) {
+        this.accounts = accounts;
     }
 
     public boolean hasAccount(String accountNumber) {
@@ -40,6 +49,13 @@ public class Bank {
             throw new NoSuchAccountException(accountNumber);
         }
         return accounts.get(accountNumber);
+    }
+    
+    public void addAccount(BankAccount account) {
+        if (hasAccount(account.getNumber())) {
+            return;
+        }
+        accounts.put(account.getNumber(), account);
     }
 
     public SavingsAccount openSavingsAccount(String number, Owner owner) {
@@ -99,5 +115,35 @@ public class Bank {
         } else {
             throw new Exception("Can't transfer from not owned account !");
         }
+    }
+    
+    public boolean equals(Object other) {
+        if (other instanceof Bank) {
+            try {
+                Bank bank = (Bank) other;
+                if (accounts.size() != bank.accounts.size()) {
+                	return false;
+                }
+                Iterator<String> iterator = accounts.keySet().iterator();
+                for (int i = 0; i < accounts.size(); i++) {
+                    BankAccount thisAccount = accounts.get(iterator.next());
+                    if (thisAccount != null) {
+                        if (!thisAccount.equals(bank.getAccount(thisAccount.getNumber()))) {
+                        	return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            } catch (NoSuchAccountException e) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

@@ -187,7 +187,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * Retrieves the home repository of the confluence space.
-     * </p>
+     * <p></p>
      * 
      * @return the home repository of the confluence space.
      * @throws LivingDocServerException
@@ -213,7 +213,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * Returns a message if an exception occurs.
-     * <p/>
+     * <p></p>
      * 
      * @param spaceKey Space Key
      * @return a message if an exception occurs.
@@ -236,7 +236,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * Retrieves the specification
-     * <p/>
+     * <p></p>
      * 
      * @param page
      * @return the specification.
@@ -248,7 +248,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * Retrieves the specification
-     * <p/>
+     * <p></p>
      * 
      * @param spaceKey Space Key
      * @param pageTitle String pageTitle
@@ -263,7 +263,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * True if the specification exists
-     * <p/>
+     * <p></p>
      * 
      * @param page
      * @return if the specification exists
@@ -281,7 +281,7 @@ public class ConfluenceLivingDoc {
      * dedicated
      * <p>
      * 
-     * @param Space Key
+     * @param spaceKey Space Key
      * @return List of requirement repositories
      * @throws LivingDocServerException
      */
@@ -296,7 +296,7 @@ public class ConfluenceLivingDoc {
      * Get the systems under test associated with the space specified
      * <p>
      * 
-     * @param Space Key
+     * @param spaceKey Space Key
      * @return List of systems under test
      * @throws LivingDocServerException
      */
@@ -309,7 +309,7 @@ public class ConfluenceLivingDoc {
      * Get the systems under test list associated with the page specified
      * <p>
      * 
-     * @param Page
+     * @param page Page
      * @return the systems under test list associated with the page specified
      * @throws LivingDocServerException
      */
@@ -321,8 +321,8 @@ public class ConfluenceLivingDoc {
      * Get the systems under test list associated with the page specified
      * <p>
      * 
-     * @param spaceKey
-     * @param pageTitle
+     * @param spaceKey Space Key
+     * @param pageTitle Page Title
      * @return the systems under test list associated with the page specified
      * @throws LivingDocServerException
      */
@@ -336,7 +336,7 @@ public class ConfluenceLivingDoc {
      * Get the References with the specified page.
      * <p>
      * 
-     * @param Page page
+     * @param page Page
      * @return List of References
      * @throws LivingDocServerException
      */
@@ -348,8 +348,8 @@ public class ConfluenceLivingDoc {
      * Get the References with the specified page and space.
      * <p>
      * 
-     * @param Space Key
-     * @param Page Title
+     * @param spaceKey Space Key
+     * @param pageTitle Page Title
      * @return List of References
      * @throws LivingDocServerException
      */
@@ -581,7 +581,7 @@ public class ConfluenceLivingDoc {
 
     /**
      * Verifies if the the selectedSystemUnderTestInfo matches the specified key
-     * </p>
+     * <p></p>
      * 
      * @param selectedSystemUnderTestInfo
      * @param key
