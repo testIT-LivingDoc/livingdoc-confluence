@@ -20,7 +20,7 @@ import info.novatec.testit.livingdoc.server.domain.Runner;
 
 /**
  * Action for the <code>test IT - LivingDoc Server Properties</code>.
- * <p/>
+ * <p></p>
  * Copyright (c) 2006 Pyxis technologies inc. All Rights Reserved.
  * 
  * @author JCHUET

@@ -24,6 +24,13 @@ public class SavingsAccount extends BankAccount {
         super(AccountType.SAVINGS, number, owner);
     }
 
+    /**
+     * No modifier for restricted access to this constructor.
+     */
+    SavingsAccount(String number, Owner owner, Money balance, boolean frozen) {
+        super(AccountType.SAVINGS, number, owner, balance, frozen);
+    }
+
     @Override
     public void checkFunds(Money amount) throws Exception {
         if (getBalance().lowerThan(amount)) {
