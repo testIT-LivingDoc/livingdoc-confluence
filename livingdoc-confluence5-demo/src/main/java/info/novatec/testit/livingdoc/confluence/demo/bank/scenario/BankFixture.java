@@ -10,7 +10,6 @@ import info.novatec.testit.livingdoc.confluence.demo.bank.NoSuchAccountException
 import info.novatec.testit.livingdoc.confluence.demo.bank.Owner;
 import info.novatec.testit.livingdoc.confluence.demo.bank.OwnerTypeConverter;
 import info.novatec.testit.livingdoc.confluence.demo.bank.WithdrawType;
-import info.novatec.testit.livingdoc.converter.TypeConverter;
 import info.novatec.testit.livingdoc.interpreter.flow.scenario.Check;
 import info.novatec.testit.livingdoc.interpreter.flow.scenario.Display;
 import info.novatec.testit.livingdoc.interpreter.flow.scenario.Expectation;
@@ -24,7 +23,7 @@ public class BankFixture {
 
     static {
         if ( ! TypeConversion.supports(Owner.class)) {
-            TypeConversion.register(( TypeConverter ) new OwnerTypeConverter());
+            TypeConversion.register(new OwnerTypeConverter());
         }
     }
 
