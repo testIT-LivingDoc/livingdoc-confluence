@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2008 Pyxis Technologies inc.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF site:
@@ -26,15 +26,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+
 public class Bank {
     private final Map<String, BankAccount> accounts;
 
     public Bank() {
         accounts = new HashMap<String, BankAccount>();
     }
-    
+
     /**
      * No modifier for restricted access to this constructor.
+     *
+     * @param accounts the bank accounts
      */
     Bank(Map<String, BankAccount> accounts) {
         this.accounts = accounts;
@@ -50,7 +53,7 @@ public class Bank {
         }
         return accounts.get(accountNumber);
     }
-    
+
     public void addAccount(BankAccount account) {
         if (hasAccount(account.getNumber())) {
             return;
@@ -97,7 +100,7 @@ public class Bank {
         return Collections.unmodifiableCollection(accounts.values());
     }
 
-    public void transfer(String numberFrom, String numberTo, Money amountToTransfert) throws Exception {
+    public void transfer(String numberFrom, String numberTo, Money amountToTransfer) throws Exception {
         if ( ! hasAccount(numberFrom)) {
             throw new NoSuchAccountException(numberFrom);
         }
@@ -110,39 +113,54 @@ public class Bank {
 
         if (accountFrom.getOwner().getFirstName().equals(accountTo.getOwner().getFirstName()) && accountFrom.getOwnerName()
             .equals(accountTo.getOwnerName())) {
-            accountFrom.withdraw(amountToTransfert);
-            accountTo.deposit(amountToTransfert);
+            accountFrom.withdraw(amountToTransfer);
+            accountTo.deposit(amountToTransfer);
         } else {
             throw new Exception("Can't transfer from not owned account !");
         }
     }
-    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ( ( accounts == null ) ? 0 : accounts.hashCode() );
+        return result;
+    }
+
+    @Override
     public boolean equals(Object other) {
-        if (other instanceof Bank) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        Bank otherBank = ( Bank ) other;
+        if (accounts.size() != otherBank.accounts.size()) {
+            return false;
+        }
+
+        for (Iterator<String> iterator = accounts.keySet().iterator(); iterator.hasNext();) {
+            BankAccount thisAccount = accounts.get(iterator.next());
+            if (thisAccount == null) {
+                return false;
+            }
             try {
-                Bank bank = (Bank) other;
-                if (accounts.size() != bank.accounts.size()) {
-                	return false;
-                }
-                Iterator<String> iterator = accounts.keySet().iterator();
-                for (int i = 0; i < accounts.size(); i++) {
-                    BankAccount thisAccount = accounts.get(iterator.next());
-                    if (thisAccount != null) {
-                        if (!thisAccount.equals(bank.getAccount(thisAccount.getNumber()))) {
-                        	return false;
-                        }
-                    } else {
-                        return false;
-                    }
+                BankAccount otherBankAccount = otherBank.getAccount(thisAccount.getNumber());
+                if ( ! thisAccount.equals(otherBankAccount)) {
+                    return false;
                 }
             } catch (NoSuchAccountException e) {
                 return false;
             }
-            return true;
         }
-        return false;
+
+        return true;
+
     }
-    
+
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
