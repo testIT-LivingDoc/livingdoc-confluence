@@ -408,5 +408,10 @@
 		<version>2.5</version>
 		<license>The Apache License, Version 2.0</license>
 	</artifact>
-	
+	<artifact>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate</artifactId>
+		<version>3.2.6.ga</version>
+		<license>unknown license. Please check the license by yourself.</license>			
+	</artifact>
 </license-lookup>
