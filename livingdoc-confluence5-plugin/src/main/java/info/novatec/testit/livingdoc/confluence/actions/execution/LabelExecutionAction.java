@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.atlassian.confluence.core.ContentEntityObject;
+import com.atlassian.confluence.core.PartialList;
 import com.atlassian.confluence.labels.Label;
 import com.atlassian.confluence.labels.LabelManager;
 import com.atlassian.confluence.pages.Page;
@@ -57,14 +59,19 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
         return pages;
     }
 
-    @SuppressWarnings("unchecked")
     private List<Page> getLabeledPages(String label) {
         Label labelObject = confluenceLivingDoc.getLabelManager().getLabel(label.trim());
+        List<Page> pageList =  new ArrayList<Page>();
         if (labelObject != null) {
-            return ( List<Page> ) confluenceLivingDoc.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
+            PartialList<ContentEntityObject> partialList = confluenceLivingDoc.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
                 LabelManager.NO_MAX_RESULTS, labelObject);
+            for (ContentEntityObject ceo : partialList.getList()){
+                if(ceo instanceof Page){
+                    pageList.add((Page)ceo);
+                }
+            }
         }
 
-        return new ArrayList<Page>();
+        return pageList;
     }
 }
