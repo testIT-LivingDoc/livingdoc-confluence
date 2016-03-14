@@ -202,7 +202,14 @@
 			<param name="help-section" value="misc"/>
 		</resource>
 	</macro>
-	
+	<macro name='livingdoc-labels' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels' key='livingdoc-labels'>
+        <param name="help-section" value="external"/>
+        <description/>
+        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocLabels-help.vm">
+            <param name="help-section" value="misc"/>
+        </resource>
+    </macro>
+    
 	<!-- DOCTHEME XHTML MACRO -->
 	<xhtml-macro name='spacejump' class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro' key='spacejump-xhtml'>
         <description />
@@ -306,7 +313,25 @@
 		    <parameter name="labels" type="string"/>
 		</parameters>
 	</xhtml-macro>
-	
+	 <xhtml-macro name='livingdoc-labels' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels' key='livingdoc-labels-xhtml'
+    		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+    		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Labels+macro">
+        <category name="development"/>
+		<parameters>
+		    <parameter name="spaceKey" type="spacekey"/>
+		    <parameter name="labels" type="string"/>
+			<parameter name="title" type="string" >
+	            <option key="showNameInPlaceholder" value="false" />
+	            <option key="showValueInPlaceholder" value="true" />
+	        </parameter>
+		    <parameter name="expanded" type="boolean"/>
+			<parameter name="suts" type="string"/>
+			<parameter name="group" type="string"/>
+			<parameter name="sort" type="string"/>
+		    <parameter name="reverse" type="boolean"/>
+		    <parameter name="openInSameWindow" type="boolean"/>
+		</parameters>
+    </xhtml-macro>
 	<!-- DOCTHEME MACRO MIGRATOR -->
 	<macro-migrator key="spacejump-migrator" 
 					macro-name="spacejump" 
