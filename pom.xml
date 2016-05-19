@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-plugin</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
@@ -25,8 +25,8 @@
 	<properties>
 		<project.java.version>1.8</project.java.version>
 		<project.root>.</project.root>
-		<confluence.version>5.9.9</confluence.version>
-		<confluence.data.version>5.9.9</confluence.data.version>
+		<confluence.version>5.8.17</confluence.version>
+		<confluence.data.version>5.8.17</confluence.data.version>
 		<amps.version>6.2.4</amps.version>
 		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
