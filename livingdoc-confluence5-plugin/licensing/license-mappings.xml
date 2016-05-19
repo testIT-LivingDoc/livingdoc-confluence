@@ -43,6 +43,12 @@
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
+		<groupId>com.atlassian.analytics</groupId>
+		<artifactId>analytics-api</artifactId>
+		<version>5.0.2-hashfix</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
 		<groupId>com.atlassian.bonnie</groupId>
 		<artifactId>lucene-upgrader</artifactId>
 		<version>1.0</version>

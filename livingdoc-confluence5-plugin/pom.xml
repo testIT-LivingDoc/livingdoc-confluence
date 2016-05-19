@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-confluence</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence5-plugin</artifactId>
-	<name>${project.title} - Confluence Plugin</name>
+	<name>testIT LivingDoc - Confluence Plugin</name>
 	<packaging>atlassian-plugin</packaging>
 
 	<properties>
@@ -193,7 +195,6 @@
 			<plugin>
 				<groupId>org.jasig.maven</groupId>
 				<artifactId>maven-notice-plugin</artifactId>
-				<version>1.0.4</version>
 				<executions>
 					<execution>
 						<!-- Generate NOTICE file to be bundled with the .jar files. -->

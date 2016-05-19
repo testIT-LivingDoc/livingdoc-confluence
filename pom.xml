@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-plugin</artifactId>
-		<version>1.1.1</version>
+		<version>1.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
-	<name>${project.title} - Confluence</name>
+	<name>testIT LivingDoc - Confluence</name>
 	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
 	<packaging>pom</packaging>
-	<version>1.2.0-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</connection>
@@ -22,11 +23,12 @@
 	</scm>
 
 	<properties>
+		<project.java.version>1.8</project.java.version>
 		<project.root>.</project.root>
-		<confluence.version>5.9.3</confluence.version>
-		<confluence.data.version>5.9.3</confluence.data.version>
-		<amps.version>6.2.1</amps.version>
-		<testit.livingdoc.core.version>1.1.1</testit.livingdoc.core.version>
+		<confluence.version>5.9.9</confluence.version>
+		<confluence.data.version>5.9.9</confluence.data.version>
+		<amps.version>6.2.4</amps.version>
+		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
 
 	<!-- - LivingDoc modules -->
