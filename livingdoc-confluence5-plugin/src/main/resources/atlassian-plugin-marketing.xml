@@ -2,7 +2,7 @@
 
 	<!--Describe names and versions of compatible applications -->
 	<compatibility>
-		<product name="confluence" min="5.0" />
+		<product name="confluence" min="5.9" max="5.9"/>
 	</compatibility>
 
 	<!-- Describe your add-on logo and banner. The banner is only displayed 
@@ -12,8 +12,6 @@
 
 	<!-- Describe highlight and cropped highlight image assets, in order. -->
 	<highlights>
-		<highlight image="includes/images/testit_logo.png" cropped="includes/images/testit_logo_cropped.png" />
-		<highlight image="includes/images/livingdoc_demospace.png" cropped="includes/images/livingdoc_demospace_cropped.png" />
 		<highlight image="includes/images/livingdoc_macro_dowith.png" cropped="includes/images/livingdoc_macro_dowith_cropped.png" />
 		<highlight image="includes/images/livingdoc_macro_scenario.png" cropped="includes/images/livingdoc_macro_scenario_cropped.png" />
 		<highlight image="includes/images/livingdoc_macro_listof.png" cropped="includes/images/livingdoc_macro_listof_cropped.png" />

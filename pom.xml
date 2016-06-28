@@ -12,10 +12,18 @@
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
-	<name>testIT LivingDoc - Confluence</name>
-	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
+	<name>testIT LivingDoc - Confluence</name>
+	<description>The Open Source Solution for your Living Documentation in Atlassian Confluence.
+	Make your Feature Specification in Confluence executable by integrating automated  Acceptance Tests.</description>
+	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
+	
+	<organization>
+		<name>NovaTec Solutions</name>
+		<url>http://www.novatec-gmbh.de</url>
+	</organization>
+	
 	<scm>
 		<connection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</connection>
 		<developerConnection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</developerConnection>
