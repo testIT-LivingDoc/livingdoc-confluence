@@ -26,12 +26,7 @@ import com.atlassian.confluence.util.GeneralUtil;
 
 public final class ConfluenceVersion implements Comparable<ConfluenceVersion> {
 
-    public static final ConfluenceVersion V26X = new ConfluenceVersion(2, 6);
-    public static final ConfluenceVersion V28X = new ConfluenceVersion(2, 8);
-    public static final ConfluenceVersion V29X = new ConfluenceVersion(2, 9);
-    public static final ConfluenceVersion V210X = new ConfluenceVersion(2, 10);
-    public static final ConfluenceVersion V30X = new ConfluenceVersion(3, 0);
-
+   
     private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+).(\\d+)(.\\d+)?");
 
     private static ConfluenceVersion CURRENT;
