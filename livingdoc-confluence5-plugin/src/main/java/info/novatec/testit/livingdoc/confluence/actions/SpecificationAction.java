@@ -46,7 +46,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
             specification = confluenceLivingDoc.getSpecification(spaceKey, getPage().getTitle());
         } catch (LivingDocServerException e) {
             if ( ! e.getId().equals(LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND))
-                addActionError(e.getId());
+                addActionError(e);
         }
 
         return SUCCESS;
@@ -63,7 +63,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
             projectSystemUnderTests = confluenceLivingDoc.getSystemsUnderTests(spaceKey);
         } catch (LivingDocServerException e) {
             projectSystemUnderTests = new ArrayList<SystemUnderTest>();
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return SUCCESS;
@@ -80,7 +80,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
 
             confluenceLivingDoc.getLDServerService().addSpecificationSystemUnderTest(sut, specification);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return getSystemUndertTestSelection();
@@ -97,7 +97,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
 
             confluenceLivingDoc.getLDServerService().removeSpecificationSystemUnderTest(sut, specification);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return getSystemUndertTestSelection();
@@ -138,7 +138,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
                     throw new LivingDocServerException("livingdoc.server.sutsnotfound", "");
             }
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
             isEditMode = false;
         }
 
@@ -149,7 +149,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
         try {
             confluenceLivingDoc.getLDServerService().createReference(instanceOfReference());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return retrieveReferenceList();
@@ -161,7 +161,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
         try {
             confluenceLivingDoc.getLDServerService().removeReference(instanceOfReference());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return retrieveReferenceList();

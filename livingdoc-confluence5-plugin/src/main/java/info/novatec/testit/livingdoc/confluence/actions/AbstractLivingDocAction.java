@@ -2,16 +2,22 @@ package info.novatec.testit.livingdoc.confluence.actions;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
 import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
 
 
 @SuppressWarnings("serial")
 public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractLivingDocAction.class);
     protected ConfluenceLivingDoc confluenceLivingDoc = StaticAccessor.getConfluenceLivingDoc();
 
     protected String bulkUID = "PAGE";
@@ -129,7 +135,15 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         }
     }
 
+    public void addActionError(LivingDocServerException ldse) {
+        super.addActionError(ldse.getId());
+        if (ldse.getCause() != null) {
+            log.error("Error in action", ldse.getCause());
+        }
+    }
+
     public String getExecutionTimeout() {
-        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
+        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty(
+            "executionTimeout");
     }
 }
