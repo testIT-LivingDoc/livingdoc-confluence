@@ -35,7 +35,6 @@ import com.atlassian.confluence.importexport.ImportedObjectPostProcessor;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
-import com.atlassian.user.User;
 
 import info.novatec.testit.livingdoc.confluence.demo.phonebook.PhoneBookSystemUnderDevelopment;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
@@ -121,8 +120,6 @@ public class DemoSpaceAction extends LivingDocServerAction {
             doAddPhoneBookSUT(demoRepository);
 
             doEnableLivingDocPage(demoSpace, demoRepository);
-
-            doAddRemoteUserToLivingDocUserGroup();
         } catch (LivingDocServerException ex) {
             addActionError(ex.getId());
             doRemoveDemoSpace();
@@ -215,13 +212,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
         }
     }
 
-    private void doAddRemoteUserToLivingDocUserGroup() {
-        final User remoteUser = this.getAuthenticatedUser();
-
-        if ( ! confluenceLivingDoc.getLivingdocUserGroup().hasMembership(remoteUser)) {
-            confluenceLivingDoc.getLivingdocUserGroup().addMembership(remoteUser);
-        }
-    }
+    
 
     private Space getDemoSpace() {
         return confluenceLivingDoc.getSpaceManager().getSpace(DEMO_SPACE_KEY);
