@@ -102,7 +102,7 @@ public class ConfigurationAction extends LivingDocServerAction {
             editClasspathsMode = false;
             selectedRunnerName = NONE_SELECTED;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return SUCCESS;
@@ -119,7 +119,7 @@ public class ConfigurationAction extends LivingDocServerAction {
             getService().createRunner(selectedRunner);
             successfullAction();
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetRunners();
@@ -143,10 +143,10 @@ public class ConfigurationAction extends LivingDocServerAction {
                 runners = getService().getAllRunners();
                 selectedRunner.setName(selectedRunnerName);
             } catch (LivingDocServerException e1) {
-                addActionError(e.getId());
+                addActionError(e1);
             }
 
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return SUCCESS;
@@ -156,7 +156,7 @@ public class ConfigurationAction extends LivingDocServerAction {
         try {
             getService().removeRunner(selectedRunnerName);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetRunners();
@@ -168,7 +168,7 @@ public class ConfigurationAction extends LivingDocServerAction {
             selectedRunner.setClasspaths(ClasspathSet.parse(classpath));
             getService().updateRunner(selectedRunnerName, selectedRunner);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetRunners();

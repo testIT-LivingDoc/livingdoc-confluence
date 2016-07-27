@@ -111,12 +111,11 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
             
-            themeManager.setSpaceTheme(getSpaceKey(), "info.novatec.testit.livingdoc.confluence.plugin:livingdoc.theme");
-            
             getService().registerRepository(registeredRepository);
+            themeManager.setSpaceTheme(getSpaceKey(), "info.novatec.testit.livingdoc.confluence.plugin:livingdoc.theme");
             projectName = isWithNewProject() ? newProjectName : projectName;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
             editMode = true;
             readonly = true;
         }
@@ -145,7 +144,7 @@ public class RegistrationAction extends LivingDocServerAction {
             getService().updateRepositoryRegistration(newRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
             editMode = true;
             readonly = true;
         }
@@ -175,7 +174,7 @@ public class RegistrationAction extends LivingDocServerAction {
                     selectedSutName = selectedSut.getName();
             }
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
             addMode = false;
         }
 
@@ -197,7 +196,7 @@ public class RegistrationAction extends LivingDocServerAction {
             getService().createSystemUnderTest(selectedSut, getHomeRepository());
             successfullAction();
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetSystemUnderTests();
@@ -234,10 +233,10 @@ public class RegistrationAction extends LivingDocServerAction {
                 selectedSut.setRunner(Runner.newInstance(newRunnerName));
                 selectedSut.setProjectDependencyDescriptor(newProjectDependencyDescriptor);
             } catch (LivingDocServerException e1) {
-                addActionError(e.getId());
+                addActionError(e1);
             }
 
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return SUCCESS;
@@ -250,7 +249,7 @@ public class RegistrationAction extends LivingDocServerAction {
             getService().removeSystemUnderTest(selectedSut, getHomeRepository());
             selectedSutName = null;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         selectedSut = null;
@@ -265,7 +264,7 @@ public class RegistrationAction extends LivingDocServerAction {
             selectedSut.setSutClasspaths(ClasspathSet.parse(sutClasspath));
             getService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetSystemUnderTests();
@@ -303,7 +302,7 @@ public class RegistrationAction extends LivingDocServerAction {
             selectedSut.setFixtureClasspaths(ClasspathSet.parse(fixtureClasspath));
             getService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetSystemUnderTests();
@@ -315,7 +314,7 @@ public class RegistrationAction extends LivingDocServerAction {
             sut.setProject(Project.newInstance(projectName));
             getService().setSystemUnderTestAsDefault(sut, getHomeRepository());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetSystemUnderTests();
@@ -332,7 +331,7 @@ public class RegistrationAction extends LivingDocServerAction {
 
             return projects;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return projects;

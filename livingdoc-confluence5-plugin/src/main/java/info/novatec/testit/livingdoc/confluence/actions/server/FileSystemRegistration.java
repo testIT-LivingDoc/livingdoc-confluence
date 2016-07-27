@@ -34,7 +34,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
         try {
             setFileRepositories(getService().getAllSpecificationRepositories());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return SUCCESS;
@@ -57,7 +57,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
                 newRepository = null;
             }
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetFileSystemRegistration();
@@ -67,7 +67,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
         try {
             getService().removeRepository(repositoryUid);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return doGetFileSystemRegistration();
@@ -78,7 +78,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
             try {
                 setFileRepositories(getService().getAllSpecificationRepositories());
             } catch (LivingDocServerException e) {
-                addActionError(e.getId());
+                addActionError(e);
             }
         }
         return fileRepositories;
@@ -168,7 +168,7 @@ public class FileSystemRegistration extends LivingDocServerAction {
         try {
             projects = new LinkedList<Project>(getService().getAllProjects());
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return projects;
