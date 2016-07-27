@@ -90,18 +90,16 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final BootstrapManager bootstrapManager;
     private final LivingDocServerServiceImpl service;
     private final LivingDocXmlRpcServer xmlRpcServer;
-    private final LivingDocUserGroup livingDocUserGroup;
     private final EventPublisher eventPublisher;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-        LivingDocServerServiceImpl service, LivingDocXmlRpcServer xmlRpcServer, LivingDocUserGroup livingDocUserGroup,
+        LivingDocServerServiceImpl service, LivingDocXmlRpcServer xmlRpcServer, 
         EventPublisher eventPublisher) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.service = service;
         this.xmlRpcServer = xmlRpcServer;
-        this.livingDocUserGroup = livingDocUserGroup;
         this.eventPublisher = eventPublisher;
     }
 
@@ -174,7 +172,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         log.debug("Boostrapping datas");
         properties.setProperty("livingdoc.path", currentBundleFilePath);
         new BootstrapData(customSessionService, properties).execute();
-        livingDocUserGroup.createIfNeeded();
     }
 
     private void initializeXmlRpcServerFromSession(HibernateSessionService customSessionService) {

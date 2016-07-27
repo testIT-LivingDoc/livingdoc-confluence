@@ -110,7 +110,6 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setBaseTestUrl(newTestUrl());
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
-            registeredRepository.setMaxUsers(confluenceLivingDoc.getNumberOfUserForLivingDocUserGroup());
             
             themeManager.setSpaceTheme(getSpaceKey(), "info.novatec.testit.livingdoc.confluence.plugin:livingdoc.theme");
             
@@ -142,7 +141,6 @@ public class RegistrationAction extends LivingDocServerAction {
             newRepository.setBaseTestUrl(newTestUrl());
             newRepository.setUsername(getUsername());
             newRepository.setPassword(getPwd());
-            newRepository.setMaxUsers(confluenceLivingDoc.getNumberOfUserForLivingDocUserGroup());
 
             getService().updateRepositoryRegistration(newRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
