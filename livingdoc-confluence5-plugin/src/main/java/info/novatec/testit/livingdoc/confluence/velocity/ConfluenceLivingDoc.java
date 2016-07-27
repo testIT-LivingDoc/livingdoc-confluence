@@ -52,7 +52,6 @@ import com.opensymphony.webwork.ServletActionContext;
 
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
-import info.novatec.testit.livingdoc.confluence.LivingDocUserGroup;
 import info.novatec.testit.livingdoc.confluence.actions.SpecificationAction;
 import info.novatec.testit.livingdoc.confluence.utils.ConfluenceVersion;
 import info.novatec.testit.livingdoc.report.XmlReport;
@@ -104,7 +103,6 @@ public class ConfluenceLivingDoc {
     private final UserAccessor userAccessor;
     private final FormatSettingsManager formatSettingsManager;
     private final LocaleManager localeManager;
-    private final LivingDocUserGroup ldUserGroup;
     private final Renderer viewRenderer;
 
     private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
@@ -124,7 +122,7 @@ public class ConfluenceLivingDoc {
     ContentEntityManager contentEntityManager, WikiStyleRenderer wikiStyleRenderer, PageManager pageManager,
         SpaceManager spaceManager, SpacePermissionManager spacePermissionManager, LabelManager labelManager,
         UserAccessor userAccessor, FormatSettingsManager formatSettingsManager, LocaleManager localeManager,
-        LivingDocUserGroup ldUserGroup, Renderer viewRenderer) {
+         Renderer viewRenderer) {
         this.service = service;
         this.configurationActivator = configurationActivator;
         this.loginManager = loginManager;
@@ -143,7 +141,6 @@ public class ConfluenceLivingDoc {
         this.userAccessor = userAccessor;
         this.formatSettingsManager = formatSettingsManager;
         this.localeManager = localeManager;
-        this.ldUserGroup = ldUserGroup;
         this.viewRenderer = viewRenderer;
     }
 
@@ -195,21 +192,10 @@ public class ConfluenceLivingDoc {
     public Repository getHomeRepository(String spaceKey) throws LivingDocServerException {
         String uid = getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + spaceKey;
         Repository repository = Repository.newInstance(uid);
-        repository.setMaxUsers(getNumberOfUserForLivingDocUserGroup());
         return repository;
     }
 
-    /**
-     * Returns the number of user associated to the 'livingdoc-users' group.
-     * 
-     * @return number of users for the group
-     * @throws LivingDocServerException
-     */
-    public int getNumberOfUserForLivingDocUserGroup() throws LivingDocServerException {
-
-        return getLivingdocUserGroup().getNumberOfUserForGroup();
-
-    }
+    
 
     /**
      * Returns a message if an exception occurs.
@@ -798,9 +784,6 @@ public class ConfluenceLivingDoc {
         return configurationActivator;
     }
 
-    public LivingDocUserGroup getLivingdocUserGroup() {
-        return ldUserGroup;
-    }
 
     public FormatSettingsManager getFormatSettingsManager() {
         return formatSettingsManager;
