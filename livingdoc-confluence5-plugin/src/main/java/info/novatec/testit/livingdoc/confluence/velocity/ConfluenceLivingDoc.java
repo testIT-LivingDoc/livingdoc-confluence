@@ -53,7 +53,6 @@ import com.opensymphony.webwork.ServletActionContext;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.actions.SpecificationAction;
-import info.novatec.testit.livingdoc.confluence.utils.ConfluenceVersion;
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.server.LivingDocServer;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
@@ -148,10 +147,7 @@ public class ConfluenceLivingDoc {
         return LivingDocServer.VERSION;
     }
 
-    public ConfluenceVersion getConfluenceVersion() {
-        return ConfluenceVersion.getCurrentVersion();
-    }
-
+   
     
     /**
      * Custom I18n. Based on WebWork i18n.
