@@ -1,5 +1,17 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
+import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
+
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.LivingDocServerService;
@@ -10,18 +22,11 @@ import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import info.novatec.testit.livingdoc.util.I18nUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
-import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
-
 
 @SuppressWarnings("serial")
 public class LivingDocServerAction extends AbstractSpaceAction {
+    private static final Logger log = LoggerFactory.getLogger(LivingDocServerAction.class);
+
     private static final String RESOURCE_BUNDLE = ConfigurationAction.class.getName();
     private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
     private ResourceBundle resourceBundle;
@@ -134,7 +139,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
             }
             systemUnderTests = confluenceLivingDoc.getLDServerService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return systemUnderTests;
@@ -251,9 +256,18 @@ public class LivingDocServerAction extends AbstractSpaceAction {
 
             return projects;
         } catch (LivingDocServerException e) {
-            addActionError(e.getId());
+            addActionError(e);
         }
 
         return projects;
     }
+
+    public void addActionError(LivingDocServerException ldse) {
+        super.addActionError(ldse.getId());
+        if (ldse.getCause() != null) {
+            log.error("Error in action", ldse.getCause());
+        }
+    }
+    
+    
 }
