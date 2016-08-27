@@ -59,11 +59,6 @@
 			</dependency>
 			<dependency>
 				<groupId>info.novatec.testit</groupId>
-				<artifactId>livingdoc-server</artifactId>
-				<version>${testit.livingdoc.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>info.novatec.testit</groupId>
 				<artifactId>livingdoc-client</artifactId>
 				<version>${testit.livingdoc.core.version}</version>
 			</dependency>
