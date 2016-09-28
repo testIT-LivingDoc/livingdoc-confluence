@@ -1,12 +1,16 @@
 package info.novatec.testit.livingdoc.server.database.hibernate;
 
+import java.util.EnumSet;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.schema.TargetType;
 
 import info.novatec.testit.livingdoc.server.domain.Execution;
 import info.novatec.testit.livingdoc.server.domain.Project;
@@ -21,35 +25,48 @@ import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 
 
 public class HibernateDatabase {
-    private final AnnotationConfiguration cfg;
+    private final Properties properties;
+    private final Metadata metadata;
 
     public HibernateDatabase(Properties properties) throws HibernateException {
-        cfg = new AnnotationConfiguration();
-        cfg.setProperties(properties);
-        setAnnotadedClasses();
+
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(properties).build();
+        MetadataSources metadataSources = new MetadataSources(registry);
+        metadataSources.addAnnotatedClass(SystemInfo.class)
+            .addAnnotatedClass(Project.class)
+            .addAnnotatedClass(Runner.class)
+            .addAnnotatedClass(Repository.class)
+            .addAnnotatedClass(RepositoryType.class)
+            .addAnnotatedClass(SystemUnderTest.class)
+            .addAnnotatedClass(Requirement.class)
+            .addAnnotatedClass(Specification.class)
+            .addAnnotatedClass(Reference.class)
+            .addAnnotatedClass(Execution.class);
+
+        this.properties = properties;
+        this.metadata = metadataSources.buildMetadata();
+
     }
 
     public void createDatabase() throws HibernateException {
-        new SchemaExport(cfg).create(false, true);
+        // executes a drop and a create!
+        new SchemaExport().create(EnumSet.of(TargetType.DATABASE), metadata);
     }
 
     public void dropDatabase() throws HibernateException {
-        new SchemaExport(cfg).drop(false, true);
+//        new SchemaExport().drop(EnumSet.of(TargetType.DATABASE), metadata);
     }
 
-    public Configuration getConfiguration() {
-        return cfg;
+    public Properties getConfiguration() {
+        return properties;
+    }
+
+    public Metadata getMetadata() {
+        return metadata;
     }
 
     public SessionFactory getSessionFactory() throws HibernateException {
-        return cfg.buildSessionFactory();
-    }
-
-    private void setAnnotadedClasses() {
-        cfg.addAnnotatedClass(SystemInfo.class).addAnnotatedClass(Project.class).addAnnotatedClass(Runner.class)
-            .addAnnotatedClass(Repository.class).addAnnotatedClass(RepositoryType.class).addAnnotatedClass(
-                SystemUnderTest.class).addAnnotatedClass(Requirement.class).addAnnotatedClass(Specification.class)
-            .addAnnotatedClass(Reference.class).addAnnotatedClass(Execution.class);
+        return metadata.buildSessionFactory();
     }
 
 }

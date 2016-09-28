@@ -15,7 +15,7 @@ import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateSystem
 
 
 public class InitialDatas {
-    public static final String DEFAULT_VERSION = "1.0";
+    public static final String DEFAULT_VERSION = LivingDocServer.VERSION;
 
     private final SystemInfoDao systDao;
     private final RepositoryDao repoDao;

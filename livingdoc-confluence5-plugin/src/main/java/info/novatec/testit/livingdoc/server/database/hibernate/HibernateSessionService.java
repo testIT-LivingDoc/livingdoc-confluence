@@ -74,9 +74,7 @@ public class HibernateSessionService implements SessionService {
     public void commitTransaction() throws HibernateException {
         Transaction tx = threadTransaction.get();
         threadTransaction.set(null);
-        if (tx != null && ! tx.wasCommitted() && ! tx.wasRolledBack()) {
-            tx.commit();
-        }
+        tx.commit();
     }
 
     @Override
@@ -84,9 +82,7 @@ public class HibernateSessionService implements SessionService {
         Transaction tx = threadTransaction.get();
         try {
             threadTransaction.set(null);
-            if (tx != null && ! tx.wasCommitted() && ! tx.wasRolledBack()) {
-                tx.rollback();
-            }
+            tx.rollback();
         } finally {
             closeSession();
         }

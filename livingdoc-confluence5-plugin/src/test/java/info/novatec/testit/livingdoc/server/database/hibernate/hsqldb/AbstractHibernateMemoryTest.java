@@ -1,5 +1,6 @@
 package info.novatec.testit.livingdoc.server.database.hibernate.hsqldb;
 
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.junit.After;
 import org.junit.Before;
 
@@ -26,7 +27,7 @@ public abstract class AbstractHibernateMemoryTest extends HibernateMemoryTestCas
         if (transaction == null) {
             return;
         }
-        if ( ! transaction.wasCommitted()) {
+        if(transaction.getStatus() != TransactionStatus.COMMITTED){
             transaction.rollback();
         }
     }

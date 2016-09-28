@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Properties;
 
 import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConfig;
@@ -20,7 +21,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.MappingException;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
@@ -40,7 +40,7 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
      * operation assumes that table data does not exist in the target database
      * and fails if this is not the case. To prevent problems with foreign keys,
      * tables must be sequenced appropriately in the dataset.
-     * 
+     *
      * @param dataSet
      * @throws Exception
      */
@@ -64,7 +64,7 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
      * dataset does not contains a particular table, but that table exists in
      * the database, the database table is not affected. Table are truncated in
      * reverse sequence.
-     * 
+     *
      * @param dataSet
      * @throws Exception
      */
@@ -78,7 +78,7 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
         }
     }
 
-    protected void deleteAllFromDatabase(Class< ? > persistentClass) throws Exception {
+    protected void deleteAllFromDatabase(Class<?> persistentClass) throws Exception {
         IDatabaseConnection connection = null;
         try {
             connection = getConnection();
@@ -98,7 +98,7 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
      * followed by an insertIntoDatabase operation. This is the safest approach
      * to ensure that the database is in a known state. This is appropriate for
      * tests that require the database to only contain a specific set of data.
-     * 
+     *
      * @param dataSet
      * @throws Exception
      */
@@ -113,28 +113,28 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
         }
     }
 
-    protected void assertTableEquals(Class< ? > peristentClass, String[] includedFields, String flatXmlDataSetFileName)
+    protected void assertTableEquals(Class<?> peristentClass, String[] includedFields, String flatXmlDataSetFileName)
         throws Exception {
         assertTableEquals(peristentClass, includedFields, getFlatXmlDataSet(flatXmlDataSetFileName));
     }
 
-    protected void assertTableEquals(Class< ? > peristentClass, String[] includedFields, IDataSet dataset) throws Exception {
+    protected void assertTableEquals(Class<?> peristentClass, String[] includedFields, IDataSet dataset) throws Exception {
         // Fetch database data after executing your code
         IDataSet databaseDataSet = getConnection().createDataSet();
         ITable actualTable = databaseDataSet.getTable(getTableName(peristentClass));
-        ITable actualData = DefaultColumnFilter.includedColumnsTable(actualTable, getColumnNames(peristentClass,
-            includedFields));
+        ITable actualData =
+            DefaultColumnFilter.includedColumnsTable(actualTable, getColumnNames(peristentClass, includedFields));
 
         // Load expected data from an XML dataset
         ITable expectedTable = dataset.getTable(getTableName(peristentClass));
-        ITable expectedData = DefaultColumnFilter.includedColumnsTable(expectedTable, getColumnNames(peristentClass,
-            includedFields));
+        ITable expectedData =
+            DefaultColumnFilter.includedColumnsTable(expectedTable, getColumnNames(peristentClass, includedFields));
 
         // Assert actual database table match expected table
         Assertion.assertEquals(expectedData, actualData);
     }
 
-    protected void assertTableEmpty(Class< ? > peristentClass) throws Exception {
+    protected void assertTableEmpty(Class<?> peristentClass) throws Exception {
         // Fetch database data after executing your code
         IDataSet databaseDataSet = getConnection().createDataSet();
         ITable actualTable = databaseDataSet.getTable(getTableName(peristentClass));
@@ -142,13 +142,13 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
         assertTrue(actualTable.getRowCount() == 0);
     }
 
-    protected String getTableName(Class< ? > peristentClass) {
+    protected String getTableName(Class<?> peristentClass) {
         Table table = getMapping(peristentClass).getTable();
         return table.getName();
     }
 
-    private PersistentClass getMapping(Class< ? > peristentClass) {
-        PersistentClass mapping = getHibernateConfiguration().getClassMapping(peristentClass.getName());
+    private PersistentClass getMapping(Class<?> peristentClass) {
+        PersistentClass mapping = getHibernateMetadata().getEntityBinding(peristentClass.getName());
         if (mapping == null) {
             throw new AssertionFailedError("Unable to resolve table name for class: " + peristentClass.getName());
         }
@@ -156,13 +156,13 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
     }
 
     @SuppressWarnings("unchecked")
-    protected String[] getColumnNames(Class< ? > peristentClass, String[] includedFields) throws MappingException {
+    protected String[] getColumnNames(Class<?> peristentClass, String[] includedFields) throws MappingException {
         Collection<String> columns = new ArrayList<String>();
-        for (int i = 0; i < includedFields.length; i ++ ) {
+        for (int i = 0; i < includedFields.length; i++) {
             String propertyName = includedFields[i];
             Property property = getMapping(peristentClass).getProperty(propertyName);
 
-            for (Iterator<Column> it = property.getColumnIterator(); it.hasNext();) {
+            for (Iterator<Column> it = property.getColumnIterator(); it.hasNext(); ) {
                 Column col = it.next();
                 columns.add(col.getName());
             }
@@ -175,7 +175,7 @@ public abstract class AbstractDBUnitHibernateMemoryTest extends AbstractHibernat
     }
 
     protected IDatabaseConnection getConnection() throws Exception {
-        Configuration cfg = getHibernateConfiguration();
+        Properties cfg = getHibernateConfiguration();
         String username = cfg.getProperty("hibernate.connection.username");
         String password = cfg.getProperty("hibernate.connection.password");
         String driver = cfg.getProperty("hibernate.connection.driver_class");

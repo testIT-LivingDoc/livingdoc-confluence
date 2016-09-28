@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.atlassian.config.bootstrap.AtlassianBootstrapManager;
 import com.atlassian.config.util.BootstrapUtils;
 import com.atlassian.confluence.content.render.xhtml.Renderer;
 import com.atlassian.confluence.core.ConfluenceActionSupport;
-import com.atlassian.confluence.core.ContentEntityManager;
 import com.atlassian.confluence.core.ContentEntityObject;
 import com.atlassian.confluence.core.ContentPermissionManager;
 import com.atlassian.confluence.core.ContentPropertyManager;
@@ -93,7 +91,6 @@ public class ConfluenceLivingDoc {
     private AtlassianBootstrapManager bootstrapManager;
     private final ContentPropertyManager contentPropertyManager;
     private final ContentPermissionManager contentPermissionManager;
-    private final ContentEntityManager contentEntityManager;
     private final WikiStyleRenderer wikiStyleRenderer;
     private final PageManager pageManager;
     private final SpaceManager spaceManager;
@@ -110,15 +107,14 @@ public class ConfluenceLivingDoc {
     /**
      * Constructor for IoC
      * 
-     * Note: The qualifier for {@link ContentEntityManager} is needed because
+     * Note: The qualifier for {@link PageManager} is needed because
      * there are multiple implementations.
      */
     public ConfluenceLivingDoc(LivingDocServerService service, LivingDocServerConfigurationActivator configurationActivator,
         LoginManager loginManager, ConfluenceUserManager confluenceUserManager, TransactionTemplate transactionTemplate,
         SettingsManager settingsManager, AtlassianBootstrapManager bootstrapManager,
         ContentPropertyManager contentPropertyManager, ContentPermissionManager contentPermissionManager,
-        @Qualifier("contentEntityManager")
-    ContentEntityManager contentEntityManager, WikiStyleRenderer wikiStyleRenderer, PageManager pageManager,
+         WikiStyleRenderer wikiStyleRenderer, PageManager pageManager,
         SpaceManager spaceManager, SpacePermissionManager spacePermissionManager, LabelManager labelManager,
         UserAccessor userAccessor, FormatSettingsManager formatSettingsManager, LocaleManager localeManager,
          Renderer viewRenderer) {
@@ -131,7 +127,6 @@ public class ConfluenceLivingDoc {
         this.bootstrapManager = bootstrapManager;
         this.contentPropertyManager = contentPropertyManager;
         this.contentPermissionManager = contentPermissionManager;
-        this.contentEntityManager = contentEntityManager;
         this.wikiStyleRenderer = wikiStyleRenderer;
         this.pageManager = pageManager;
         this.spaceManager = spaceManager;
@@ -425,7 +420,7 @@ public class ConfluenceLivingDoc {
      * @param value
      */
     public void saveSelectedSystemUnderTestInfo(Page page, String value) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         getContentPropertyManager().setStringProperty(entityObject, EXECUTION_KEY, value);
     }
 
@@ -449,7 +444,7 @@ public class ConfluenceLivingDoc {
      * @return the previous implemented version of the specification.
      */
     public Integer getPreviousImplementedVersion(Page page) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         String value = getContentPropertyManager().getStringProperty(entityObject, PREVIOUS_IMPLEMENTED_VERSION);
         return value == null ? null : Integer.valueOf(value);
     }
@@ -462,7 +457,7 @@ public class ConfluenceLivingDoc {
      */
     public void savePreviousImplementedVersion(Page page, Integer version) {
         String value = version != null ? String.valueOf(version) : null;
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         getContentPropertyManager().setStringProperty(entityObject, PREVIOUS_IMPLEMENTED_VERSION, value);
     }
 
@@ -484,7 +479,7 @@ public class ConfluenceLivingDoc {
      * @return the implemented version of the specification.
      */
     public Integer getImplementedVersion(Page page) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         String value = getContentPropertyManager().getStringProperty(entityObject, IMPLEMENTED_VERSION);
         return value == null ? null : Integer.valueOf(value);
     }
@@ -504,7 +499,7 @@ public class ConfluenceLivingDoc {
             savePreviousImplementedVersion(page, previousImplementedVersion);
 
         String value = version != null ? String.valueOf(version) : null;
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         getContentPropertyManager().setStringProperty(entityObject, IMPLEMENTED_VERSION, value);
     }
 
@@ -550,13 +545,13 @@ public class ConfluenceLivingDoc {
      * @return the Execute childs boolean.
      */
     public boolean getExecuteChildren(Page page) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         String value = getContentPropertyManager().getStringProperty(entityObject, EXECUTE_CHILDREN);
         return value == null ? false : Boolean.valueOf(value);
     }
 
     public void saveExecuteChildren(Page page, Boolean doExecuteChildren) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         getContentPropertyManager().setStringProperty(entityObject, ConfluenceLivingDoc.EXECUTE_CHILDREN,
             doExecuteChildren != null ? String.valueOf(doExecuteChildren) : null);
     }
@@ -654,13 +649,13 @@ public class ConfluenceLivingDoc {
         if (space == null)
             return null;
 
-        ContentEntityObject entityObject = getContentEntityManager().getById(space.getHomePage().getId());
+        ContentEntityObject entityObject = getPageManager().getById(space.getHomePage().getId());
         return getContentPropertyManager().getStringProperty(entityObject, ServerPropertiesManager.SEQUENCE + key);
     }
 
     public void setPageProperty(String key, String value, String identifier) {
         Space space = getSpaceManager().getSpace(identifier);
-        ContentEntityObject entityObject = getContentEntityManager().getById(space.getHomePage().getId());
+        ContentEntityObject entityObject = getPageManager().getById(space.getHomePage().getId());
         getContentPropertyManager().setStringProperty(entityObject, ServerPropertiesManager.SEQUENCE + key, value);
     }
 
@@ -732,9 +727,7 @@ public class ConfluenceLivingDoc {
         return contentPropertyManager;
     }
 
-    public ContentEntityManager getContentEntityManager() {
-        return contentEntityManager;
-    }
+    
 
     public WikiStyleRenderer getWikiStyleRenderer() {
         return wikiStyleRenderer;
@@ -796,7 +789,7 @@ public class ConfluenceLivingDoc {
     }
 
     private SystemUnderTest getSavedSelectedSystemUnderTest(Page page) {
-        ContentEntityObject entityObject = getContentEntityManager().getById(page.getId());
+        ContentEntityObject entityObject = getPageManager().getById(page.getId());
         String key = getContentPropertyManager().getStringProperty(entityObject, EXECUTION_KEY);
         return buildSelectedSystemUnderTest(key);
     }

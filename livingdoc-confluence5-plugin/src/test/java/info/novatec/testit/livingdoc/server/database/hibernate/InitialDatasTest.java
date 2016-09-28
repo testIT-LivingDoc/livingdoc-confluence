@@ -34,7 +34,10 @@ public class InitialDatasTest extends AbstractDBUnitHibernateMemoryTest {
 
     @Test
     public void testTheSystemInfoIsInitializedIfNotEntry() throws Exception {
+
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
+        session.getTransaction().commit();
         SystemInfo systemInfo = systDao.getSystemInfo();
         assertEquals(LivingDocServer.VERSION, systemInfo.getServerVersion());
     }
@@ -43,7 +46,10 @@ public class InitialDatasTest extends AbstractDBUnitHibernateMemoryTest {
     public void testTheSystemInfoInsertIsNotTriggeredIfWeAlreadyHaveSomeEntriesButTheVersionIsSetToDefault()
         throws Exception {
         insertIntoDatabase("/dbunit/datas/InitializedDataBase-latest.xml");
+
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
+        session.getTransaction().commit();
 
         SystemInfo systemInfo = systDao.getSystemInfo();
         assertEquals(InitialDatas.DEFAULT_VERSION, systemInfo.getServerVersion());
@@ -51,7 +57,11 @@ public class InitialDatasTest extends AbstractDBUnitHibernateMemoryTest {
 
     @Test
     public void testAllSupportedRepositoryTypesAreRegisteredAtInitialization() throws Exception {
+
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
+        session.getTransaction().commit();
+
         RepositoryType type = repoDao.getTypeByName("FILE");
         RepositoryType typeJava = repoDao.getTypeByName("CONFLUENCE");
 
@@ -69,7 +79,10 @@ public class InitialDatasTest extends AbstractDBUnitHibernateMemoryTest {
 
     @Test
     public void testAllSupportedRepositoryTypesInsertIsNotTriggeredIfWeAlreadyHaveSomeEntries() throws Exception {
+
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
+        session.getTransaction().commit();
 
         List<RepositoryType> types = repoDao.getAllTypes();
         for (RepositoryType type : types) {
