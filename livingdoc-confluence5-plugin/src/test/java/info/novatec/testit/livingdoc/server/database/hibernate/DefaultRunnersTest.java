@@ -53,8 +53,10 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         expectedCp.add(URIUtil.decoded(new File(runnerDir, "livingdoc-confluence-plugin-dummy-complete.jar")
             .getAbsolutePath()).toUpperCase());
 
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
         new DefaultRunners(this, properties).insertJavaRunner();
+        session.getTransaction().commit();
 
         Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
 
@@ -71,7 +73,9 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
     @Test
     public void testTheJavaCurrentVersionRunnerInsertIsNotTriggeredIfWeAlreadyHaveARunnerWithSameVersion() throws Exception {
         insertIntoDatabase(DATAS);
+        session.getTransaction().begin();
         new DefaultRunners(this, properties).insertJavaRunner();
+        session.getTransaction().commit();
 
         Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
 
@@ -91,8 +95,10 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         expectedCp.add(URIUtil.decoded(new File(runnerDir, "xmlrpc-2.0.1.jar").getAbsolutePath()).toUpperCase());
         expectedCp.add(URIUtil.decoded(new File(runnerDir, "commons-codec-1.3.jar").getAbsolutePath()).toUpperCase());
 
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
         new DefaultRunners(this, properties).insertJavaRunner();
+        session.getTransaction().commit();
 
         Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
 
@@ -123,8 +129,10 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         List<String> expectedCp = new ArrayList<String>();
         expectedCp.add(URIUtil.decoded(runnerFilePath).toUpperCase());
 
+        session.getTransaction().begin();
         new InitialDatas(this).insert();
         new DefaultRunners(this, customProperties).insertJavaRunner();
+        session.getTransaction().commit();
 
         Runner runner = sutDao.getRunnerByName("LDCore JAVA v. " + jarVersion);
 

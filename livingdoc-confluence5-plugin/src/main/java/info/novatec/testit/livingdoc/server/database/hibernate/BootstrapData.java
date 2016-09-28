@@ -5,7 +5,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.novatec.testit.livingdoc.server.LivingDocServer;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.database.SessionService;
 import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
@@ -45,7 +44,6 @@ public class BootstrapData {
 
             new InitialDatas(systemInfoDao, repositoryDao).insert();
             new DefaultRunners(systemUnderTestDao, properties).insertJavaRunner();
-            new ServerUpgrader(sessionService, systemInfoDao).upgradeTo(LivingDocServer.VERSION);
 
             sessionService.commitTransaction();
         } catch (Exception e) {

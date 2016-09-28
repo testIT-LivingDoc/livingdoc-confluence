@@ -6,7 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.Metadata;
 import org.junit.After;
 import org.junit.Before;
 
@@ -171,7 +171,10 @@ public abstract class HibernateMemoryTestCase implements SessionService {
         return session.get(theClass, new Long(id));
     }
 
-    public Configuration getHibernateConfiguration() {
+    public Properties getHibernateConfiguration() {
         return db.getConfiguration();
+    }
+    public Metadata getHibernateMetadata() {
+        return db.getMetadata();
     }
 }

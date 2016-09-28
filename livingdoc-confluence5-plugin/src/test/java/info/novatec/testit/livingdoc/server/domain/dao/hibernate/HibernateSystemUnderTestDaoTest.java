@@ -82,7 +82,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.update("RUNNER-TO-UPDATE", runner);
         session.getTransaction().commit();
 
-        Runner runnerDB = getById(Runner.class, - 1l);
+        Runner runnerDB = getById(Runner.class, - 10l);
         assertEquals("SNAME_UPDATED", runnerDB.getServerName());
         assertEquals("SPORTUP", runnerDB.getServerPort());
         assertTrue(updatedClassPaths.containsAll(runnerDB.getClasspaths()));
@@ -150,7 +150,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.removeRunner("RUNNER-TO-REMOVE");
         session.getTransaction().commit();
 
-        assertNull(getById(Runner.class, - 2l));
+        assertNull(getById(Runner.class, - 20l));
     }
 
     @Test
@@ -262,7 +262,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.update("SUT-TO-UPDATE", newSut);
         session.getTransaction().commit();
 
-        SystemUnderTest loadedSut = getById(SystemUnderTest.class, - 1l);
+        SystemUnderTest loadedSut = getById(SystemUnderTest.class, - 10l);
         assertEquals("PROJECT-1", loadedSut.getProject().getName());
         assertEquals("RUNNER-2", loadedSut.getRunner().getName());
         assertEquals("SUT-UPDATED", loadedSut.getName());
@@ -307,7 +307,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.remove("PROJECT-1", "SUT-TO-REMOVE");
         session.getTransaction().commit();
 
-        assertNull(getById(SystemUnderTest.class, - 2l));
+        assertNull(getById(SystemUnderTest.class, - 20l));
     }
 
     @Test

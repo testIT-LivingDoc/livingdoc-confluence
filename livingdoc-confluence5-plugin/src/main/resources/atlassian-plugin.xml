@@ -1,622 +1,910 @@
-<atlassian-plugin key="${project.plugin.key}" name="${project.plugin.name}" enabled="true" plugins-version="2">
-    <plugin-info>
-        <description>${project.description}</description>
-        <version>${project.version}</version>
-        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
-        <param name="configure.url">/admin/plugins/livingdoc/config.action</param>
-        
-        <param name="plugin-icon">includes/images/livingdoc-logo.png</param>
-        <param name="plugin-logo">includes/images/livingdoc-logo-big.png</param>
-        <param name="vendor-icon">includes/images/nt-icon.jpg</param>
-        <param name="vendor-logo">includes/images/nt-logo.jpg</param>
-    </plugin-info>
-    
-    <!-- DOC THEME RESOURCES -->
-    <web-resource name="Doc Theme Resources" key="resources">
-        <transformation extension="js">
-            <transformer key="jsI18n"/>
-        </transformation>
-        <resource name="doc-theme.js" type="download" location="templates/livingdoc/confluence/themes/doctheme/doc-theme.js" />
-    </web-resource>
-    <web-resource name="Splitter" key="splitter">
-        <resource name="splitter.js" type="download" location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/splitter.js" />
-        <resource name="space-specific-quicknav.js" type="download" location="templates/livingdoc/confluence/themes/doctheme/space-specific-quicknav.js" />
-        <context>main</context>
-        <dependency>confluence.web.resources:ajs</dependency>
-        <!-- Ensures that the default quick search is bound first -->
-        <dependency>confluence.web.resources:contentnamesearch</dependency>
-    </web-resource>
-    
-    <web-resource name="testIT - LivingDoc JS Resources" key="livingdoc-javascript-resources">
-		<resource name="inheritance.js" type="download" location="includes/js/lib/inheritance.js" />
-	    <resource name="livingdoc-util.js" type="download" location="includes/js/livingdoc-util.js" />
-	    <resource name="ConfluenceActions.js" type="download" location="includes/js/ConfluenceActions.js" />
-	    <resource name="server-properties.js" type="download" location="includes/js/server-properties.js" />
-	    <resource name="conf-livingdoc.js" type="download" location="includes/js/conf-livingdoc.js" />
-	    <resource name="statusbar.js" type="download" location="includes/js/statusbar.js" />
-	    <context>atl.general</context>
-	    <context>atl.admin</context>
-	    <dependency>confluence.web.resources:ajs</dependency>
+<atlassian-plugin key="${project.plugin.key}" name="${project.plugin.name}"
+	enabled="true" plugins-version="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<param name="configure.url">/admin/plugins/livingdoc/config.action</param>
+
+		<param name="plugin-icon">includes/images/livingdoc-logo.png</param>
+		<param name="plugin-logo">includes/images/livingdoc-logo-big.png</param>
+		<param name="vendor-icon">includes/images/nt-icon.jpg</param>
+		<param name="vendor-logo">includes/images/nt-logo.jpg</param>
+		<bundle-instructions>
+			<!-- Import-Package>com.atlassian.sal.api.transaction;version="3.0.6",com.atlassian.confluence.themes;version="5.10.5",com.atlassian.confluence.user;version="5.10.5",com.atlassian.confluence.plugin.descriptor.web.conditions;version="5.10.5",com.atlassian.confluence.security.login;version="5.10.5",javax.servlet.http;version="3.1.0",com.atlassian.confluence.pages;version="5.10.5",com.atlassian.confluence.importexport;version="5.10.5",com.atlassian.event.api;version="3.0.0",com.atlassian.confluence.spaces;version="5.10.5",com.atlassian.confluence.setup;version="5.10.5",com.atlassian.confluence.labels;version="5.10.5",com.atlassian.confluence.plugin.webresource;version="5.10.5",com.atlassian.confluence.xhtml.api;version="5.10.5",com.atlassian.confluence.core;version="5.10.5",com.atlassian.bandana;version="3.1.0",com.atlassian.confluence.setup.settings;version="5.10.5",com.atlassian.confluence.security;version="5.10.5",com.atlassian.user;version="3.0.0",com.atlassian.confluence.setup.bandana;version="5.10.5",com.atlassian.confluence.macro.xhtml;version="5.10.5",com.atlassian.renderer;version="6.2.19",com.atlassian.confluence.languages;version="5.10.5",com.atlassian.config.bootstrap;version="0.25.0",com.atlassian.confluence.content.render.xhtml;version="5.10.5",org.hibernate,org.hibernate.boot,org.hibernate.boot.registry,org.hibernate.criterion,org.hibernate.dialect,org.hibernate.service,org.hibernate.tool.hbm2ddl,org.hibernate.tool.schema,org.jfree.chart,org.jfree.chart.axis,org.jfree.chart.imagemap,org.jfree.chart.labels,org.jfree.chart.plot,org.jfree.chart.renderer.category,org.jfree.chart.title,org.jfree.chart.urls,org.jfree.data,org.jfree.data.category,org.jfree.ui,com.google.gson;version="1.6.0",org.slf4j;version="0";resolution:="optional",org.slf4j.helpers;version="0";resolution:="optional",org.slf4j.spi;version="0";resolution:="optional",com.atlassian.config.util;resolution:="optional",com.atlassian.confluence.content.render.xhtml.definition;resolution:="optional",com.atlassian.confluence.event.events.content.page;resolution:="optional",com.atlassian.confluence.event.events.plugin;resolution:="optional",com.atlassian.confluence.event.events.space;resolution:="optional",com.atlassian.confluence.macro;resolution:="optional",com.atlassian.confluence.plugin.descriptor.web;resolution:="optional",com.atlassian.confluence.renderer;resolution:="optional",com.atlassian.confluence.renderer.radeox.macros;resolution:="optional",com.atlassian.confluence.renderer.v2.macros;resolution:="optional",com.atlassian.confluence.rpc;resolution:="optional",com.atlassian.confluence.servlet.download;resolution:="optional",com.atlassian.confluence.spaces.actions;resolution:="optional",com.atlassian.confluence.util;resolution:="optional",com.atlassian.confluence.util.velocity;resolution:="optional",com.atlassian.confluence.velocity.htmlsafe;resolution:="optional",com.atlassian.renderer.v2;resolution:="optional",com.atlassian.renderer.v2.components;resolution:="optional",com.atlassian.renderer.v2.macro;resolution:="optional",com.fasterxml.jackson.annotation;resolution:="optional",com.fasterxml.jackson.core;resolution:="optional",com.fasterxml.jackson.core.type;resolution:="optional",com.fasterxml.jackson.core.util;resolution:="optional",com.fasterxml.jackson.databind;resolution:="optional",com.fasterxml.jackson.databind.annotation;resolution:="optional",com.fasterxml.jackson.databind.deser.std;resolution:="optional",com.fasterxml.jackson.databind.module;resolution:="optional",com.fasterxml.jackson.databind.node;resolution:="optional",com.fasterxml.jackson.databind.ser;resolution:="optional",com.fasterxml.jackson.databind.ser.impl;resolution:="optional",com.fasterxml.jackson.databind.ser.std;resolution:="optional",com.fasterxml.jackson.dataformat.xml;resolution:="optional",com.fasterxml.jackson.dataformat.xml.annotation;resolution:="optional",com.fasterxml.jackson.dataformat.xml.util;resolution:="optional",com.fasterxml.jackson.dataformat.yaml;resolution:="optional",com.lmax.disruptor;resolution:="optional",com.lmax.disruptor.dsl;resolution:="optional",com.lmax.disruptor.util;resolution:="optional",com.opensymphony.module.sitemesh;resolution:="optional",com.opensymphony.webwork;resolution:="optional",com.sun.jdi;resolution:="optional",com.sun.jdi.connect;resolution:="optional",com.sun.jdi.event;resolution:="optional",com.sun.jdi.request;resolution:="optional",com.sun.org.apache.xml.internal.serialize;resolution:=optional",com.vividsolutions.jts.geom;resolution:="optional",com.vividsolutions.jts.io;resolution:="optional",javax.activation;resolution:="optional",javax.annotation.processing;resolution:="optional",javax.crypto;resolution:="optional",javax.imageio;resolution:="optional",javax.jms;resolution:="optional",javax.lang.model;resolution:="optional",javax.lang.model.element;resolution:="optional",javax.lang.model.util;resolution:="optional",javax.mail;resolution:="optional",javax.mail.internet;resolution:="optional",javax.mail.util;resolution:="optional",javax.management;resolution:="optional",javax.naming;resolution:="optional",javax.naming.spi;resolution:="optional",javax.net;resolution:="optional",javax.net.ssl;resolution:="optional",javax.servlet;resolution:="optional",javax.sql;resolution:="optional",javax.tools;resolution:="optional",javax.transaction.xa;resolution:="optional",javax.xml.bind;resolution:="optional",javax.xml.parsers;resolution:="optional",javax.xml.transform;resolution:="optional",javax.xml.transform.dom;resolution:="optional",javax.xml.transform.stream;resolution:="optional",javax.xml.validation;resolution:="optional",org.apache.commons.lang;resolution:="optional",org.apache.commons.vfs2;resolution:="optional",org.apache.lucene.analysis;resolution:="optional",org.apache.lucene.analysis.standard;resolution:="optional",org.apache.lucene.document;resolution:="optional",org.apache.lucene.index;resolution:="optional",org.apache.lucene.queryParser;resolution:="optional",org.apache.lucene.search;resolution:="optional",org.apache.lucene.store;resolution:="optional",org.apache.lucene.util;resolution:="optional",org.apache.xmlrpc;resolution:="optional",org.apache.xmlrpc.client;resolution:="optional",org.apache.xmlrpc.secure;resolution:="optional",org.dom4j;resolution:="optional",org.dom4j.io;resolution:="optional",org.osgi.framework;resolution:="optional",org.osgi.framework.wiring;resolution:="optional",org.osgi.service.jdbc;resolution:="optional",org.springframework.beans.factory;resolution:="optional",org.springframework.beans.factory.annotation;resolution:="optional",org.w3c.dom;resolution:="optional",org.xml.sax;resolution:="optional",sun.misc;resolution:="optional",com.atlassian.sal.api;version="3.0.6",com.atlassian.confluence.search.v2;version="5.10.5",com.atlassian.config.setup;version="0.25.0",com.atlassian.confluence.user.actions;version="5.10.5",com.atlassian.confluence.internal.labels;version="0",com.atlassian.config;version="0.25.0",com.atlassian.confluence.api.model.content.id;version="5.10.5",com.atlassian.confluence.content.service.comment;version="5.10.5",com.atlassian.user.search.page;version="3.0.0",com.atlassian.plugin;version="4.1.9",com.atlassian.plugin.predicate;version="4.1.9",com.atlassian.annotations;version="0.16.0",com.atlassian.confluence.security.access;version="5.10.5",com.atlassian.user.search.query;version="3.0.0",com.atlassian.sal.api.user;version="3.0.6",com.atlassian.confluence.content.ui;version="5.10.5",com.atlassian.confluence.util.http;version="5.10.5",com.atlassian.sal.api.timezone;version="3.0.6",com.atlassian.confluence.upgrade;version="5.10.5",com.atlassian.plugin.web;version="4.0.0",com.atlassian.user.search;version="3.0.0",com.atlassian.confluence.mail.notification;version="5.10.5",com.atlassian.confluence.util.i18n;version="5.10.5",com.atlassian.core.util;version="4.6.17",com.atlassian.confluence.content.render.xhtml.view;version="5.10.5",com.atlassian.user.repository;version="3.0.0",com.atlassian.plugin.webresource;version="0",com.opensymphony.module.propertyset;version="0",com.atlassian.confluence.internal;version="0",com.atlassian.confluence.content.service;version="5.10.5",com.atlassian.core.user.preferences;version="4.6.17",com.atlassian.confluence.api.model.pagination;version="5.10.5",com.atlassian.confluence.impl.security.access;version="0",com.atlassian.confluence.api.model;version="5.10.5",com.atlassian.plugin.web.model;version="4.0.0",org.joda.time;version="2.8.2",com.atlassian.confluence.internal.spaces;version="0",com.google.common.base;version="0",com.atlassian.confluence.user.persistence.dao;version="5.10.5",com.atlassian.confluence.search.service;version="5.10.5",com.atlassian.config.db;version="0.25.0",com.atlassian.confluence.status.service;version="5.10.5",com.atlassian.plugin.web.descriptors;version="4.0.0",com.atlassian.confluence.pages.persistence.dao.bulk.copy;version="5.10.5",com.atlassian.confluence.content.render.xhtml.model.inlinetask;version="5.10.5",bucket.user;version="5.10.5",com.atlassian.core.exception;version="4.6.17",com.atlassian.confluence.status.service.systeminfo;version="5.10.5",com.atlassian.event;version="3.0.0",com.atlassian.user.security.password;version="3.0.0",com.atlassian.confluence.api.service.datetime;version="5.10.5",com.atlassian.fugue;version="2.2.1"</Import-Package -->
+			<!-- DynamicImport-Package>org.hibernate.dialect.*</DynamicImport-Package -->
+			<Import-Package>
+				javax.transaction.xa;resolution:=optional,
+				javax.el;resolution:=optional,
+				javax.interceptor;resolution:=optional,
+				com.opensymphony.module.sitemesh;resolution:=optional,
+				org.springframework.beans.factory;resolution:=optional,
+				com.atlassian.confluence.event.events.content.page;resolution:=optional,
+				org.slf4j;resolution:=optional,
+				com.google.gson;resolution:=optional,
+				com.atlassian.confluence.event.events.plugin;resolution:=optional,
+				com.atlassian.confluence.event.events.space;resolution:=optional,
+				org.osgi.framework;resolution:=optional,
+				com.atlassian.confluence.macro;resolution:=optional,
+				com.atlassian.renderer.v2.macro;resolution:=optional,
+				com.atlassian.confluence.renderer;resolution:=optional,
+				com.atlassian.confluence.content.render.xhtml.definition;resolution:=optional,
+				com.atlassian.confluence.spaces.actions;resolution:=optional,
+				com.atlassian.renderer.v2
+			</Import-Package>
+			<Require-Bundle><!-- Bundle symbolic name -->
+				org.apache.felix.framework;bundle-version="[4.2.0,4.2.9]",
+				org.apache.servicemix.bundles.spring-beans;bundle-version="[4.2.0,4.2.9]"
+			</Require-Bundle>
+		</bundle-instructions>
+	</plugin-info>
+
+	<!-- DOC THEME RESOURCES -->
+	<web-resource name="Doc Theme Resources" key="resources">
+		<transformation extension="js">
+			<transformer key="jsI18n" />
+		</transformation>
+		<resource name="doc-theme.js" type="download"
+			location="templates/livingdoc/confluence/themes/doctheme/doc-theme.js" />
 	</web-resource>
-	
+	<web-resource name="Splitter" key="splitter">
+		<resource name="splitter.js" type="download"
+			location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/splitter.js" />
+		<resource name="space-specific-quicknav.js" type="download"
+			location="templates/livingdoc/confluence/themes/doctheme/space-specific-quicknav.js" />
+		<context>main</context>
+		<dependency>confluence.web.resources:ajs</dependency>
+		<!-- Ensures that the default quick search is bound first -->
+		<dependency>confluence.web.resources:contentnamesearch</dependency>
+	</web-resource>
+
+	<web-resource name="testIT - LivingDoc JS Resources" key="livingdoc-javascript-resources">
+		<resource name="inheritance.js" type="download"
+			location="includes/js/lib/inheritance.js" />
+		<resource name="livingdoc-util.js" type="download"
+			location="includes/js/livingdoc-util.js" />
+		<resource name="ConfluenceActions.js" type="download"
+			location="includes/js/ConfluenceActions.js" />
+		<resource name="server-properties.js" type="download"
+			location="includes/js/server-properties.js" />
+		<resource name="conf-livingdoc.js" type="download"
+			location="includes/js/conf-livingdoc.js" />
+		<resource name="statusbar.js" type="download" location="includes/js/statusbar.js" />
+		<context>atl.general</context>
+		<context>atl.admin</context>
+		<dependency>confluence.web.resources:ajs</dependency>
+	</web-resource>
+
 	<web-resource name="testIt - LivingDoc CSS Resources" key="livingdoc-css-resources">
-		<resource name="conf-livingdoc.css" type="download" location="includes/css/conf-livingdoc.css" />
-	    <resource name="server-properties.css" type="download" location="includes/css/server-properties.css" />
-	    <context>atl.general</context>
-	    <context>atl.admin</context>	   
+		<resource name="conf-livingdoc.css" type="download"
+			location="includes/css/conf-livingdoc.css" />
+		<resource name="server-properties.css" type="download"
+			location="includes/css/server-properties.css" />
+		<context>atl.general</context>
+		<context>atl.admin</context>
 	</web-resource>
 
-    <resource type="download" name="js/" location="includes/js/"/>
-    <resource type="download" name="css/" location="includes/css/"/>
-    <resource type="download" name="images/" location="includes/images/"/>
-    <resource type="download" name="CONFLUENCE" location="includes/images/conf.gif"/>
-    <resource type="download" name="FILE" location="includes/images/file.gif"/>
-    <resource type="download" name="JIRA" location="includes/images/jira.gif"/>
+	<resource type="download" name="js/" location="includes/js/" />
+	<resource type="download" name="css/" location="includes/css/" />
+	<resource type="download" name="images/" location="includes/images/" />
+	<resource type="download" name="CONFLUENCE" location="includes/images/conf.gif" />
+	<resource type="download" name="FILE" location="includes/images/file.gif" />
+	<resource type="download" name="JIRA" location="includes/images/jira.gif" />
 
-	<resource type="download" name="icons/" key="icons" location="includes/images/"/>
+	<resource type="download" name="icons/" key="icons" location="includes/images/" />
 
-	<resource type="i18n" name="macros-i18n" location="info/novatec/testit/livingdoc/confluence/macros/macros" />
-	
+	<resource type="i18n" name="macros-i18n"
+		location="info/novatec/testit/livingdoc/confluence/macros/macros" />
+
 	<!-- LIVINGDOC THEME -->
 	<!-- DOCTHEME THEME -->
-	<theme key="livingdoc.theme" name="testIT - LivingDoc Documentation Theme" class="com.atlassian.confluence.themes.BasicTheme">
-        <description>Default Confluence Documentation page decorator with testIT - LivingDoc functionalities.</description>
-        <param name="includeClassicStyles" value="false"/>
-       
-        <!-- Decorators -->
-       	<layout key="info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page"/>
-		<layout key="info.novatec.testit.livingdoc.confluence.plugin:main"/>
-        <layout key="info.novatec.testit.livingdoc.confluence.plugin:blogpost"/>
-        
-        <colour-scheme key="${project.plugin.key}:livingdoc-colours"/>
-        <body-class>theme-documentation</body-class>
-    </theme>
-    
-    <colour-scheme key="livingdoc-colours" name="testIT - LivingDoc Documentation Theme Colour Scheme"
-                   class="com.atlassian.confluence.themes.BaseColourScheme">
-        <colour key="property.style.topbarcolour" value="#205081"/>
-        <colour key="property.style.breadcrumbstextcolour" value="#ffffff"/>
-        <colour key="property.style.spacenamecolour" value="#999999"/>
-        <colour key="property.style.headingtextcolour" value="#000000"/>
-        <colour key="property.style.linkcolour" value="#326ca6"/>
-        <colour key="property.style.bordercolour" value="#2E3D54"/>
-        <colour key="property.style.navbgcolour" value="#6699cc"/>
-        <colour key="property.style.navtextcolour" value="#ffffff"/>
-        <colour key="property.style.navselectedbgcolour" value="#003366"/>
-        <colour key="property.style.navselectedtextcolour" value="#ffffff"/>
-        <colour key="property.style.topbarmenuselectedbgcolour" value="#296CA3"/>
-        <colour key="property.style.topbarmenuitemtextcolour" value="#333333"/>
-        <colour key="property.style.menuselectedbgcolour" value="#6699cc"/>
-        <colour key="property.style.menuitemtextcolour" value="#333333"/>
-        <colour key="property.style.menuitemselectedbgcolour" value="#326ca6"/>
-        <colour key="property.style.menuitemselectedtextcolour" value="#ffffff"/>
-        <colour key="property.style.headerbuttonbasebgcolour" value="#3b7fc4"/>
-        <colour key="property.style.headerbuttontextcolour" value="#ffffff"/>
-    </colour-scheme>
-    
-     <!-- Make sure CSS resources get batched by not putting them in the theme -->
-    <web-resource name="Doc Theme CSS Resources" key="css-resources">
-        <!-- Stylesheets -->
-        <dependency>com.atlassian.confluence.themes.default:styles</dependency>
-        <resource type="download" name="doc-theme.css" location="templates/livingdoc/confluence/themes/doctheme/doc-theme.css" />
-        <resource type="download" name="splitter.css" location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/splitter.css" />
+	<theme key="livingdoc.theme" name="testIT - LivingDoc Documentation Theme"
+		class="com.atlassian.confluence.themes.BasicTheme">
+		<description>Default Confluence Documentation page decorator with
+			testIT - LivingDoc functionalities.
+		</description>
+		<param name="includeClassicStyles" value="false" />
 
-        <!-- Images -->
-        <resource type="download" name="sidebar-shadow.png" location="templates/livingdoc/confluence/themes/doctheme/images/sidebar-shadow.png"/>
-        <resource type="download" name="tree.png" location="templates/livingdoc/confluence/themes/doctheme/images/tree.png"/>
-        <resource type="download" name="tree-off.png" location="templates/livingdoc/confluence/themes/doctheme/images/tree-off.png"/>
-        <resource type="download" name="vgrabber.gif" location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/img/vgrabber.gif"/>
-        <resource name="themeicon.gif" type="download" location="templates/livingdoc/confluence/themes/doctheme/themeicon.gif">
-            <property key="content-type" value="image/gif"/>
-        </resource>
-        <context>theme.doc</context>
-    </web-resource>
-        
-    <layout key="livingdoc.page" name="testIT - LivingDoc Page Decorator" class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/page.vmd">
-        <resource type="velocity" name="decorator" location="templates/livingdoc/confluence/themes/page.vmd"/>
+		<!-- Decorators -->
+		<layout
+			key="info.novatec.testit.livingdoc.confluence.plugin:livingdoc.page" />
+		<layout key="info.novatec.testit.livingdoc.confluence.plugin:main" />
+		<layout key="info.novatec.testit.livingdoc.confluence.plugin:blogpost" />
+
+		<colour-scheme key="${project.plugin.key}:livingdoc-colours" />
+		<body-class>theme-documentation</body-class>
+	</theme>
+
+	<colour-scheme key="livingdoc-colours"
+		name="testIT - LivingDoc Documentation Theme Colour Scheme" class="com.atlassian.confluence.themes.BaseColourScheme">
+		<colour key="property.style.topbarcolour" value="#205081" />
+		<colour key="property.style.breadcrumbstextcolour" value="#ffffff" />
+		<colour key="property.style.spacenamecolour" value="#999999" />
+		<colour key="property.style.headingtextcolour" value="#000000" />
+		<colour key="property.style.linkcolour" value="#326ca6" />
+		<colour key="property.style.bordercolour" value="#2E3D54" />
+		<colour key="property.style.navbgcolour" value="#6699cc" />
+		<colour key="property.style.navtextcolour" value="#ffffff" />
+		<colour key="property.style.navselectedbgcolour" value="#003366" />
+		<colour key="property.style.navselectedtextcolour" value="#ffffff" />
+		<colour key="property.style.topbarmenuselectedbgcolour" value="#296CA3" />
+		<colour key="property.style.topbarmenuitemtextcolour" value="#333333" />
+		<colour key="property.style.menuselectedbgcolour" value="#6699cc" />
+		<colour key="property.style.menuitemtextcolour" value="#333333" />
+		<colour key="property.style.menuitemselectedbgcolour" value="#326ca6" />
+		<colour key="property.style.menuitemselectedtextcolour" value="#ffffff" />
+		<colour key="property.style.headerbuttonbasebgcolour" value="#3b7fc4" />
+		<colour key="property.style.headerbuttontextcolour" value="#ffffff" />
+	</colour-scheme>
+
+	<!-- Make sure CSS resources get batched by not putting them in the theme -->
+	<web-resource name="Doc Theme CSS Resources" key="css-resources">
+		<!-- Stylesheets -->
+		<dependency>com.atlassian.confluence.themes.default:styles
+		</dependency>
+		<resource type="download" name="doc-theme.css"
+			location="templates/livingdoc/confluence/themes/doctheme/doc-theme.css" />
+		<resource type="download" name="splitter.css"
+			location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/splitter.css" />
+
+		<!-- Images -->
+		<resource type="download" name="sidebar-shadow.png"
+			location="templates/livingdoc/confluence/themes/doctheme/images/sidebar-shadow.png" />
+		<resource type="download" name="tree.png"
+			location="templates/livingdoc/confluence/themes/doctheme/images/tree.png" />
+		<resource type="download" name="tree-off.png"
+			location="templates/livingdoc/confluence/themes/doctheme/images/tree-off.png" />
+		<resource type="download" name="vgrabber.gif"
+			location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/img/vgrabber.gif" />
+		<resource name="themeicon.gif" type="download"
+			location="templates/livingdoc/confluence/themes/doctheme/themeicon.gif">
+			<property key="content-type" value="image/gif" />
+		</resource>
+		<context>theme.doc</context>
+	</web-resource>
+
+	<layout key="livingdoc.page" name="testIT - LivingDoc Page Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/page.vmd">
+		<resource type="velocity" name="decorator"
+			location="templates/livingdoc/confluence/themes/page.vmd" />
 	</layout>
-	
-	<layout key="main" name="Main Decorator" class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/main.vmd">
-        <resource type="velocity" name="decorator" location="templates/livingdoc/confluence/themes/doctheme/decorators/main.vmd" />
-    </layout>
-    
-     <layout key="blogpost" name="Blogpost Decorator" class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/blogpost.vmd">
-        <resource type="velocity" name="decorator" location="templates/livingdoc/confluence/themes/doctheme/decorators/blogpost.vmd" />
-    </layout>
-    
-   	<web-item key="livingdoc.configuration" name="testIT - LivingDoc Configuration" section="system.space.admin/livingdoc.section" weight="3">
-    	<label key="Space Registration" />
-    	<link>/livingdoc/LivingDocServer.action?key=$helper.spaceKey</link>
-    	<icon height="16" width="12">
-        	<link>/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/nt_logo_16.gif</link>
-    	</icon>
-    	<condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
-    		<param name="permission">edit</param>
+
+	<layout key="main" name="Main Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/main.vmd">
+		<resource type="velocity" name="decorator"
+			location="templates/livingdoc/confluence/themes/doctheme/decorators/main.vmd" />
+	</layout>
+
+	<layout key="blogpost" name="Blogpost Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/blogpost.vmd">
+		<resource type="velocity" name="decorator"
+			location="templates/livingdoc/confluence/themes/doctheme/decorators/blogpost.vmd" />
+	</layout>
+
+	<web-item key="livingdoc.configuration" name="testIT - LivingDoc Configuration"
+		section="system.space.admin/livingdoc.section" weight="3">
+		<label key="Space Registration" />
+		<link>/livingdoc/LivingDocServer.action?key=$helper.spaceKey</link>
+		<icon height="16" width="12">
+			<link>/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/nt_logo_16.gif
+			</link>
+		</icon>
+		<condition
+			class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
+			<param name="permission">edit</param>
 		</condition>
 	</web-item>
-    
+
 	<!-- Item in Space Admin (for Doc Theme) -->
-    <web-item key="space-admin-livingdoc-config-2" name="testIT - LivingDoc Configuration in Space Admin" section="system.space.admin/addons" weight="100">
-        <label key="LivingDoc" />
-        <link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)</link>
-        <conditions type="AND">
-            <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
-                <param name="permission">administer</param>
-            </condition>
-                    <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpaceSidebarCondition" invert="true"/>
-        </conditions>
-    </web-item>
-    <!-- Item in Space Tools -->
-    <web-item key="space-admin-livingdoc-config" name="testIT - LivingDoc Configuration in Space Admin" section="system.space.tools/addons" weight="100">
-        <label key="LivingDoc" />
-        <link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)</link>
-        <conditions type="AND">
-            <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
-                <param name="permission">administer</param>
-            </condition>
-                    <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpaceSidebarCondition"/>
-        </conditions>
-    </web-item>
-	
+	<web-item key="space-admin-livingdoc-config-2"
+		name="testIT - LivingDoc Configuration in Space Admin" section="system.space.admin/addons"
+		weight="100">
+		<label key="LivingDoc" />
+		<link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)
+		</link>
+		<conditions type="AND">
+			<condition
+				class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
+				<param name="permission">administer</param>
+			</condition>
+			<condition
+				class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpaceSidebarCondition"
+				invert="true" />
+		</conditions>
+	</web-item>
+	<!-- Item in Space Tools -->
+	<web-item key="space-admin-livingdoc-config"
+		name="testIT - LivingDoc Configuration in Space Admin" section="system.space.tools/addons"
+		weight="100">
+		<label key="LivingDoc" />
+		<link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)
+		</link>
+		<conditions type="AND">
+			<condition
+				class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpacePermissionCondition">
+				<param name="permission">administer</param>
+			</condition>
+			<condition
+				class="com.atlassian.confluence.plugin.descriptor.web.conditions.SpaceSidebarCondition" />
+		</conditions>
+	</web-item>
+
 	<!-- DOCTHEME MACRO -->
-	<macro name='spacejump' class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro' key='spacejump'>
-        <description />
-        <category name="navigation"/>
-    </macro>
+	<macro name='spacejump'
+		class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro'
+		key='spacejump'>
+		<description />
+		<category name="navigation" />
+	</macro>
 
-	<!-- WIKI MACRO-->
+	<!-- WIKI MACRO -->
 
-    <macro name='livingdoc-logo' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLogo' key='livingdoc-logo'/>
-    <macro name='livingdoc-include' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInclude' key='livingdoc-include'>
-        <param name="help-section" value="external"/>
-        <description/>
-        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocInclude-help.vm">
-            <param name="help-section" value="misc"/>
-        </resource>
-    </macro>
-    <macro name='livingdoc-children' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocChildren' key='livingdoc-children'>
-        <param name="help-section" value="external"/>
-        <description/>
-        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocChildren-help.vm">
-            <param name="help-section" value="misc"/>
-        </resource>
-    </macro>
-    <macro name='livingdoc-info' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo' key='livingdoc-info'>
-        <param name="help-section" value="external"/>
-        <description/>
-        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocInfo-help.vm">
-            <param name="help-section" value="misc"/>
-        </resource>
-    </macro>
-    <macro name='livingdoc-import' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocImport' key='livingdoc-import'>
-        <param name="help-section" value="external"/>
-        <description/>
-        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocImport-help.vm">
-            <param name="help-section" value="misc"/>
-        </resource>
-    </macro>
-	<macro name='livingdoc-historic' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocHistoric' key='livingdoc-historic'>
-		<param name="help-section" value="external"/>
-		<description/>
-		<resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocHistoric-help.vm">
-			<param name="help-section" value="misc"/>
+	<macro name='livingdoc-logo'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLogo'
+		key='livingdoc-logo' />
+	<macro name='livingdoc-include'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInclude'
+		key='livingdoc-include'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocInclude-help.vm">
+			<param name="help-section" value="misc" />
 		</resource>
 	</macro>
-	<macro name='livingdoc-labels' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels' key='livingdoc-labels'>
-        <param name="help-section" value="external"/>
-        <description/>
-        <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocLabels-help.vm">
-            <param name="help-section" value="misc"/>
-        </resource>
-    </macro>
-    
-	<!-- DOCTHEME XHTML MACRO -->
-	<xhtml-macro name='spacejump' class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro' key='spacejump-xhtml'>
-        <description />
-        <category name="navigation"/>
-        <parameters>
-            <parameter name="space" type="spacekey" required="true" multiple="false"/>
-            <parameter name="alias" type="string"/>
-        </parameters>
-    </xhtml-macro>
+	<macro name='livingdoc-children'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocChildren'
+		key='livingdoc-children'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocChildren-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+	</macro>
+	<macro name='livingdoc-info'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo'
+		key='livingdoc-info'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocInfo-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+	</macro>
+	<macro name='livingdoc-import'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocImport'
+		key='livingdoc-import'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocImport-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+	</macro>
+	<macro name='livingdoc-historic'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocHistoric'
+		key='livingdoc-historic'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocHistoric-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+	</macro>
+	<macro name='livingdoc-labels'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels'
+		key='livingdoc-labels'>
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocLabels-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+	</macro>
 
-	<!-- XHTML MACRO-->
-    
-    <xhtml-macro name='livingdoc-logo' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLogo' key='livingdoc-logo-xhtml' hidden='true'>
-		<category name="development"/>
-		<parameters/>
-    </xhtml-macro>
-    <xhtml-macro name='livingdoc-include' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInclude' key='livingdoc-include-xhtml'
-    		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-    		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Include+Macro">
-        <category name="development"/>
+	<!-- DOCTHEME XHTML MACRO -->
+	<xhtml-macro name='spacejump'
+		class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro'
+		key='spacejump-xhtml'>
+		<description />
+		<category name="navigation" />
+		<parameters>
+			<parameter name="space" type="spacekey" required="true"
+				multiple="false" />
+			<parameter name="alias" type="string" />
+		</parameters>
+	</xhtml-macro>
+
+	<!-- XHTML MACRO -->
+
+	<xhtml-macro name='livingdoc-logo'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLogo'
+		key='livingdoc-logo-xhtml' hidden='true'>
+		<category name="development" />
+		<parameters />
+	</xhtml-macro>
+	<xhtml-macro name='livingdoc-include'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInclude'
+		key='livingdoc-include-xhtml'
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Include+Macro">
+		<category name="development" />
 		<parameters>
 			<parameter name="pageTitle" type="string" required="true">
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-		    <parameter name="spaceKey" type="spacekey"/>
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+			<parameter name="spaceKey" type="spacekey" />
 			<parameter name="title" type="string" />
-		    <parameter name="expanded" type="boolean"/>
-	    </parameters>
-    </xhtml-macro>
-    <xhtml-macro name='livingdoc-children' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocChildren' key='livingdoc-children-xhtml'
-    		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-    		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Children+Macro">
-        <category name="development"/>
-		<parameters>
-		    <parameter name="all" type="boolean"/>
-		    <parameter name="spaceKey" type="spacekey"/>
-			<parameter name="pageTitle" type="string"/>
-			<parameter name="title" type="string" >
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-		    <parameter name="expanded" type="boolean"/>
-			<parameter name="suts" type="string"/>
-			<parameter name="group" type="string"/>
-			<parameter name="sort" type="string"/>
-		    <parameter name="reverse" type="boolean"/>
-		    <parameter name="openInSameWindow" type="boolean"/>
+			<parameter name="expanded" type="boolean" />
 		</parameters>
-    </xhtml-macro>
-    
-    <xhtml-macro name='livingdoc-info' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo' key='livingdoc-info-xhtml'
-    		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-    		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Info+macro">
-        <category name="development"/>
+	</xhtml-macro>
+	<xhtml-macro name='livingdoc-children'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocChildren'
+		key='livingdoc-children-xhtml'
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Children+Macro">
+		<category name="development" />
 		<parameters>
-			<parameter name="title" type="string" >
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-			<parameter name="bgcolor" type="string"/>
+			<parameter name="all" type="boolean" />
+			<parameter name="spaceKey" type="spacekey" />
+			<parameter name="pageTitle" type="string" />
+			<parameter name="title" type="string">
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+			<parameter name="expanded" type="boolean" />
+			<parameter name="suts" type="string" />
+			<parameter name="group" type="string" />
+			<parameter name="sort" type="string" />
+			<parameter name="reverse" type="boolean" />
+			<parameter name="openInSameWindow" type="boolean" />
 		</parameters>
-    </xhtml-macro>
-    
-	<xhtml-macro name="livingdoc-import"
-	             class="info.novatec.testit.livingdoc.confluence.macros.LivingDocImport"
-	             key="livingdoc-import-xhtml"
-	             icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-	             documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Import+macro">
-	    <category name="development"/>
-	    <param name="help-section" value="external"/>
-	    <description/>
-	    <resource type="velocity" name="help" location="/templates/livingdoc/confluence/macros/livingDocImport-help.vm">
-	        <param name="help-section" value="misc"/>
-    	</resource>
-        <parameters>
-	        <parameter name="imports" type="string" multiple="true" >
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-    	</parameters>
 	</xhtml-macro>
 
-	<xhtml-macro name='livingdoc-historic' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocHistoric' key='livingdoc-historic-xhtml'
-			icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-			documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Historic+Macro">
-		<category name="development"/>
+	<xhtml-macro name='livingdoc-info'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo'
+		key='livingdoc-info-xhtml'
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Info+macro">
+		<category name="development" />
+		<parameters>
+			<parameter name="title" type="string">
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+			<parameter name="bgcolor" type="string" />
+		</parameters>
+	</xhtml-macro>
+
+	<xhtml-macro name="livingdoc-import"
+		class="info.novatec.testit.livingdoc.confluence.macros.LivingDocImport"
+		key="livingdoc-import-xhtml"
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Import+macro">
+		<category name="development" />
+		<param name="help-section" value="external" />
+		<description />
+		<resource type="velocity" name="help"
+			location="/templates/livingdoc/confluence/macros/livingDocImport-help.vm">
+			<param name="help-section" value="misc" />
+		</resource>
+		<parameters>
+			<parameter name="imports" type="string" multiple="true">
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+		</parameters>
+	</xhtml-macro>
+
+	<xhtml-macro name='livingdoc-historic'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocHistoric'
+		key='livingdoc-historic-xhtml'
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Historic+Macro">
+		<category name="development" />
 		<parameters>
 			<parameter name="pageTitle" type="string">
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-		    <parameter name="spaceKey" type="spacekey"/>
-			<parameter name="sut" type="string"/>
-		    <parameter name="maxresult" type="string" default="30"/>
-		    <parameter name="width" type="string" default="500"/>
-		    <parameter name="height" type="string" default="500"/>
-		    <parameter name="border" type="boolean"/>
-		    <parameter name="showignored" type="boolean"/>
-		    <parameter name="children" type="boolean"/>
-		    <parameter name="labels" type="string"/>
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+			<parameter name="spaceKey" type="spacekey" />
+			<parameter name="sut" type="string" />
+			<parameter name="maxresult" type="string" default="30" />
+			<parameter name="width" type="string" default="500" />
+			<parameter name="height" type="string" default="500" />
+			<parameter name="border" type="boolean" />
+			<parameter name="showignored" type="boolean" />
+			<parameter name="children" type="boolean" />
+			<parameter name="labels" type="string" />
 		</parameters>
 	</xhtml-macro>
-	 <xhtml-macro name='livingdoc-labels' class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels' key='livingdoc-labels-xhtml'
-    		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-    		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Labels+macro">
-        <category name="development"/>
+	<xhtml-macro name='livingdoc-labels'
+		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels'
+		key='livingdoc-labels-xhtml'
+		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
+		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Labels+macro">
+		<category name="development" />
 		<parameters>
-		    <parameter name="spaceKey" type="spacekey"/>
-		    <parameter name="labels" type="string"/>
-			<parameter name="title" type="string" >
-	            <option key="showNameInPlaceholder" value="false" />
-	            <option key="showValueInPlaceholder" value="true" />
-	        </parameter>
-		    <parameter name="expanded" type="boolean"/>
-			<parameter name="suts" type="string"/>
-			<parameter name="group" type="string"/>
-			<parameter name="sort" type="string"/>
-		    <parameter name="reverse" type="boolean"/>
-		    <parameter name="openInSameWindow" type="boolean"/>
+			<parameter name="spaceKey" type="spacekey" />
+			<parameter name="labels" type="string" />
+			<parameter name="title" type="string">
+				<option key="showNameInPlaceholder" value="false" />
+				<option key="showValueInPlaceholder" value="true" />
+			</parameter>
+			<parameter name="expanded" type="boolean" />
+			<parameter name="suts" type="string" />
+			<parameter name="group" type="string" />
+			<parameter name="sort" type="string" />
+			<parameter name="reverse" type="boolean" />
+			<parameter name="openInSameWindow" type="boolean" />
 		</parameters>
-    </xhtml-macro>
+	</xhtml-macro>
 	<!-- DOCTHEME MACRO MIGRATOR -->
-	<macro-migrator key="spacejump-migrator" 
-					macro-name="spacejump" 
-					class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacroMigrator"/>
-	
+	<macro-migrator key="spacejump-migrator" macro-name="spacejump"
+		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacroMigrator" />
+
 
 	<macro-migrator key="livingdoc-info-migrator"
-                	macro-name="livingdoc-info"
-                class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocMacroWithBodyMigrator"/>
-                
+		macro-name="livingdoc-info"
+		class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocMacroWithBodyMigrator" />
+
 	<macro-migrator key="livingdoc-example-migrator"
-                	macro-name="livingdoc-example"
-                class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocMacroWithBodyMigrator"/>
+		macro-name="livingdoc-example"
+		class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocMacroWithBodyMigrator" />
 
 	<macro-migrator key="livingdoc-import-migrator"
-                	macro-name="livingdoc-import"
-                class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocImportMigrator"/>
+		macro-name="livingdoc-import"
+		class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocImportMigrator" />
 
-	<!--
-	<macro-migrator key="livingdoc-children-migrator"
-                	macro-name="livingdoc-children"
-                class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocChildrenMigrator"/>
-	-->
+	<!-- <macro-migrator key="livingdoc-children-migrator" macro-name="livingdoc-children" 
+		class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocChildrenMigrator"/> -->
 	<!-- LIVINGDOC CORE -->
-	<velocity-context-item key="livingdoc.velocity" name="testIT - LivingDoc velocity" context-key="livingDoc" class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
-	
-	<velocity-context-item key="velocityHelper" name="Velocity Helper" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
-                           context-key="docThemeHelper"/>
-                           
-    <component key="docThemeHelper" name="Doc Theme Helper" interface="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
-               class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper" public="true"/>
+	<velocity-context-item key="livingdoc.velocity"
+		name="testIT - LivingDoc velocity" context-key="livingDoc"
+		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
 
-    <web-item key="sidebar-splitter" name="Show or Hide Sidebar" section="system.header/right">
-        <link linkId="doctheme-anchor"/>
-        <label key=""/>
-        <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.ViewingContentCondition"/>
-        <condition class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeEnabledCondition"/>
-    </web-item>
-	
+	<velocity-context-item key="velocityHelper" name="Velocity Helper"
+		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
+		context-key="docThemeHelper" />
+
+	<component key="docThemeHelper" name="Doc Theme Helper"
+		interface="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
+		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
+		public="true" />
+
+	<web-item key="sidebar-splitter" name="Show or Hide Sidebar"
+		section="system.header/right">
+		<link linkId="doctheme-anchor" />
+		<label key="" />
+		<condition
+			class="com.atlassian.confluence.plugin.descriptor.web.conditions.ViewingContentCondition" />
+		<condition
+			class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeEnabledCondition" />
+	</web-item>
+
 	<xwork key="livingdoc.webactions" name="testIT - LivingDoc Web Actions">
-        <package name="LivingDocInstall" extends="default" namespace="/admin/plugins/livingdoc">
-            <default-interceptor-ref name="defaultStack"/>
-			<action name="config" class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction" method="config">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocInstall.vm</result>
+		<package name="LivingDocInstall" extends="default"
+			namespace="/admin/plugins/livingdoc">
+			<default-interceptor-ref name="defaultStack" />
+			<action name="config"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction"
+				method="config">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocInstall.vm
+				</result>
 			</action>
-        </package>
-    	<package name="livingdoc" extends="default" namespace="/livingdoc">
-        	<default-interceptor-ref name="defaultStack" />
-			<action name="GetDbmsPane" class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocDbmsConfig.ajax.vm</result>
+		</package>
+		<package name="livingdoc" extends="default" namespace="/livingdoc">
+			<default-interceptor-ref name="defaultStack" />
+			<action name="GetDbmsPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocDbmsConfig.ajax.vm
+				</result>
 			</action>
-			<action name="EditDbmsConfiguration" class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction" method="editDbmsConfiguration">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocDbmsConfig.ajax.vm</result>
+			<action name="EditDbmsConfiguration"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction"
+				method="editDbmsConfiguration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/livingDocDbmsConfig.ajax.vm
+				</result>
 			</action>
-			<action name="ChangeInstallType" class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction" method="changeInstallationType">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/configurationDbmsEdit.ajax.vm</result>
+			<action name="ChangeInstallType"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction"
+				method="changeInstallationType">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/configurationDbmsEdit.ajax.vm
+				</result>
 			</action>
-			<action name="TestDbmsConnection" class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction" method="testDbmsConnection">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/configurationDbmsTest.ajax.vm</result>
+			<action name="TestDbmsConnection"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.InstallationAction"
+				method="testDbmsConnection">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/installation/configurationDbmsTest.ajax.vm
+				</result>
 			</action>
 			<!-- Actions managing the Demo -->
-			<action name="GetDemoPane" class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction" method="doGetDemo">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm</result>
+			<action name="GetDemoPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction"
+				method="doGetDemo">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm
+				</result>
 			</action>
-			<action name="CreateDemoSpace" class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction" method="doCreateDemoSpace">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm</result>
+			<action name="CreateDemoSpace"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction"
+				method="doCreateDemoSpace">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm
+				</result>
 			</action>
-			<action name="RemoveDemoSpace" class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction" method="doRemoveDemoSpace">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm</result>
+			<action name="RemoveDemoSpace"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.DemoSpaceAction"
+				method="doRemoveDemoSpace">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/demo/demoPane.ajax.vm
+				</result>
 			</action>
-			<action name="LivingDocServer" class="info.novatec.testit.livingdoc.confluence.actions.server.LivingDocServerAction">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/livingDocConfig.ajax.vm</result>
+			<action name="LivingDocServer"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.LivingDocServerAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/livingDocConfig.ajax.vm
+				</result>
 			</action>
-			<action name="LivingDocSpaceAdmin" class="info.novatec.testit.livingdoc.confluence.actions.server.LivingDocServerAction">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/livingDocSpaceConfig.ajax.vm</result>
+			<action name="LivingDocSpaceAdmin"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.LivingDocServerAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/livingDocSpaceConfig.ajax.vm
+				</result>
 			</action>
-<!-- Actions managing the LivingDoc's Runners -->
-            <action name="GetRunnersPane" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="doGetRunners">
-              	<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm</result>
-        	</action>
-        	<action name="AddRunner" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="doAddRunner">
-              	<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm</result>
-        	</action>
-       		<action name="RemoveRunner" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="doRemoveRunner">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm</result>
-       		</action>
-       		<action name="EditRunnerProperties" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="doGetRunners">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm</result>
-       		</action>
-       		<action name="UpdateRunnerProperties" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="doUpdateRunner">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm</result>
-      		</action>       		
-<!-- Actions managing the Confluence's project Registration -->
-			<action name="GetLdProjectPane" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction" method="verifyServerReady">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/ProjectManagementPane.ajax.vm</result>
+			<!-- Actions managing the LivingDoc's Runners -->
+			<action name="GetRunnersPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="doGetRunners">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm
+				</result>
 			</action>
-            <action name="GetRegistration" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doGetRegistration">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm</result>
-       		</action>
-       		<action name="EditRegistration" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doGetRegistration">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm</result>
-       		</action>
-       		<action name="Register" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doRegister">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm</result>
-       		</action>
-       		<action name="UpdateRegistration" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doUpdateRegistration">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm</result>
-       		</action>
-<!-- Actions managing the System Under Tests -->
-       		<action name="GetSutsPane" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doGetSystemUnderTests">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-       		<action name="AddSystemUnderTest" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doAddSystemUnderTest">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-       		<action name="RemoveSystemUnderTest" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doRemoveSystemUnderTest">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-       		<action name="EditSutProperties" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doGetSystemUnderTests">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-       		<action name="UpdateSystemUnderTest" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doUpdateSystemUnderTest">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-       		<action name="SetAsDefault" class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction" method="doSetAsDefault">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm</result>
-       		</action>
-<!-- Actions managing the File System Repositories -->
-       		<action name="GetFileSystemRegistration" class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration" method="doGetFileSystemRegistration">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm</result>
-       		</action>
-       		<action name="EditFileSystem" class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration" method="doGetFileSystemRegistration">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm</result>
-       		</action>
-       		<action name="AddFileSystem" class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration" method="doAddFileSystem">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm</result>
-       		</action>
-       		<action name="RemoveFileSystem" class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration" method="doRemoveFileSystem">
-           		<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm</result>
-       		</action>
- <!-- Actions managing General Settings -->
-            <action name="GetGeneralSettingsPane" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
-                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
-            </action>
-            <action name="EditSettings" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
-                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
-            </action>
-            <action name="UpdateSettings" class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
-                <result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm</result>
-            </action>
-<!-- END -->
-            <action name="LivingDocHeader" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="loadHeader">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm</result>
-            </action>
-            <action name="EnableLivingDoc" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="enableLivingDoc">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm</result>
-            </action>
-            <action name="SetAsImplemented" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="setAsImplemented">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm</result>
-            </action>
-            <action name="Revert" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="revert">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm</result>
-            </action>
-            <action name="RetrieveBody" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/body.ajax.vm</result>
-            </action>
-            <action name="UpdateExecuteChildren" class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction" method="updateExecuteChildren">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/header-execution.ajax.vm</result>
-            </action>
-            <action name="GetSutSelection" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="loadSpecification">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/systemUnderTest.ajax.vm</result>
-            </action>
-            <action name="UpdateSelectedSut" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="updateSelectedSystemUndertTest">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/systemUnderTest.ajax.vm</result>
-            </action>
-            <action name="RetrieveSutConfiguration" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="getSystemUndertTestSelection">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm</result>
-            </action>
-            <action name="AddSpecSystemUnderTest" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="addSystemUnderTest">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm</result>
-            </action>
-            <action name="RemoveSpecSystemUnderTest" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="removeSystemUnderTest">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm</result>
-            </action>
-            <action name="RetrieveReferenceList" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="retrieveReferenceList">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm</result>
-            </action>
-            <action name="AddReference" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="addReference">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm</result>
-            </action>
-            <action name="RemoveReference" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="removeReference">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm</result>
-            </action>
-            <action name="RefreshChildren" class="info.novatec.testit.livingdoc.confluence.actions.execution.ChildrenExecutionAction">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/children-execution.ajax.vm</result>
-            </action>
-            <action name="RefreshLabels" class="info.novatec.testit.livingdoc.confluence.actions.execution.LabelExecutionAction">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/label-execution.ajax.vm</result>
-            </action>
-            <action name="Run" class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction" method="run">
-                <result name="success" type="velocity">/templates/livingdoc/confluence/execution/execution-result.ajax.vm</result>
-            </action>
-			<action name="ShowExecutionResult" class="info.novatec.testit.livingdoc.confluence.actions.execution.ShowExecutionResultAction" method="show">
-				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/execution-result-historic.ajax.vm</result>
+			<action name="AddRunner"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="doAddRunner">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm
+				</result>
 			</action>
-			<action name="ShowHistoricChart" class="info.novatec.testit.livingdoc.confluence.actions.execution.ChildrenExecutionResultAction" method="show">
-				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/children-execution-historic.ajax.vm</result>
+			<action name="RemoveRunner"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="doRemoveRunner">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm
+				</result>
 			</action>
-        </package>
-    </xwork>
-    <!-- DOCHTHEME XWORK -->
-     <xwork name="Documentation Theme Actions" key="docthemeactions">
-        <package name="docthemespace" extends="default" namespace="/spaces/doctheme">
-            <default-interceptor-ref name="validatingStack"/>
-            <action name="configuretheme" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
-                    method="doDefault">
-                <result name="input" type="velocity">/templates/livingdoc/confluence/themes/doctheme/templates/configuretheme-space.vm</result>
-            </action>
-            <action name="doconfiguretheme" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
-                <param name="RequireSecurityToken">true</param>
-                <result name="input" type="velocity">/spaces/choosetheme.vm</result>
-                <result name="success" type="redirect">/spaces/choosetheme.action?key=${key}</result>
-                <result name="cancel" type="redirect">/spaces/choosetheme.action?key=${key}</result>
-            </action>
-        </package>
-        <package name="docthemeadmin" extends="default" namespace="/admin/doctheme">
-            <default-interceptor-ref name="validatingStack"/>
-            <action name="configuretheme" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
-                    method="doDefault">
-                <result name="input" type="velocity">/templates/livingdoc/confluence/themes/doctheme/templates/configuretheme-admin.vm</result>
-            </action>
-            <action name="doconfiguretheme" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
-                <param name="RequireSecurityToken">true</param>
-                <result name="input" type="velocity">/admin/lookandfeel/choosetheme.vm</result>
-                <result name="success" type="redirect">/admin/choosetheme.action</result>
-                <result name="cancel" type="redirect">/admin/choosetheme.action</result>
-            </action>
-        </package>
-    </xwork>
-    
-    <!-- DOCTHEME COMPONENT -->
-    <component key="themeService" name="Theme Service" class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DefaultThemeService">
-        <description>Services to store and retrieve theme configuration information.</description>
-        <interface>info.novatec.testit.livingdoc.confluence.velocity.doctheme.ThemeService</interface>
-    </component>
-    
-    <component key="livingdoc.listener" name="testIT - LivingDoc Listener"
-				class="info.novatec.testit.livingdoc.confluence.listeners.LivingDocPageListener" />
+			<action name="EditRunnerProperties"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="doGetRunners">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateRunnerProperties"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="doUpdateRunner">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/runners/runnersPane.ajax.vm
+				</result>
+			</action>
+			<!-- Actions managing the Confluence's project Registration -->
+			<action name="GetLdProjectPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction"
+				method="verifyServerReady">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/ProjectManagementPane.ajax.vm
+				</result>
+			</action>
+			<action name="GetRegistration"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doGetRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm
+				</result>
+			</action>
+			<action name="EditRegistration"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doGetRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm
+				</result>
+			</action>
+			<action name="Register"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doRegister">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateRegistration"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doUpdateRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm
+				</result>
+			</action>
+			<!-- Actions managing the System Under Tests -->
+			<action name="GetSutsPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doGetSystemUnderTests">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<action name="AddSystemUnderTest"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doAddSystemUnderTest">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<action name="RemoveSystemUnderTest"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doRemoveSystemUnderTest">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<action name="EditSutProperties"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doGetSystemUnderTests">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateSystemUnderTest"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doUpdateSystemUnderTest">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<action name="SetAsDefault"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+				method="doSetAsDefault">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
+				</result>
+			</action>
+			<!-- Actions managing the File System Repositories -->
+			<action name="GetFileSystemRegistration"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
+				method="doGetFileSystemRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
+				</result>
+			</action>
+			<action name="EditFileSystem"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
+				method="doGetFileSystemRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
+				</result>
+			</action>
+			<action name="AddFileSystem"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
+				method="doAddFileSystem">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
+				</result>
+			</action>
+			<action name="RemoveFileSystem"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
+				method="doRemoveFileSystem">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
+				</result>
+			</action>
+			<!-- Actions managing General Settings -->
+			<action name="GetGeneralSettingsPane"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm
+				</result>
+			</action>
+			<action name="EditSettings"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateSettings"
+				class="info.novatec.testit.livingdoc.confluence.actions.server.ConfigurationAction">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/settings/GeneralSettingsPane.ajax.vm
+				</result>
+			</action>
+			<!-- END -->
+			<action name="LivingDocHeader"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
+				method="loadHeader">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
+				</result>
+			</action>
+			<action name="EnableLivingDoc"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
+				method="enableLivingDoc">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
+				</result>
+			</action>
+			<action name="SetAsImplemented"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
+				method="setAsImplemented">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
+				</result>
+			</action>
+			<action name="Revert"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
+				method="revert">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
+				</result>
+			</action>
+			<action name="RetrieveBody"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/body.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateExecuteChildren"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
+				method="updateExecuteChildren">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header-execution.ajax.vm
+				</result>
+			</action>
+			<action name="GetSutSelection"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="loadSpecification">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/systemUnderTest.ajax.vm
+				</result>
+			</action>
+			<action name="UpdateSelectedSut"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="updateSelectedSystemUndertTest">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/systemUnderTest.ajax.vm
+				</result>
+			</action>
+			<action name="RetrieveSutConfiguration"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="getSystemUndertTestSelection">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm
+				</result>
+			</action>
+			<action name="AddSpecSystemUnderTest"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="addSystemUnderTest">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm
+				</result>
+			</action>
+			<action name="RemoveSpecSystemUnderTest"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="removeSystemUnderTest">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/sut-configuration.ajax.vm
+				</result>
+			</action>
+			<action name="RetrieveReferenceList"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="retrieveReferenceList">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm
+				</result>
+			</action>
+			<action name="AddReference"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="addReference">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm
+				</result>
+			</action>
+			<action name="RemoveReference"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="removeReference">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/referenceList.ajax.vm
+				</result>
+			</action>
+			<action name="RefreshChildren"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.ChildrenExecutionAction">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/children-execution.ajax.vm
+				</result>
+			</action>
+			<action name="RefreshLabels"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.LabelExecutionAction">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/label-execution.ajax.vm
+				</result>
+			</action>
+			<action name="Run"
+				class="info.novatec.testit.livingdoc.confluence.actions.SpecificationAction"
+				method="run">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/execution-result.ajax.vm
+				</result>
+			</action>
+			<action name="ShowExecutionResult"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.ShowExecutionResultAction"
+				method="show">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/execution-result-historic.ajax.vm
+				</result>
+			</action>
+			<action name="ShowHistoricChart"
+				class="info.novatec.testit.livingdoc.confluence.actions.execution.ChildrenExecutionResultAction"
+				method="show">
+				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/children-execution-historic.ajax.vm
+				</result>
+			</action>
+		</package>
+	</xwork>
+	<!-- DOCHTHEME XWORK -->
+	<xwork name="Documentation Theme Actions" key="docthemeactions">
+		<package name="docthemespace" extends="default" namespace="/spaces/doctheme">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="configuretheme"
+				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
+				method="doDefault">
+				<result name="input" type="velocity">/templates/livingdoc/confluence/themes/doctheme/templates/configuretheme-space.vm
+				</result>
+			</action>
+			<action name="doconfiguretheme"
+				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
+				<param name="RequireSecurityToken">true</param>
+				<result name="input" type="velocity">/spaces/choosetheme.vm</result>
+				<result name="success" type="redirect">/spaces/choosetheme.action?key=${key}
+				</result>
+				<result name="cancel" type="redirect">/spaces/choosetheme.action?key=${key}
+				</result>
+			</action>
+		</package>
+		<package name="docthemeadmin" extends="default" namespace="/admin/doctheme">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="configuretheme"
+				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
+				method="doDefault">
+				<result name="input" type="velocity">/templates/livingdoc/confluence/themes/doctheme/templates/configuretheme-admin.vm
+				</result>
+			</action>
+			<action name="doconfiguretheme"
+				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
+				<param name="RequireSecurityToken">true</param>
+				<result name="input" type="velocity">/admin/lookandfeel/choosetheme.vm
+				</result>
+				<result name="success" type="redirect">/admin/choosetheme.action
+				</result>
+				<result name="cancel" type="redirect">/admin/choosetheme.action</result>
+			</action>
+		</package>
+	</xwork>
+
+	<!-- DOCTHEME COMPONENT -->
+	<component key="themeService" name="Theme Service"
+		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DefaultThemeService">
+		<description>Services to store and retrieve theme configuration
+			information.
+		</description>
+		<interface>info.novatec.testit.livingdoc.confluence.velocity.doctheme.ThemeService
+		</interface>
+	</component>
+
+	<component key="livingdoc.listener" name="testIT - LivingDoc Listener"
+		class="info.novatec.testit.livingdoc.confluence.listeners.LivingDocPageListener" />
 
 	<!-- LivingDoc Confluence PlugIn as GPS -->
-	<component key="livingDocServerConfigurationActivator" name="testIT - LivingDoc Server Configuration Activator"
-			class="info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator">
-		<description>The testIT - LivingDoc Server Configuration Activator.</description>
-    </component>
-    
-    <component key="styleSheetExtractor" name="Style Sheet Extractor" class="info.novatec.testit.livingdoc.confluence.utils.stylesheet.DefaultStyleSheetExtractorImpl">
-        <interface>info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor</interface>
-    </component>
-    
-	<component key="livingDocServerService" name="testIT - LivingDoc Server Service"
-			   class="info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl"/>
-	<component key="livingDocXmlRpcServer" name="testIT - LivingDoc XML-RPC Server"
-			   class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer"/>
+	<component key="livingDocServerConfigurationActivator"
+		name="testIT - LivingDoc Server Configuration Activator"
+		class="info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator">
+		<description>The testIT - LivingDoc Server Configuration Activator.
+		</description>
+	</component>
 
-	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService" name="testIT - LivingDoc XML-RPC Service Delegator"
-				class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
-		<description/>
+	<component key="styleSheetExtractor" name="Style Sheet Extractor"
+		class="info.novatec.testit.livingdoc.confluence.utils.stylesheet.DefaultStyleSheetExtractorImpl">
+		<interface>info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor
+		</interface>
+	</component>
+
+	<component key="livingDocServerService" name="testIT - LivingDoc Server Service"
+		class="info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl" />
+	<component key="livingDocXmlRpcServer" name="testIT - LivingDoc XML-RPC Server"
+		class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer" />
+
+	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService"
+		name="testIT - LivingDoc XML-RPC Service Delegator"
+		class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
+		<description />
 		<service-path>livingdoc1</service-path>
-		<published-interface>info.novatec.testit.livingdoc.confluence.rpc.RpcClientService</published-interface>
+		<published-interface>info.novatec.testit.livingdoc.confluence.rpc.RpcClientService
+		</published-interface>
 		<authenticate>false</authenticate>
 	</rpc-xmlrpc>
 
-	<component key="staticAccessor" class="info.novatec.testit.livingdoc.confluence.StaticAccessor" />
-	<component key="confluenceLivingDoc" class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
-	<component key="bundleFileLocatorHelper" class="info.novatec.testit.livingdoc.confluence.utils.osgi.DefaultFileLocatorHelper">
-		<interface>info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper</interface>
+	<component key="staticAccessor"
+		class="info.novatec.testit.livingdoc.confluence.StaticAccessor" />
+	<component key="confluenceLivingDoc"
+		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
+	<component key="bundleFileLocatorHelper"
+		class="info.novatec.testit.livingdoc.confluence.utils.osgi.DefaultFileLocatorHelper">
+		<interface>info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper
+		</interface>
 	</component>
-	
-	<component key="confluenceUserManager" class="com.atlassian.confluence.user.ConfluenceUserManager"/>
-	
+
+	<component key="confluenceUserManager"
+		class="com.atlassian.confluence.user.ConfluenceUserManager" />
+
 	<!-- import from the product container -->
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+	<component-import key="applicationProperties"
+		interface="com.atlassian.sal.api.ApplicationProperties" />
 
 	<component-import name="SAL Transaction Template" key="transactionTemplate">
-		<interface>com.atlassian.sal.api.transaction.TransactionTemplate</interface>
+		<interface>com.atlassian.sal.api.transaction.TransactionTemplate
+		</interface>
 	</component-import>
-	
+
 </atlassian-plugin>

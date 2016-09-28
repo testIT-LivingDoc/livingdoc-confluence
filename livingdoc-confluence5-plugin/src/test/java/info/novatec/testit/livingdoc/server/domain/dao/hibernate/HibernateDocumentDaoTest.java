@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -86,7 +86,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         requirement.setRepository(Repository.newInstance("UID-1"));
         documentDao.removeRequirement(requirement);
         session.getTransaction().commit();
-        assertNull(getById(Requirement.class, 2));
+        assertNull(getById(Requirement.class, -2));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
          * Default Sut */
         session.getTransaction().begin();
         Specification spec = documentDao.createSpecification(null, "UID-1", "SPECIFICATION-NEW");
-        SortedSet<SystemUnderTest> suts = spec.getTargetedSystemUnderTests();
+        Set<SystemUnderTest> suts = spec.getTargetedSystemUnderTests();
         SystemUnderTest sut = suts.iterator().next();
         assertEquals("SUT-DEFAULT", sut.getName());
         session.getTransaction().commit();
@@ -175,7 +175,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.updateSpecification(oldSpec, updatedSpec);
         session.getTransaction().commit();
 
-        loadedSpec = getById(Specification.class, - 1l);
+        loadedSpec = getById(Specification.class, - 10l);
         assertEquals("SPECIFICATION-UPDATED", loadedSpec.getName());
         assertEquals("UID-1", loadedSpec.getRepository().getUid());
 
@@ -244,7 +244,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.addSystemUnderTest(systemUnderTest, spec);
         session.getTransaction().commit();
 
-        Specification loadedSpec = getById(Specification.class, 5l);
+        Specification loadedSpec = getById(Specification.class, -5l);
         assertTrue(containsSut(loadedSpec.getTargetedSystemUnderTests(), systemUnderTest.getName()));
 
         /* An Error Occures If We Try To Associate A Sut To A None Existing
@@ -289,7 +289,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeSystemUnderTest(systemUnderTest, spec);
         session.getTransaction().commit();
 
-        loadedSpec = getById(Specification.class, 6l);
+        loadedSpec = getById(Specification.class, -6l);
         loadedSpec.getTargetedSystemUnderTests().contains(systemUnderTest);
         assertFalse(containsSut(loadedSpec.getTargetedSystemUnderTests(), systemUnderTest.getName()));
 
@@ -395,7 +395,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeReference(reference);
         session.getTransaction().commit();
 
-        loadedRef = getById(Reference.class, 1l);
+        loadedRef = getById(Reference.class, -1l);
         assertNull(loadedRef);
 
         /* Updating A Reference Will Delete The Current One And Create A New One */
@@ -415,9 +415,9 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.updateReference(oldReference, newReference);
         session.getTransaction().commit();
 
-        assertNull(getById(Reference.class, 1l));
+        assertNull(getById(Reference.class, -1l));
         assertNotNull(documentDao.get(newReference));
-        assertNotNull(getById(Requirement.class, 1l));
+        assertNotNull(getById(Requirement.class, -1l));
 
         /* Removing The Only Reference Of A Requirement Will Remove The
          * Requirement Also */
@@ -434,7 +434,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeReference(reference);
         session.getTransaction().commit();
 
-        assertNull(getById(Requirement.class, - 1l));
+        assertNull(getById(Requirement.class, - 10l));
     }
 
     @Test
@@ -476,14 +476,10 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         List<Execution> executions = documentDao.getSpecificationExecutions(spec, null, 100);
         assertNotNull(executions);
         assertTrue(executions.size() == 2);
-        assertEquals(new Long(1), executions.get(0).getId());
-        assertEquals(new Long(2), executions.get(1).getId());
+        assertEquals(new Long(-1), executions.get(0).getId());
+        assertEquals(new Long(-2), executions.get(1).getId());
 
         spec = documentDao.getSpecificationByName("UID-1", "SPECIFICATION-2");
-
-        executions = documentDao.getSpecificationExecutions(spec, sut, 0);
-        assertNotNull(executions);
-        assertTrue(executions.size() == 0);
 
         executions = documentDao.getSpecificationExecutions(spec, sut, 100);
         assertNotNull(executions);
@@ -491,12 +487,12 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
 
         Execution execution = documentDao.getSpecificationExecution(executions.get(0).getId());
         assertNotNull(execution);
-        assertEquals(new Long(3), execution.getId());
+        assertEquals(new Long(-3), execution.getId());
     }
 
     @Test
     public void testWeCanRetrieveSpecificationById() {
-        Specification spec = documentDao.getSpecificationById(1L);
+        Specification spec = documentDao.getSpecificationById(-1L);
         assertNotNull(spec);
         assertEquals("SPECIFICATION-1", spec.getName());
 
@@ -517,7 +513,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         return true;
     }
 
-    private boolean containsSut(SortedSet<SystemUnderTest> suts, String sutName) {
+    private boolean containsSut(Set<SystemUnderTest> suts, String sutName) {
         for (SystemUnderTest sut : suts) {
             if (sut.getName().equals(sutName)) {
                 return true;

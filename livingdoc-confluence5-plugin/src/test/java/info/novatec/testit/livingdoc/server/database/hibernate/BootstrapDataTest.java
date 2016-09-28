@@ -1,9 +1,6 @@
 package info.novatec.testit.livingdoc.server.database.hibernate;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import java.net.URL;
 
@@ -11,13 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.configuration.ServerConfiguration;
 import info.novatec.testit.livingdoc.server.database.hibernate.hsqldb.AbstractDBUnitHibernateMemoryTest;
 import info.novatec.testit.livingdoc.server.domain.SystemInfo;
 import info.novatec.testit.livingdoc.server.domain.dao.SystemInfoDao;
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateSystemInfoDao;
-
 
 public class BootstrapDataTest extends AbstractDBUnitHibernateMemoryTest {
     private URL configURL = BootstrapDataTest.class.getResource("configuration-test.xml");
@@ -38,21 +33,9 @@ public class BootstrapDataTest extends AbstractDBUnitHibernateMemoryTest {
 
     @Override
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
+        super.tearDown();
         // overrides tearDown from extended class
-    }
-
-    @Test
-    public void testWhileUpgradingIfAnErrorOccuresTheBootstrapProcessWillAbortAndProvoqueARollBack() throws Exception {
-        try {
-            setupSystemInfo("VERSION.THAT.WILL.CAUSE.A.FAILURE");
-            boot.execute();
-            fail();
-        } catch (LivingDocServerException e) {
-            assertEquals("Boostrap Failure", e.getMessage());
-        }
-
-        assertNull(systemDao.getSystemInfo());
     }
 
     @Test

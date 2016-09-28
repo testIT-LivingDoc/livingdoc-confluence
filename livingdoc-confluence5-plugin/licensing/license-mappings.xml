@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<license-lookup xmlns="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup https://source.jasig.org/schemas/maven-notice-plugin/license-lookup/license-lookup-v1.0.xsd">
+<license-lookup
+	xmlns="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://source.jasig.org/schemas/maven-notice-plugin/license-lookup https://source.jasig.org/schemas/maven-notice-plugin/license-lookup/license-lookup-v1.0.xsd">
 	<artifact>
 		<groupId>antlr</groupId>
 		<artifactId>antlr</artifactId>
@@ -415,9 +418,21 @@
 		<license>The Apache License, Version 2.0</license>
 	</artifact>
 	<artifact>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate</artifactId>
-		<version>3.2.6.ga</version>
-		<license>unknown license. Please check the license by yourself.</license>			
+		<groupId>jaxen</groupId>
+		<artifactId>jaxen</artifactId>
+		<version>1.0-FCS</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>ognl</groupId>
+		<artifactId>ognl</artifactId>
+		<version>2.6.5-atlassian-3</version>
+		<license>unknown license. Please check the license by yourself.</license>
+	</artifact>
+	<artifact>
+		<groupId>saxpath</groupId>
+		<artifactId>saxpath</artifactId>
+		<version>1.0-FCS</version>
+		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 </license-lookup>

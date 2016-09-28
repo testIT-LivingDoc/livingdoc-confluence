@@ -154,7 +154,7 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
         repoDao.update(repository);
         session.getTransaction().commit();
 
-        Repository loadedRepo = getById(Repository.class, - 2l);
+        Repository loadedRepo = getById(Repository.class, - 20l);
         assertNotNull(loadedRepo);
         assertEquals("REPO-UPDATED", loadedRepo.getName());
         assertEquals("BASE-REPO-URL-2", loadedRepo.getBaseRepositoryUrl());

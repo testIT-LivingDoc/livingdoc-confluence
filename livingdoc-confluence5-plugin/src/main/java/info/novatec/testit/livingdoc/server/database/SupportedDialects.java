@@ -18,20 +18,22 @@
  */
 package info.novatec.testit.livingdoc.server.database;
 
-import org.hibernate.dialect.DerbyDialect;
 import org.hibernate.dialect.HSQLDialect;
-import org.hibernate.dialect.MySQLDialect;
+import org.hibernate.dialect.MySQL5Dialect;
 import org.hibernate.dialect.Oracle8iDialect;
-import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.PostgreSQL81Dialect;
+import org.hibernate.dialect.PostgreSQL94Dialect;
+import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 
 
 public enum SupportedDialects {
-    MySQL ( MySQLDialect.class.getName() ),
-    Derby ( DerbyDialect.class.getName() ),
+    MySQL5 ( MySQL5Dialect.class.getName() ),
     HSQL ( HSQLDialect.class.getName() ),
-    Oracle ( Oracle8iDialect.class.getName() ),
-    PostgreSQL ( PostgreSQLDialect.class.getName() ),
+    Oracle8 ( Oracle8iDialect.class.getName() ),
+    PostgreSQL81 ( PostgreSQL81Dialect.class.getName() ),
+    PostgreSQL9 ( PostgreSQL9Dialect.class.getName() ),
+    PostgreSQL94 ( PostgreSQL94Dialect.class.getName() ),
     SQLServer ( SQLServerDialect.class.getName() );
 
     private final String className;
