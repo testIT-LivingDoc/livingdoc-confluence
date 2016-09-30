@@ -16,41 +16,8 @@
  * http://www.fsf.org. */
 package info.novatec.testit.livingdoc.server;
 
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.ERROR;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.EXECUTION_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.PROJECT_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.PROJECT_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.PROJECT_UPDATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REFERENCE_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REFERENCE_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REFERENCE_UPDATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REPOSITORY_NOT_FOUND;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REPOSITORY_REGISTRATION_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REPOSITORY_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REPOSITORY_UPDATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.REQUIREMENT_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_EXECUTIONS;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_REFERENCE;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_REFERENCES;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_REQUIREMENT_REPOS;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_SPECIFICATION_REPOS;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RETRIEVE_SUTS;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RUNNER_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RUNNER_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RUNNER_UPDATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.RUN_REFERENCE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATIONS_NOT_FOUND;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_ADD_SUT_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_REMOVE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_REMOVE_SUT_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_RUN_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SPECIFICATION_UPDATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SUT_CREATE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SUT_DELETE_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SUT_SET_DEFAULT_FAILED;
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.SUT_UPDATE_FAILED;
+import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1017,6 +984,10 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             List<SpecificationLocation> locations = new ArrayList<SpecificationLocation>();
             SystemUnderTest systemUnderTest = sutDao.getByName(repository.getProject().getName(), systemUnderTestName);
+            if(systemUnderTest == null){
+                log.warn("System under test not found : "+  systemUnderTestName);
+                throw new LivingDocServerException(SUT_NOT_FOUND, "System under test not found : "+  systemUnderTestName);
+            }
             List<Specification> specifications = documentDao.getSpecifications(systemUnderTest, repository);
 
             for (Specification specification : specifications) {
