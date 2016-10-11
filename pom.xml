@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-plugin</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
@@ -191,4 +191,5 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	<version>1.2.1</version>
 </project>
