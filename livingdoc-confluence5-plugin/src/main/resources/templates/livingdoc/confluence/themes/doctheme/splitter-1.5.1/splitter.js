@@ -184,7 +184,7 @@
         var resizeHandler = function(e){
             var top = splitter.offset().top;
             //TODO: a quick hack to get the splitter to be the right height in ondemand due to the footer difference
-            var footer = $("#footer, #studio-footer").outerHeight(true);
+            var footer = $("#footer").outerHeight(true);
             if (!footer)
                 footer = 24;
             var wh = $(window).height()-footer;
@@ -224,15 +224,3 @@
     });
 };
 })(jQuery);
-
-/*Places focus on the main content section of pages*/
-/* TODO - CONFDEV-2045 Clean up this code */
-window.placeFocus = function () {
-
-    var mainSection = document.getElementById('splitter-content');
-    // Don't focus when there is an editor on the page.
-    if(mainSection && AJS.$("#wysiwyg").length == 0)
-    {
-        mainSection.focus();
-    }
-};

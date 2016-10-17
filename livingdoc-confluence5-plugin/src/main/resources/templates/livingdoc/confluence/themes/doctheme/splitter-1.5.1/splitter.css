@@ -78,17 +78,9 @@ a:hover {
     margin-top: 10px;
 }
 
-.panelMacro, .panel {
+.panel {
     margin-left: 0;
     margin-right: 0;
-}
-
-.panelMacro table {
-    padding:10px;
-}
-
-.panelMacro td, .panelMacro p {
-    padding:0;
 }
 
 #content .infoMacro, #content .tipMacro, #content .warningMacro, #content .noteMacro {
@@ -384,15 +376,6 @@ a:hover {
         margin-top:0;
     }
 
-    #theme-header .panelMacro {
-        margin-bottom:0;
-    }
-
-    #theme-header .panelMacro td,
-    #theme-header .panelMacro p {
-        padding:5px 0;
-    }
-
     #theme-header .infoMacro,
     #theme-header .tipMacro,
     #theme-header .warningMacro,
@@ -409,10 +392,6 @@ a:hover {
     #theme-footer .panel {
         border-top-width: 1px;
         border-top-style: solid;
-    }
-
-    #theme-footer .panelMacro {
-        margin:0;
     }
 
     #theme-footer p {
@@ -464,7 +443,6 @@ a:hover {
     html, body, #main, #splitter, #full-height-container {
         overflow: visible !important;
         height: 100% !important;
-        *height: auto !important;
     }
 
     html.splitter-invoked,
@@ -482,10 +460,9 @@ a:hover {
         overflow: visible !important;
         width:800px !important;
         height: 100% !important;
-        *height: auto !important;
     }
 
-    .panel, panelMacro {
+    .panel {
         page-break-inside: avoid;
     }
 

@@ -1,4 +1,4 @@
 <div id="content-editable-container" class="wiki-content">
 	<div id="conf_results_PAGE_HEADER_0" class="wiki-content" style="display:none"></div>
-	<div id="body" class="wiki-content"> $body </div>
+	<div id="main-content" class="wiki-content"> $body </div>
 </div>

@@ -105,21 +105,6 @@ LDProperties.prototype =
 	},
 	removeSystemUnderTest:function(id, projectName){ this.action.removeSystemUnderTest(this.createParams({id:id, projectName:projectName, selectedSutName:$F('selectedSut')})); },
 	setSutAsDefault:function(id, projectName){ this.action.setSutAsDefault(this.createParams({id:id, projectName:projectName, selectedSutName:$F('selectedSut')})); },
-	getFileSystemRegistration:function(){
-		AJS.tabs.change(AJS.$('a[href=#tabs-file-system]'));
-		this.action.getFileSystemRegistration(this.createParams({editMode:false}));
-	},
-	editFileSystem:function(){this.action.editFileSystem(this.createParams({editMode:true})); },
-	addFileSystem:function(){
-		if ($F('newFileSystemName') == ''){return;}
-		var path = $F('newFileSystemUrl');
-		if (path == ''){return;}
-		path = path.replace(/\\/g, "/"); 
-		this.action.addFileSystem(this.createParams({projectName:$F('newProjectName'), newName:$F('newFileSystemName'), newBaseTestUrl:path, editMode:true})); 
-	},
-	removeFileSystem:function(repositoryUid){this.action.removeFileSystem(this.createParams({repositoryUid:repositoryUid, editMode:true})); },
-	
-	
 	
 	editDbms:function(){
 		AJS.tabs.change(AJS.$('a[href=#tabs-dbms-config]'));
