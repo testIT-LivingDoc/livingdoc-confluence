@@ -33,10 +33,6 @@
                                href="#tabs-settings">$action.getText('livingdoc.install.tabmenu.settings')</a>
                         </li>
 			            <li class="menu-item">
-                            <a onclick="ldProperties.getFileSystemRegistration();"
-			            		href="#tabs-file-system">$action.getText('livingdoc.install.tabmenu.fsregister')</a>
-			               </li>
-			            <li class="menu-item">
 							<a onclick="ldProperties.getDemoPane();"
 			            		href="#tabs-demo">$action.getText('livingdoc.install.tabmenu.demo')</a>
 			            </li>
@@ -48,7 +44,6 @@
 			        <div class="tabs-pane" id="tabs-runner"></div>
 			        <div class="tabs-pane" id="tabs-project"></div>
             		<div class="tabs-pane" id="tabs-settings"></div>
-			        <div class="tabs-pane" id="tabs-file-system"></div>
 			        <div class="tabs-pane" id="tabs-demo"></div>
 
 			    </div>

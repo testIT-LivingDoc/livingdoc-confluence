@@ -6,11 +6,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import info.novatec.testit.livingdoc.server.database.SessionService;
 
 
 public class HibernateSessionService implements SessionService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateSessionService.class);
+    
     private final ThreadLocal<Transaction> threadTransaction = new ThreadLocal<Transaction>();
     private final ThreadLocal<Session> threadSession = new ThreadLocal<Session>();
     private SessionFactory sessionFactory;
@@ -57,7 +61,7 @@ public class HibernateSessionService implements SessionService {
         Transaction tx = threadTransaction.get();
         if (tx != null) {
             threadTransaction.set(null);
-            // log warning todo
+            LOGGER.warn("Transaction not found");
         }
     }
 
@@ -74,7 +78,11 @@ public class HibernateSessionService implements SessionService {
     public void commitTransaction() throws HibernateException {
         Transaction tx = threadTransaction.get();
         threadTransaction.set(null);
-        tx.commit();
+        if (tx != null) {
+            tx.commit();
+        }else{
+            LOGGER.warn("Transaction not found");
+        }
     }
 
     @Override
@@ -82,7 +90,11 @@ public class HibernateSessionService implements SessionService {
         Transaction tx = threadTransaction.get();
         try {
             threadTransaction.set(null);
-            tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }else{
+                LOGGER.warn("Transaction not found");
+            }
         } finally {
             closeSession();
         }

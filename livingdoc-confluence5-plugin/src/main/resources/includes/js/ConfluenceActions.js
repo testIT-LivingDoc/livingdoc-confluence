@@ -52,11 +52,6 @@ LD.ConfluenceActions=
 	register:function(params) { this.confQuery("registrationPane_display", "/livingdoc/Register.action", params); },
 	updateRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/UpdateRegistration.action", params); },
 	
-	getFileSystemRegistration:function(params) { this.confQuery("tabs-file-system", "/livingdoc/GetFileSystemRegistration.action", params); },
-	editFileSystem:function(params) { this.confQuery("tabs-file-system", "/livingdoc/EditFileSystem.action", params); },
-	addFileSystem:function(params) { this.confQuery("tabs-file-system", "/livingdoc/AddFileSystem.action", params); },
-	removeFileSystem:function(params) { this.confQuery("tabs-file-system", "/livingdoc/RemoveFileSystem.action", params); },
-	
 	getSutsPane:function(params) { this.confQuery("sutsPane_display", "/livingdoc/GetSutsPane.action", params); },
 	getSut:function(params) { this.confQuery("sutsPane_display", "/livingdoc/GetSutsPane.action", params); },
 	addSut:function(params) { this.confQuery("sutsPane_display", "/livingdoc/AddSystemUnderTest.action", params); },

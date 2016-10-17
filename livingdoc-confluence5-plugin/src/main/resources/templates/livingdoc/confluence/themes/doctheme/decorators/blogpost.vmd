@@ -17,20 +17,17 @@ Modes are 'view', 'edit', 'edit-preview', and 'remove'.
 #requireResourcesForContext("blogpost")
 
 #if ($mode != "edit" && $mode != "edit-preview")
-    #parse ("/decorators/includes/content-navigation.vm")
+    #if($darkFeatures.isDarkFeatureEnabled('confluence.pagenav.deferred') && $mode == "view")
+        #putMetadata('page-id', $page.id)
+        $decoratorUtil.setContentNavContext($action.page, $mode, $context, $helper)
+    #else
+        #parse ("/decorators/includes/content-navigation.vm")
+    #end
 #end
 
 #if ($infoPanelRequired)
 <content tag="sidebar">
     #infoPanel(true true true true)
-</content>
-#end
-
-#if( ($mode != "edit" && $mode != "edit-preview" ))
-<content tag="ia-sidebar">
-    #foreach ($webPanel in $webInterfaceManager.getDisplayableWebPanels("atl.page.left.sidebar", {"page": $confPage, "context": $context}))
-    	$!webPanel.getHtml($action.context)
-    #end
 </content>
 #end
 
@@ -71,7 +68,7 @@ Modes are 'view', 'edit', 'edit-preview', and 'remove'.
             $body
         </div>
         #set($labelable = $blog)
-        #parse ("/labels/labels-editor.vm")
+        #parse ("/com/atlassian/confluence/plugins/labels/components/labels-editor.vm")
 
         #applyDecorator("root")
         #decoratorParam("sitemeshPage" $sitemeshPage)

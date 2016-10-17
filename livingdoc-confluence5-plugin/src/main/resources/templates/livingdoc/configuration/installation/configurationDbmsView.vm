@@ -47,7 +47,7 @@
     </div>
     #end
     <div class="buttons-container">
-		#if(!$action.editMode)<button type="button" id="dbmsView_edit" class="aui-button" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.filesystem.edit')</button>#end
+		#if(!$action.editMode)<button type="button" id="dbmsView_edit" class="aui-button" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.registration.edit')</button>#end
 	</div>
 </form>
 	

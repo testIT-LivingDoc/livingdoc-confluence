@@ -1,1 +1,4 @@
-<span style="font-family: Arial, sans-serif; font-size: 1em; font-weight: bold; padding: 0px 3px;"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc-logo/images/livingdoc_12.gif" alt="" border="0">&nbsp;<span style="color:#003300;">Living</span><span style="color:#6699cc;">Doc</span></span>
+<span style="font-family: Arial, sans-serif; font-size: 1em; font-weight: bold; padding: 0px 3px;">
+ <img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc-logo/images/livingdoc_12.gif" alt="" border="0">
+ &nbsp;<span style="color:#003300;">Living</span><span style="color:#6699cc;">Doc</span>
+</span>

@@ -23,7 +23,7 @@
 					</div>					
 				</div>
 				<div class="buttons-container">
-					#if(!$action.editMode)<button id="dbmsView_edit" class="aui-button sp_configButtonRight" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.filesystem.edit')</button>#end
+					#if(!$action.editMode)<button id="dbmsView_edit" class="aui-button sp_configButtonRight" onclick="ldProperties.editDbms();"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.registration.edit')</button>#end
 				</div>
           #end
 	</form>

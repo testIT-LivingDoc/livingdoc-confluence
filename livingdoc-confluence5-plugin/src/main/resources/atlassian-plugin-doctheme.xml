@@ -1,0 +1,176 @@
+<atlassian-plugin key="com.atlassian.confluence.plugins.doctheme"
+	name="Documentation Theme" plugins-version="2">
+	<plugin-info>
+		<param name="atlassian-data-center-compatible">true</param>
+		<description>Featuring a page tree and customisable navigation, the
+			Documentation Theme makes it easy to browse through your Confluence
+			site.</description>
+		<version>5.10.7</version>
+		<vendor name="Atlassian" url="http://www.atlassian.com/" />
+	</plugin-info>
+	<resource type="i18n" name="i18n" location="doctheme.i18n" />
+	<macro name='spacejump'
+		class='com.atlassian.confluence.plugins.doctheme.SpaceJumpMacro' key='spacejump'>
+		<description key="doctheme.description.space.jump.macro" />
+		<category name="navigation" />
+	</macro>
+	<xhtml-macro name='spacejump'
+		class='com.atlassian.confluence.plugins.doctheme.SpaceJumpMacro' key='spacejump-xhtml'>
+		<description key="doctheme.description.space.jump.macro" />
+		<category name="navigation" />
+		<parameters>
+			<parameter name="space" type="spacekey" required="true"
+				multiple="false" />
+			<parameter name="alias" type="string" />
+		</parameters>
+	</xhtml-macro>
+	<macro-migrator key="spacejump-migrator" macro-name="spacejump"
+		class="com.atlassian.confluence.plugins.doctheme.SpaceJumpMacroMigrator" />
+	<component key="themeService" name="Theme Service"
+		class="com.atlassian.confluence.plugins.doctheme.DefaultThemeService">
+		<description>Services to store and retrieve theme configuration
+			information.</description>
+		<interface>com.atlassian.confluence.plugins.doctheme.ThemeService
+		</interface>
+	</component>
+	<web-resource name="Doc Theme Resources" key="resources">
+		<transformation extension="js">
+			<transformer key="jsI18n" />
+		</transformation>
+		<resource name="doc-theme.js" type="download" location="js/doc-theme.js" />
+		<dependency>com.atlassian.confluence.plugins.doctheme:splitter
+		</dependency>
+		<context>theme.doc</context>
+	</web-resource>
+	<web-resource name="Splitter" key="splitter">
+		<resource name="splitter.js" type="download"
+			location="doctheme/splitter-1.5.1/splitter.js" />
+		<resource name="space-specific-quicknav.js" type="download"
+			location="js/space-specific-quicknav.js" />
+		<dependency>confluence.web.resources:ajs</dependency>
+		<dependency>confluence.web.resources:contentnamesearch</dependency>
+	</web-resource>
+	<theme key="documentation" name="Documentation Theme"
+		class="com.atlassian.confluence.themes.BasicTheme">
+		<description key="doctheme.description" />
+		<param name="includeClassicStyles" value="false" />
+		<param name="space-config-path" value="/spaces/doctheme/configuretheme.action" />
+		<param name="global-config-path" value="/admin/doctheme/configuretheme.action" />
+		<layout key="com.atlassian.confluence.plugins.doctheme:main" />
+		<layout key="com.atlassian.confluence.plugins.doctheme:page" />
+		<layout key="com.atlassian.confluence.plugins.doctheme:blogpost" />
+		<colour-scheme
+			key="com.atlassian.confluence.plugins.doctheme:colour-scheme" />
+		<body-class>theme-documentation</body-class>
+	</theme>
+	<web-resource name="Doc Theme CSS Resources" key="css-resources">
+		<transformation extension="less">
+			<transformer key="less-transformer" />
+		</transformation>
+		<dependency>com.atlassian.confluence.themes.default:styles
+		</dependency>
+		<resource type="download" name="doc-theme.css" location="doctheme/doc-theme.less" />
+		<resource type="download" name="splitter.css"
+			location="doctheme/splitter-1.5.1/splitter.css" />
+		<resource type="download" name="sidebar-shadow.png"
+			location="doctheme/images/sidebar-shadow.png" />
+		<resource type="download" name="tree.png" location="doctheme/images/tree.png" />
+		<resource type="download" name="tree-off.png" location="doctheme/images/tree-off.png" />
+		<resource type="download" name="vgrabber.gif"
+			location="doctheme/splitter-1.5.1/img/vgrabber.gif" />
+		<resource name="themeicon.gif" type="download" location="doctheme/themeicon.gif">
+			<property key="content-type" value="image/gif" />
+		</resource>
+		<context>theme.doc</context>
+	</web-resource>
+	<colour-scheme key="colour-scheme" name="Documentation Theme Colour Scheme"
+		class="com.atlassian.confluence.themes.BaseColourScheme">
+		<colour key="property.style.topbarcolour" value="#205081" />
+		<colour key="property.style.breadcrumbstextcolour" value="#ffffff" />
+		<colour key="property.style.spacenamecolour" value="#999999" />
+		<colour key="property.style.headingtextcolour" value="#000000" />
+		<colour key="property.style.linkcolour" value="#326ca6" />
+		<colour key="property.style.bordercolour" value="#2E3D54" />
+		<colour key="property.style.navbgcolour" value="#6699cc" />
+		<colour key="property.style.navtextcolour" value="#ffffff" />
+		<colour key="property.style.navselectedbgcolour" value="#003366" />
+		<colour key="property.style.navselectedtextcolour" value="#ffffff" />
+		<colour key="property.style.topbarmenuselectedbgcolour" value="#296CA3" />
+		<colour key="property.style.topbarmenuitemtextcolour" value="#333333" />
+		<colour key="property.style.menuselectedbgcolour" value="#6699cc" />
+		<colour key="property.style.menuitemtextcolour" value="#333333" />
+		<colour key="property.style.menuitemselectedbgcolour" value="#326ca6" />
+		<colour key="property.style.menuitemselectedtextcolour" value="#ffffff" />
+		<colour key="property.style.headerbuttonbasebgcolour" value="#3b7fc4" />
+		<colour key="property.style.headerbuttontextcolour" value="#ffffff" />
+		<colour key="property.style.searchfieldbgcolour" value="rgba(0, 0, 0, 0.2)" />
+		<colour key="property.style.searchfieldtextcolour" value="#ffffff" />
+	</colour-scheme>
+	<layout key="main" name="Main Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/main.vmd">
+		<resource type="velocity" name="decorator" location="doctheme/decorators/main.vmd" />
+	</layout>
+	<layout key="page" name="Page Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/page.vmd">
+		<resource type="velocity" name="decorator" location="doctheme/decorators/page.vmd" />
+	</layout>
+	<layout key="blogpost" name="Blogpost Decorator"
+		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/blogpost.vmd">
+		<resource type="velocity" name="decorator"
+			location="doctheme/decorators/blogpost.vmd" />
+	</layout>
+	<velocity-context-item key="velocityHelper" name="Velocity Helper"
+		class="com.atlassian.confluence.plugins.doctheme.DocThemeHelper"
+		context-key="docThemeHelper" />
+	<component key="docThemeHelper" name="Doc Theme Helper"
+		interface="com.atlassian.confluence.plugins.doctheme.DocThemeHelper"
+		class="com.atlassian.confluence.plugins.doctheme.DocThemeHelper"
+		public="true" />
+	<web-item key="sidebar-splitter" name="Show or Hide Sidebar"
+		section="system.header/right">
+		<link linkId="doctheme-anchor" />
+		<label key="" />
+		<condition
+			class="com.atlassian.confluence.plugin.descriptor.web.conditions.ViewingContentCondition" />
+		<condition
+			class="com.atlassian.confluence.plugins.doctheme.DocThemeEnabledCondition" />
+	</web-item>
+	<xwork name="Documentation Theme Actions" key="docthemeactions">
+		<package name="docthemespace" extends="default" namespace="/spaces/doctheme">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="configuretheme"
+				class="com.atlassian.confluence.plugins.doctheme.ConfigureThemeAction"
+				method="doDefault">
+				<result name="input" type="velocity">/doctheme/templates/configuretheme-space.vm
+				</result>
+			</action>
+			<action name="doconfiguretheme"
+				class="com.atlassian.confluence.plugins.doctheme.ConfigureThemeAction">
+				<param name="RequireSecurityToken">true</param>
+				<result name="input" type="velocity">/spaces/choosetheme.vm</result>
+				<result name="success" type="redirect">/spaces/choosetheme.action?key=${key}
+				</result>
+				<result name="cancel" type="redirect">/spaces/choosetheme.action?key=${key}
+				</result>
+			</action>
+		</package>
+		<package name="docthemeadmin" extends="default" namespace="/admin/doctheme">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="configuretheme"
+				class="com.atlassian.confluence.plugins.doctheme.ConfigureThemeAction"
+				method="doDefault">
+				<result name="input" type="velocity">/doctheme/templates/configuretheme-admin.vm
+				</result>
+			</action>
+			<action name="doconfiguretheme"
+				class="com.atlassian.confluence.plugins.doctheme.ConfigureThemeAction">
+				<param name="RequireSecurityToken">true</param>
+				<result name="input" type="velocity">/admin/lookandfeel/choosetheme.vm
+				</result>
+				<result name="success" type="redirect">/admin/choosetheme.action
+				</result>
+				<result name="cancel" type="redirect">/admin/choosetheme.action</result>
+			</action>
+		</package>
+	</xwork>
+</atlassian-plugin>

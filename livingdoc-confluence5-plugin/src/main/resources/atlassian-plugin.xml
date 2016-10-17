@@ -143,7 +143,7 @@
 		<dependency>com.atlassian.confluence.themes.default:styles
 		</dependency>
 		<resource type="download" name="doc-theme.css"
-			location="templates/livingdoc/confluence/themes/doctheme/doc-theme.css" />
+			location="templates/livingdoc/confluence/themes/doctheme/doc-theme.less" />
 		<resource type="download" name="splitter.css"
 			location="templates/livingdoc/confluence/themes/doctheme/splitter-1.5.1/splitter.css" />
 
@@ -166,7 +166,7 @@
 	<layout key="livingdoc.page" name="testIT - LivingDoc Page Decorator"
 		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/page.vmd">
 		<resource type="velocity" name="decorator"
-			location="templates/livingdoc/confluence/themes/page.vmd" />
+			location="templates/livingdoc/confluence/themes/doctheme/decorators/page.vmd" />
 	</layout>
 
 	<layout key="main" name="Main Decorator"
@@ -646,31 +646,6 @@
 				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
 				method="doSetAsDefault">
 				<result name="success" type="velocity">/templates/livingdoc/configuration/suts/systemUnderTestPane.ajax.vm
-				</result>
-			</action>
-			<!-- Actions managing the File System Repositories -->
-			<action name="GetFileSystemRegistration"
-				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
-				method="doGetFileSystemRegistration">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
-				</result>
-			</action>
-			<action name="EditFileSystem"
-				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
-				method="doGetFileSystemRegistration">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
-				</result>
-			</action>
-			<action name="AddFileSystem"
-				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
-				method="doAddFileSystem">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
-				</result>
-			</action>
-			<action name="RemoveFileSystem"
-				class="info.novatec.testit.livingdoc.confluence.actions.server.FileSystemRegistration"
-				method="doRemoveFileSystem">
-				<result name="success" type="velocity">/templates/livingdoc/configuration/filesystem/fileSystemPane.ajax.vm
 				</result>
 			</action>
 			<!-- Actions managing General Settings -->
