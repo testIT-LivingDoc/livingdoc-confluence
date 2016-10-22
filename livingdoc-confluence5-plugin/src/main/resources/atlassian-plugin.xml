@@ -860,6 +860,10 @@
 		<authenticate>false</authenticate>
 	</rpc-xmlrpc>
 
+	<rest key="livingdoc.rest" path="/livingdoc" version="1.0">
+		<description>Provides livingdoc rest services.</description>
+	</rest>
+
 	<component key="staticAccessor"
 		class="info.novatec.testit.livingdoc.confluence.StaticAccessor" />
 	<component key="confluenceLivingDoc"
