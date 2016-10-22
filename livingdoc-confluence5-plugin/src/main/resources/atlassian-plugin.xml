@@ -22,6 +22,7 @@
 				com.atlassian.confluence.event.events.content.page;resolution:=optional,
 				org.slf4j;resolution:=optional,
 				com.google.gson;resolution:=optional,
+				org.springframework.aop;resolution:=optional,
 				com.atlassian.confluence.event.events.plugin;resolution:=optional,
 				com.atlassian.confluence.event.events.space;resolution:=optional,
 				org.osgi.framework;resolution:=optional,
