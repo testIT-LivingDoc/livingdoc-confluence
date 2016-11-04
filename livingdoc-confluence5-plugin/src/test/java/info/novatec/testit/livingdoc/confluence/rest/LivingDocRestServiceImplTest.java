@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.rpc.RpcClientService;
 
 
 /**
@@ -21,7 +21,7 @@ import info.novatec.testit.livingdoc.server.rpc.RpcClientService;
 public class LivingDocRestServiceImplTest {
 
     @Mock
-    RpcClientService clientService;
+    LivingDocServerService clientService;
 
     @InjectMocks
     LivingDocRestServiceImpl ldRestService;
@@ -29,7 +29,7 @@ public class LivingDocRestServiceImplTest {
     @Test
     public void dispatchByMethodName() throws Exception {
         Runner runner = Runner.newInstance("DocumentRunner");
-        when(clientService.getRunner("DocumentRunner", null)).thenReturn(runner);
+        when(clientService.getRunner("DocumentRunner")).thenReturn(runner);
         String getRunner = ldRestService.dispatchByMethodName("getRunner", "{\"name\":\"DocumentRunner\"}");
 
         assertThat(getRunner, CoreMatchers.is("{\"runner\":{\"id\":null,\"version\":null,\"name\":\"DocumentRunner\",\"serverName\":null,\"serverPort\":null,\"secured\":false,\"classpaths\":[]}}"));
