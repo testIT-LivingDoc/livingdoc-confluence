@@ -601,11 +601,11 @@ public class ConfluenceLivingDoc {
     }
 
     public String getHeader() {
-        return "/templates/livingdoc/confluence/themes/livingdoc-header.vm";
+        return "/doctheme/decorators/livingdoc-header.vm";
     }
 
     public String getBody() {
-        return "templates/livingdoc/confluence/themes/livingdoc-body.vm";
+        return "/doctheme/decorators/livingdoc-body.vm";
     }
 
     public boolean isInSutList(SystemUnderTest sut, Collection<SystemUnderTest> sutList) {
