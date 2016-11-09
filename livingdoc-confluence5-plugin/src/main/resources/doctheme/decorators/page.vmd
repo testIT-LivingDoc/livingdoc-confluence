@@ -113,15 +113,15 @@
 	            <input type="hidden" title="browsePageTreeMode" value="view">
         </fieldset>
 
-        ##<div class="wiki-content">
+        ##<div id="main-content" class="wiki-content">
         ##   $body
         ##</div>
         
         ## LIVINGDOC
 		<table cellspacing="0" width="100%">
-	  		#parse("/templates/livingdoc/confluence/themes/doctheme/decorators/livingdoc-header.vm")
+	  		#parse("/doctheme/decorators/livingdoc-header.vm")
 		</table>
-		#parse("/templates/livingdoc/confluence/themes/doctheme/decorators/livingdoc-body.vm") 
+		#parse("/doctheme/decorators/livingdoc-body.vm") 
 
         #trackbackRdf ($trackbackUtils.getContentIdentifier($page) $page.title $trackbackUtils.getPingUrl($page))
 
