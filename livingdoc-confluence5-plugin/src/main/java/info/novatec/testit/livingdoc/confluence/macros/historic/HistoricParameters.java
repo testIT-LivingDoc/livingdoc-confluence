@@ -55,15 +55,15 @@ public class HistoricParameters {
     public static final int DEFAULT_POPUP_HEIGHT = 600;
 
     public enum Children {
-        False, First, All;
+        None, First, All;
 
         public static Children toChildren(String id) {
-            if (id.equalsIgnoreCase("first")) {
+            if (id.equalsIgnoreCase("First")) {
                 return First;
-            } else if (id.equalsIgnoreCase("all")) {
+            } else if (id.equalsIgnoreCase("All")) {
                 return All;
             } else {
-                return False;
+                return None;
             }
         }
     }
@@ -97,7 +97,7 @@ public class HistoricParameters {
         height = getParameters(parameters, HEIGHT, DEFAULT_HEIGHT);
         border = getParameters(parameters, BORDER, false);
 
-        children = getParameters(parameters, CHILDREN, Children.False);
+        children = getParameters(parameters, CHILDREN, Children.None);
 
         maxResult = getParameters(parameters, MAXRESULT, DEFAULT_MAXRESULT);
         targetedSystemUnderTest = getSutParameter(parameters, SUT, page);
@@ -142,7 +142,7 @@ public class HistoricParameters {
     }
 
     public boolean isNoChildren() {
-        return Children.False == children;
+        return Children.None == children;
     }
 
     public boolean isAllChildren() {

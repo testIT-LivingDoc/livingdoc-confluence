@@ -5,6 +5,6 @@
     </td>
     <td>
         <p>$livingDoc.getText('livingdoc.include.helpdesc')</p>
-		<p>$livingDoc.getText('livingdoc.macros.seealso')&nbsp;<a href="http://www.greenpeppersoftware.com/confluence/display/GP/Confluence+Macros">$livingDoc.getText('livingdoc.macros.guide')</a></p>
+		<p>$livingDoc.getText('livingdoc.macros.seealso')&nbsp;<a href="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-IncludeMacro">$livingDoc.getText('livingdoc.macros.guide')</a></p>
     </td>
 </tr>
