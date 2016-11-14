@@ -487,7 +487,11 @@
 			<parameter name="height" type="string" default="500" />
 			<parameter name="border" type="boolean" />
 			<parameter name="showignored" type="boolean" />
-			<parameter name="children" type="boolean" />
+			<parameter name="children" type="enum" >
+				<value name="None" />
+				<value name="First" />
+				<value name="All" />
+			</parameter>
 			<parameter name="labels" type="string" />
 		</parameters>
 	</xhtml-macro>
