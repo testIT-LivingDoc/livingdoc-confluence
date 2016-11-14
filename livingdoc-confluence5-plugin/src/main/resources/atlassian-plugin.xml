@@ -399,7 +399,7 @@
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInclude'
 		key='livingdoc-include-xhtml'
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Include+Macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-IncludeMacro">
 		<category name="development" />
 		<parameters>
 			<parameter name="pageTitle" type="string" required="true">
@@ -415,7 +415,7 @@
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocChildren'
 		key='livingdoc-children-xhtml'
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Children+Macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-ChildrenMacro">
 		<category name="development" />
 		<parameters>
 			<parameter name="all" type="boolean" />
@@ -438,7 +438,7 @@
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo'
 		key='livingdoc-info-xhtml'
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Info+macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-InfoMacro">
 		<category name="development" />
 		<parameters>
 			<parameter name="title" type="string">
@@ -453,7 +453,7 @@
 		class="info.novatec.testit.livingdoc.confluence.macros.LivingDocImport"
 		key="livingdoc-import-xhtml"
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Import+macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-ImportMacro">
 		<category name="development" />
 		<param name="help-section" value="external" />
 		<description />
@@ -473,7 +473,7 @@
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocHistoric'
 		key='livingdoc-historic-xhtml'
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Historic+Macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-HistoricMacro">
 		<category name="development" />
 		<parameters>
 			<parameter name="pageTitle" type="string">
@@ -499,7 +499,7 @@
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLabels'
 		key='livingdoc-labels-xhtml'
 		icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png"
-		documentation-url="http://www.greenpeppersoftware.com/confluence/display/GP/Labels+macro">
+		documentation-url="https://testit-livingdoc.atlassian.net/wiki/display/CURDOC/Confluence+plugin#Confluenceplugin-LabelssearchMacro">
 		<category name="development" />
 		<parameters>
 			<parameter name="spaceKey" type="spacekey" />

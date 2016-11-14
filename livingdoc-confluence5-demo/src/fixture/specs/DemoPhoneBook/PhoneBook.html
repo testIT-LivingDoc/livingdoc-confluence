@@ -3108,20 +3108,20 @@ div.calendar { position: relative; }
 		<div class="panel" style="background-color: #FFFFCE;border-color: #ccc;border-style: solid;border-width: 1px;"><div class="panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #ccc;background-color: #8CC06D;"><b>Phone Book Example</b></div><div class="panelContent" style="background-color: #FFFFCE;">
 <p>This main purpose of this example is to show you :</p>
 <ul>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GPO/Using+a+custom+SystemUnderDevelopment" rel="nofollow">How to use a custom system under development</a></li>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GREENPEPPER/Type+conversion+%28JAVA%29" rel="nofollow">How Type Conversion work</a></li>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GPO/Writing+an+executable+specification+with+the+Set+up" rel="nofollow">How to initialize a list of data using the 'Setup' Interpreter</a></li>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GREENPEPPER/Value+Comparison" rel="nofollow">How to compare null value using the 'nothing' keyword</a></li>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GPO/Writing+an+executable+specification+with+the+Do+With" rel="nofollow">How to use the 'Do With' Interpreter</a></li>
-	<li><a href="http://www.greenpeppersoftware.com/confluence/display/GPEXAMPLES/Collection+of+values+sample" rel="nofollow">How to use the 'Subset Of' Interpreter</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/DgIi" rel="nofollow">How to use a custom system under development</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/DgIi" rel="nofollow">How Type Conversion work</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/EgIi" rel="nofollow">How to initialize a list of data using the 'Setup' Interpreter</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/FAIi" rel="nofollow">How to compare null value using the 'nothing' keyword</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/EgIi" rel="nofollow">How to use the 'Do With' Interpreter</a></li>
+	<li><a href="https://testit-livingdoc.atlassian.net/wiki/x/EgIi" rel="nofollow">How to use the 'Subset Of' Interpreter</a></li>
 </ul>
 </div></div>
 
 <p>The <span class="error">[PhoneBookSystemUnderDevelopment]</span> is a <tt>Fixture Factory</tt> that take care of :</p>
 <ul>
-	<li><span>Importing the </span><tt>info.novatec.testit.livingdoc.confluence.demo.phonebook</tt><span> Java package.  This way, no need to use the </span><a href="http://www.greenpeppersoftware.com/confluence/display/GPO/Import" rel="nofollow">Import Table</a><span> or the </span><a href="http://www.greenpeppersoftware.com/confluence/display/GP/Import+Macro" rel="nofollow">Import Macro</a><span> on every specification</span></li>
+	<li><span>Importing the </span><tt>info.novatec.testit.livingdoc.confluence.demo.phonebook</tt><span> Java package.  This way, no need to use the </span><a href="https://testit-livingdoc.atlassian.net/wiki/x/EgIi" rel="nofollow">Import Table</a><span> or the </span><a href="https://testit-livingdoc.atlassian.net/wiki/x/EgIi" rel="nofollow">Import Macro</a><span> on every specification</span></li>
 	<li><span>Registering the custom converter </span><span class="error">[PhoneBookEntryTypeConverter]</span><span>. This way, no need to modify our domain object with the 'Self Conversion' methods </span><tt>parse</tt><span> or </span><tt>toString</tt><span>.</span></li>
-	<li><span>Manage our instance of the </span><span class="error">[PhoneBookFixture]</span><span> to make sure the instance of </span><span class="error">[PhoneBook]</span><span> is the same for all interpreters.  This is really optional but provide a way to use the same instance (singleton) of the </span><span class="error">[PhoneBook]</span><span> that contains a list of contact.  A better approach would be to use </span><a href="http://www.greenpeppersoftware.com/svn/trunk/java/extensions/src/main/java/com/greenpepper/systemunderdevelopment/SpringSystemUnderDevelopment.java" rel="nofollow">Spring</a><span> or </span><a href="http://www.greenpeppersoftware.com/svn/trunk/java/extensions/src/main/java/com/greenpepper/systemunderdevelopment/GuiceSystemUnderDevelopment.java" rel="nofollow">Guice</a><span>.</span></li>
+	<li><span>Manage our instance of the </span><span class="error">[PhoneBookFixture]</span><span> to make sure the instance of </span><span class="error">[PhoneBook]</span><span> is the same for all interpreters.  This is really optional but provide a way to use the same instance (singleton) of the </span><span class="error">[PhoneBook]</span><span> that contains a list of contact.  A better approach would be to use </span>Spring<span> or </span>Guice<span>.</span></li>
 </ul>
 
 </div>
