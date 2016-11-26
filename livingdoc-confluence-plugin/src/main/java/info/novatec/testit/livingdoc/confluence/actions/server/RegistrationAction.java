@@ -21,7 +21,7 @@ import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 
 
 /**
- * Action for the <code>testIT - LivingDoc Server Properties</code>.
+ * Action for the <code>LivingDoc Server Properties</code>.
  * <p></p>
  * Copyright (c) 2006 Pyxis technologies inc. All Rights Reserved.
  */

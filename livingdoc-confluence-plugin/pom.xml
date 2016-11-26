@@ -10,13 +10,13 @@
 	</parent>
 
 	<artifactId>livingdoc-confluence-plugin</artifactId>
-	<name>testIT LivingDoc - Confluence Plugin</name>
+	<name>LivingDoc - Confluence Plugin</name>
 	<packaging>atlassian-plugin</packaging>
 
 	<properties>
 		<project.root>..</project.root>
 		<project.plugin.key>info.novatec.testit.livingdoc.confluence.plugin</project.plugin.key>
-		<project.plugin.name>testIT - LivingDoc Plugin</project.plugin.name>
+		<project.plugin.name>LivingDoc Plugin</project.plugin.name>
 		<plugin.testrunner.version>1.3-SNAPSHOT</plugin.testrunner.version>
 		<licenses.mapping>./licensing/license-mappings.xml</licenses.mapping>
 		<licenses.template>./licensing/NOTICE.template</licenses.template>
