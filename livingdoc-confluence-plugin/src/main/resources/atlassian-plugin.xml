@@ -129,7 +129,7 @@
 		<context>theme.doc</context>
 	</web-resource>
 	<colour-scheme key="livingdoc-colours"
-		name="testIT - LivingDoc Documentation Theme Colour Scheme" class="com.atlassian.confluence.themes.BaseColourScheme">
+		name="LivingDoc Documentation Theme Colour Scheme" class="com.atlassian.confluence.themes.BaseColourScheme">
 		<colour key="property.style.topbarcolour" value="#205081" />
 		<colour key="property.style.breadcrumbstextcolour" value="#ffffff" />
 		<colour key="property.style.spacenamecolour" value="#999999" />
@@ -170,7 +170,7 @@
 		context-key="docThemeHelper" />
 		
 	<velocity-context-item key="livingdoc.velocity"
-		name="testIT - LivingDoc velocity" context-key="livingDoc"
+		name="LivingDoc velocity" context-key="livingDoc"
 		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
 
 	
@@ -237,7 +237,7 @@
 		<context>atl.general</context>
 		<context>atl.admin</context>
 	</web-resource>
-	<web-resource name="testIT - LivingDoc JS Resources" key="livingdoc-javascript-resources">
+	<web-resource name="LivingDoc JS Resources" key="livingdoc-javascript-resources">
 		<resource name="inheritance.js" type="download"
 			location="includes/js/lib/inheritance.js" />
 		<resource name="livingdoc-util.js" type="download"
@@ -270,7 +270,7 @@
 
 
 
-	<web-item key="livingdoc.configuration" name="testIT - LivingDoc Configuration"
+	<web-item key="livingdoc.configuration" name="LivingDoc Configuration"
 		section="system.space.admin/livingdoc.section" weight="3">
 		<label key="Space Registration" />
 		<link>/livingdoc/LivingDocServer.action?key=$helper.spaceKey</link>
@@ -286,7 +286,7 @@
 
 	<!-- Item in Space Admin (for Doc Theme) -->
 	<web-item key="space-admin-livingdoc-config-2"
-		name="testIT - LivingDoc Configuration in Space Admin" section="system.space.admin/addons"
+		name="LivingDoc Configuration in Space Admin" section="system.space.admin/addons"
 		weight="100">
 		<label key="LivingDoc" />
 		<link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)
@@ -303,7 +303,7 @@
 	</web-item>
 	<!-- Item in Space Tools -->
 	<web-item key="space-admin-livingdoc-config"
-		name="testIT - LivingDoc Configuration in Space Admin" section="system.space.tools/addons"
+		name="LivingDoc Configuration in Space Admin" section="system.space.tools/addons"
 		weight="100">
 		<label key="LivingDoc" />
 		<link linkId="space-admin-livingdoc-config-id">/livingdoc/LivingDocSpaceAdmin.action?key=$generalUtil.urlEncode($helper.spaceKey)
@@ -533,7 +533,7 @@
 		class="info.novatec.testit.livingdoc.confluence.macros.migrator.LivingDocChildrenMigrator"/> -->
 	<!-- LIVINGDOC CORE -->
 	
-	<xwork key="livingdoc.webactions" name="testIT - LivingDoc Web Actions">
+	<xwork key="livingdoc.webactions" name="LivingDoc Web Actions">
 		<package name="LivingDocInstall" extends="default"
 			namespace="/admin/plugins/livingdoc">
 			<default-interceptor-ref name="defaultStack" />
@@ -828,14 +828,14 @@
 		</package>
 	</xwork>
 	
-	<component key="livingdoc.listener" name="testIT - LivingDoc Listener"
+	<component key="livingdoc.listener" name="LivingDoc Listener"
 		class="info.novatec.testit.livingdoc.confluence.listeners.LivingDocPageListener" />
 
 	<!-- LivingDoc Confluence PlugIn as GPS -->
 	<component key="livingDocServerConfigurationActivator"
-		name="testIT - LivingDoc Server Configuration Activator"
+		name="LivingDoc Server Configuration Activator"
 		class="info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator">
-		<description>The testIT - LivingDoc Server Configuration Activator.
+		<description>The LivingDoc Server Configuration Activator.
 		</description>
 	</component>
 
@@ -845,13 +845,13 @@
 		</interface>
 	</component>
 
-	<component key="livingDocServerService" name="testIT - LivingDoc Server Service"
+	<component key="livingDocServerService" name="LivingDoc Server Service"
 		class="info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl" />
-	<component key="livingDocXmlRpcServer" name="testIT - LivingDoc XML-RPC Server"
+	<component key="livingDocXmlRpcServer" name="LivingDoc XML-RPC Server"
 		class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer" />
 
 	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService"
-		name="testIT - LivingDoc XML-RPC Service Delegator"
+		name="LivingDoc XML-RPC Service Delegator"
 		class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
 		<description />
 		<service-path>livingdoc1</service-path>

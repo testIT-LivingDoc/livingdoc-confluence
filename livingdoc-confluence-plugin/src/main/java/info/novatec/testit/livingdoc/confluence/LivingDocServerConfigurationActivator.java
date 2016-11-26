@@ -61,7 +61,7 @@ import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 
 
 /**
- * This component is responsible to bootstrap the testIT - LivingDoc database
+ * This component is responsible to bootstrap the LivingDoc database
  * and manage it's state and configuration data.
  * 
  * Note: The {@link BandanaManager} has some problems storing classes
@@ -157,7 +157,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
             isDatabaseInitialized = true;
         } catch (Exception ex) {
-            log.error("Failed to initialize testIT - LivingDoc database.", ex);
+            log.error("Failed to initialize LivingDoc database.", ex);
             throw new LivingDocServerException(LivingDocServerErrorKey.GENERAL_ERROR, ex);
         }
     }

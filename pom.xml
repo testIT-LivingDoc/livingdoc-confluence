@@ -14,7 +14,7 @@
 	<artifactId>livingdoc-confluence</artifactId>
 	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>testIT LivingDoc - Confluence</name>
+	<name>LivingDoc - Confluence</name>
 	<description>The Open Source Solution for your Living Documentation in Atlassian Confluence.
 	Make your Feature Specification in Confluence executable by integrating automated  Acceptance Tests.</description>
 	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
