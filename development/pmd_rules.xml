@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ruleset
-	name="testIT ruleset"
+	name="LivingDoc ruleset"
 	xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
-	<description>testIT WebTester PMD rules</description>
+	<description>LivingDoc PMD rules</description>
 
 	<exclude-pattern>.*/test-output/.*</exclude-pattern>
 
