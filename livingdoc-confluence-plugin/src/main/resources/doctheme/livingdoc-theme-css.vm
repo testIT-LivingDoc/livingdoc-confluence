@@ -1,0 +1,12 @@
+body {
+	font-family:Helvetica,Arial,sans-serif;
+}
+#user-control-panel {
+	display: none;
+}
+
+#sidebar {
+	clear: right;
+	float: right;
+	width: 20em;
+}

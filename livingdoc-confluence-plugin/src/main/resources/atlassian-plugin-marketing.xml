@@ -1,0 +1,22 @@
+<atlassian-plugin-marketing>
+
+	<!--Describe names and versions of compatible applications -->
+	<compatibility>
+		<product name="confluence" min="5.10" max="6.1"/>
+	</compatibility>
+
+	<!-- Describe your add-on logo and banner. The banner is only displayed 
+		in the UPM. -->
+	<logo image="includes/images/logo.png" />
+	<banner image="includes/images/testit_logo.png" />
+
+	<!-- Describe highlight and cropped highlight image assets, in order. -->
+	<highlights>
+		<highlight image="includes/images/livingdoc_macro_dowith.png" cropped="includes/images/livingdoc_macro_dowith_cropped.png" />
+		<highlight image="includes/images/livingdoc_macro_scenario.png" cropped="includes/images/livingdoc_macro_scenario_cropped.png" />
+		<highlight image="includes/images/livingdoc_macro_listof.png" cropped="includes/images/livingdoc_macro_listof_cropped.png" />
+		<highlight image="includes/images/livingdoc_macro_rulefor.png" cropped="includes/images/livingdoc_macro_rulefor_cropped.png" />
+	</highlights>
+
+
+</atlassian-plugin-marketing>

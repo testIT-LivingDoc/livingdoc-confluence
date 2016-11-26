@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.novatec.testit</groupId>
+		<artifactId>livingdoc-confluence</artifactId>
+		<version>1.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>livingdoc-confluence-plugin</artifactId>
+	<name>LivingDoc - Confluence Plugin</name>
+	<packaging>atlassian-plugin</packaging>
+
+	<properties>
+		<project.root>..</project.root>
+		<project.plugin.key>info.novatec.testit.livingdoc.confluence.plugin</project.plugin.key>
+		<project.plugin.name>LivingDoc Plugin</project.plugin.name>
+		<plugin.testrunner.version>1.3-SNAPSHOT</plugin.testrunner.version>
+		<licenses.mapping>./licensing/license-mappings.xml</licenses.mapping>
+		<licenses.template>./licensing/NOTICE.template</licenses.template>
+	</properties>
+
+	<!-- Please read the following guides before making changes: -->
+	<!-- https://developer.atlassian.com/display/DOCS/Managing+Dependencies -->
+	<!-- https://developer.atlassian.com/display/DOCS/Bundling+extra+dependencies+in+an+OBR -->
+	<!-- Exclusions are necessary because Confluence provides already some classes -->
+
+	<dependencies>
+		<!-- Bundle dependencies -->
+		<dependency>
+			<groupId>info.novatec.testit</groupId>
+			<artifactId>livingdoc-cli</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xmlrpc-client</artifactId>
+					<groupId>org.apache.xmlrpc</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xmlrpc</artifactId>
+					<groupId>xmlrpc</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>info.novatec.testit</groupId>
+			<artifactId>livingdoc-confluence-demo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>info.novatec.testit</groupId>
+			<artifactId>livingdoc-confluence-demo</artifactId>
+			<version>${project.version}</version>
+			<classifier>fixtures</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.1.0.Final</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>5.1.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.common</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>5.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml</groupId>
+			<artifactId>classmate</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.20.0-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.19</version>
+		</dependency>
+		<!-- OSGI utilities -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>9.2.19.v20160908</version>
+		</dependency>
+		<!-- Provided libraries -->
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.192</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.4</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>.org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.13</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>javax.transaction-api</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.interceptor</groupId>
+			<artifactId>javax.interceptor-api</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.antlr</artifactId>
+			<version>2.7.7_5</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.eclipse.persistence</groupId> -->
+		<!-- <artifactId>javax.persistence</artifactId> -->
+		<!-- <version>2.1.0</version> -->
+		<!-- </dependency> -->
+
+		<!-- Confluence dependencies -->
+		<dependency>
+			<groupId>com.atlassian.confluence</groupId>
+			<artifactId>confluence</artifactId>
+			<version>${confluence.version}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.3</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*.xml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<!-- include all generated license information -->
+				<directory>${project.build.directory}/generated-sources/license</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>maven-confluence-plugin</artifactId>
+				<version>${amps.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<enableFastdev>false</enableFastdev>
+					<allowGoogleTracking>false</allowGoogleTracking>
+					<productVersion>${confluence.version}</productVersion>
+					<productDataVersion>${confluence.data.version}</productDataVersion>
+					<instructions>
+						<Import-Package>
+							javax.transaction.xa;resolution:=optional,
+							javax.el;resolution:=optional,
+							javax.interceptor;resolution:=optional,
+							com.opensymphony.module.sitemesh;resolution:=optional,
+							org.springframework.beans.factory;resolution:=optional,
+							com.atlassian.confluence.event.events.content.page;resolution:=optional,
+							org.slf4j;resolution:=optional,
+							com.google.gson;resolution:=optional,
+							com.atlassian.confluence.event.events.plugin;resolution:=optional,
+							com.atlassian.confluence.event.events.space;resolution:=optional,
+							org.osgi.framework;resolution:=optional,
+							com.atlassian.confluence.macro;resolution:=optional,
+							com.atlassian.renderer.v2.macro;resolution:=optional,
+							com.atlassian.confluence.renderer;resolution:=optional,
+							com.atlassian.confluence.content.render.xhtml.definition;resolution:=optional,
+							com.atlassian.confluence.spaces.actions;resolution:=optional,
+							com.atlassian.renderer.v2
+						</Import-Package>
+						<Require-Bundle><!-- Bundle symbolic name -->
+							org.apache.felix.framework;bundle-version="[4.2.0,4.2.9]",
+							org.apache.servicemix.bundles.spring-beans;bundle-version="[4.2.0,4.2.9]"
+						</Require-Bundle>
+
+					</instructions>
+					<pluginDependencies><!-- this section declares the following as dependent 
+							bundles to be incorporated into the OBR -->
+						<pluginDependency>
+							<groupId>com.google.code.gson</groupId>
+							<artifactId>gson</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>com.h2database</groupId>
+							<artifactId>h2</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>javax.servlet</groupId>
+							<artifactId>servlet-api</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>c3p0</groupId>
+							<artifactId>c3p0</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>org.hsqldb</groupId>
+							<artifactId>hsqldb</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>org.jfree</groupId>
+							<artifactId>jfreechart</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>.org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+						</pluginDependency>
+
+						<pluginDependency>
+							<groupId>javax.transaction</groupId>
+							<artifactId>javax.transaction-api</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>javax.enterprise</groupId>
+							<artifactId>cdi-api</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>javax.el</groupId>
+							<artifactId>javax.el-api</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>javax.interceptor</groupId>
+							<artifactId>javax.interceptor-api</artifactId>
+						</pluginDependency>
+						<pluginDependency>
+							<groupId>org.apache.servicemix.bundles</groupId>
+							<artifactId>org.apache.servicemix.bundles.antlr</artifactId>
+						</pluginDependency>
+
+					</pluginDependencies>
+					<bundledArtifacts><!-- this section is for atlas-XXX commands -->
+						<bundledArtifact>
+							<groupId>com.google.code.gson</groupId>
+							<artifactId>gson</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>com.h2database</groupId>
+							<artifactId>h2</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>javax.servlet</groupId>
+							<artifactId>servlet-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>c3p0</groupId>
+							<artifactId>c3p0</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>org.hsqldb</groupId>
+							<artifactId>hsqldb</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>org.jfree</groupId>
+							<artifactId>jfreechart</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>.org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>javax.transaction</groupId>
+							<artifactId>javax.transaction-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>javax.enterprise</groupId>
+							<artifactId>cdi-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>javax.el</groupId>
+							<artifactId>javax.el-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>javax.interceptor</groupId>
+							<artifactId>javax.interceptor-api</artifactId>
+						</bundledArtifact>
+						<bundledArtifact>
+							<groupId>org.apache.servicemix.bundles</groupId>
+							<artifactId>org.apache.servicemix.bundles.antlr</artifactId>
+						</bundledArtifact>
+					</bundledArtifacts>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.atlassian.lesscss</groupId>
+				<artifactId>lesscss-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>maven-notice-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Generate NOTICE file to be bundled with the .jar files. -->
+						<id>generate-bundled-notice-file</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<noticeTemplate>${licenses.template}</noticeTemplate>
+							<licenseMapping>
+								<param>${licenses.mapping}</param>
+							</licenseMapping>
+							<outputDir>${project.build.directory}/generated-sources/license</outputDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

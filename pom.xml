@@ -8,12 +8,13 @@
 	<parent>
 		<groupId>info.novatec.testit</groupId>
 		<artifactId>livingdoc-plugin</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>1.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>livingdoc-confluence</artifactId>
+	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>testIT LivingDoc - Confluence</name>
+	<name>LivingDoc - Confluence</name>
 	<description>The Open Source Solution for your Living Documentation in Atlassian Confluence.
 	Make your Feature Specification in Confluence executable by integrating automated  Acceptance Tests.</description>
 	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
@@ -35,13 +36,13 @@
 		<confluence.version>5.10.7</confluence.version>
 		<confluence.data.version>5.10.7</confluence.data.version>
 		<amps.version>6.2.6</amps.version>
-		<testit.livingdoc.core.version>1.2.0</testit.livingdoc.core.version>
+		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
 
 	<!-- - LivingDoc modules -->
 	<modules>
-		<module>livingdoc-confluence5-demo</module>
-		<module>livingdoc-confluence5-plugin</module>
+		<module>livingdoc-confluence-demo</module>
+		<module>livingdoc-confluence-plugin</module>
 	</modules>
 
 	<dependencyManagement>

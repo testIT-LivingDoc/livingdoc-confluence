@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.novatec.testit</groupId>
+		<artifactId>livingdoc-confluence</artifactId>
+		<version>1.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>livingdoc-confluence-demo</artifactId>
+	<name>LivingDoc - Confluence Demo</name>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.root>..</project.root>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>info.novatec.testit</groupId>
+			<artifactId>livingdoc-cli</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20151123</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>info.novatec.testit</groupId>
+				<artifactId>livingdoc-maven</artifactId>
+				<configuration>
+					<source>${project.java.version}</source>
+					<target>${project.java.version}</target>
+					<fixtureSourceDirectory>src/fixture/java</fixtureSourceDirectory>
+					<fixtureOutputDirectory>target/fixture-test-classes</fixtureOutputDirectory>
+					<systemUnderDevelopment>info.novatec.testit.livingdoc.confluence.demo.DemoSystemUnderDevelopment</systemUnderDevelopment>
+					<reportsType>xml</reportsType>
+					<resources>
+						<resource>
+							<directory>src/fixture/resources</directory>
+							<excludes>
+								<exclude>**/*.java</exclude>
+							</excludes>
+						</resource>
+					</resources>
+					<repositories>
+						<repository>
+							<name>Demo</name>
+							<type>info.novatec.testit.livingdoc.repository.FileSystemRepository</type>
+							<root>${basedir}/src/fixture/specs</root>
+							<suites>
+								<suite>Demo</suite>
+							</suites>
+						</repository>
+						<repository>
+							<name>DemoPhoneBook</name>
+							<type>info.novatec.testit.livingdoc.repository.FileSystemRepository</type>
+							<root>${basedir}/src/fixture/specs</root>
+							<suites>
+								<suite>DemoPhoneBook</suite>
+							</suites>
+						</repository>
+					</repositories>
+				</configuration>
+				<executions>
+					<execution>
+						<id>livingdoc</id>
+						<goals>
+							<goal>compile</goal>
+							<goal>resources</goal>
+							<goal>fixture-jar</goal>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
