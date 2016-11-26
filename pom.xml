@@ -41,8 +41,8 @@
 
 	<!-- - LivingDoc modules -->
 	<modules>
-		<module>livingdoc-confluence5-demo</module>
-		<module>livingdoc-confluence5-plugin</module>
+		<module>livingdoc-confluence-demo</module>
+		<module>livingdoc-confluence-plugin</module>
 	</modules>
 
 	<dependencyManagement>
