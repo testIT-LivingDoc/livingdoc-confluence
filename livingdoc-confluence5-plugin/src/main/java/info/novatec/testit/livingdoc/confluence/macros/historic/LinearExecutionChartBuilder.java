@@ -21,6 +21,8 @@ package info.novatec.testit.livingdoc.confluence.macros.historic;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +51,7 @@ import info.novatec.testit.livingdoc.server.domain.Execution;
 public class LinearExecutionChartBuilder extends AbstractChartBuilder {
 
     private final List<Execution> executions;
-
+    private DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM HH:mm");
     private LinearExecutionChartBuilder(HistoricParameters settings, List<Execution> executions) {
         super(settings);
 
@@ -76,7 +78,6 @@ public class LinearExecutionChartBuilder extends AbstractChartBuilder {
     }
 
     private CategoryDataset generateDataset() {
-        final DateFormatter dateFormatter = ldUtil.getUserPreferencesDateFormatter();
 
         final String successLabel = ldUtil.getText("livingdoc.historic.success");
         final String failuresLabel = ldUtil.getText("livingdoc.historic.failures");
@@ -88,7 +89,7 @@ public class LinearExecutionChartBuilder extends AbstractChartBuilder {
         for (Execution exec : executions) {
             // Need to prefix with the count since we can have execution at the
             // same time (formatDateTime is removing seconds!)
-            String category = String.format("%2d. %s", count, dateFormatter.formatDateTime(exec.getExecutionDate()));
+            String category = DATE_FORMAT.format(exec.getExecutionDate());
 
             if ( ! StringUtils.isEmpty(exec.getSections())) {
                 category += "*";
