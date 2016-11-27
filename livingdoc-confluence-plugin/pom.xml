@@ -9,7 +9,7 @@
 		<version>1.3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>livingdoc-confluence5-plugin</artifactId>
+	<artifactId>livingdoc-confluence-plugin</artifactId>
 	<name>testIT LivingDoc - Confluence Plugin</name>
 	<packaging>atlassian-plugin</packaging>
 
@@ -53,12 +53,12 @@
 		</dependency>
 		<dependency>
 			<groupId>info.novatec.testit</groupId>
-			<artifactId>livingdoc-confluence5-demo</artifactId>
+			<artifactId>livingdoc-confluence-demo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>info.novatec.testit</groupId>
-			<artifactId>livingdoc-confluence5-demo</artifactId>
+			<artifactId>livingdoc-confluence-demo</artifactId>
 			<version>${project.version}</version>
 			<classifier>fixtures</classifier>
 		</dependency>

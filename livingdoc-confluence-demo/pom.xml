@@ -11,7 +11,7 @@
 		<version>1.3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>livingdoc-confluence5-demo</artifactId>
+	<artifactId>livingdoc-confluence-demo</artifactId>
 	<name>testIT LivingDoc - Confluence Demo</name>
 	<packaging>jar</packaging>
 
