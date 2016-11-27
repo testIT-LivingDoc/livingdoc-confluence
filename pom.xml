@@ -17,7 +17,7 @@
 	<description>The Open Source Solution for your Living Documentation in Atlassian Confluence.
 	Make your Feature Specification in Confluence executable by integrating automated  Acceptance Tests.</description>
 	<url>https://github.com/testIT-LivingDoc/livingdoc-confluence</url>
-	
+
 	<organization>
 		<name>NovaTec Solutions</name>
 		<url>http://www.novatec-gmbh.de</url>
@@ -32,8 +32,8 @@
 	<properties>
 		<project.java.version>1.8</project.java.version>
 		<project.root>.</project.root>
-		<confluence.version>5.10.7</confluence.version>
-		<confluence.data.version>5.10.7</confluence.data.version>
+		<confluence.version>5.10.8</confluence.version>
+		<confluence.data.version>5.10.8</confluence.data.version>
 		<amps.version>6.2.6</amps.version>
 		<testit.livingdoc.core.version>1.2.0</testit.livingdoc.core.version>
 	</properties>
