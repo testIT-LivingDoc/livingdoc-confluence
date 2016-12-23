@@ -37,6 +37,7 @@ testIT LivingDoc is licensed under [GNU General Public License, Version 3.0](htt
 - Jaspreet Kaur
 - Johannes Schlaudraff
 - Luca Haensch
+- Matthias Mueller
 - Moritz Platzer
 - Moritz Staebler
 - Pascal Moll
@@ -44,7 +45,6 @@ testIT LivingDoc is licensed under [GNU General Public License, Version 3.0](htt
 - Sebastian Letzel
 - Stefan Ludwig
 - Valentin Schraub
-- Matthias Müller
 
 ### Sponsoring
 testIT LivingDoc is mainly developed by [NovaTec Consulting GmbH](http://www.novatec-gmbh.de/), a German consultancy firm that drives quality in software development projects.
