@@ -18,6 +18,8 @@
  */
 package info.novatec.testit.livingdoc.confluence.demo.phonebook;
 
+import info.novatec.testit.livingdoc.reflect.annotation.Alias;
+
 public class PhoneBookEntry {
 
     private String firstName;
@@ -34,6 +36,7 @@ public class PhoneBookEntry {
         return firstName;
     }
 
+    @Alias({"Vorname", "name"})
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -41,7 +44,8 @@ public class PhoneBookEntry {
     public String getLastName() {
         return lastName;
     }
-
+    	
+    @Alias({"Nachname", "family name"})
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -50,6 +54,7 @@ public class PhoneBookEntry {
         return number;
     }
 
+    @Alias({"Telefonnummer", "phone number", "telephone"})
     public void setNumber(String number) {
         this.number = number;
     }
