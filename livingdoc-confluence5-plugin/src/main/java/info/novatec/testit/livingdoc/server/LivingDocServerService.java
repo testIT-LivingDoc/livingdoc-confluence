@@ -17,6 +17,7 @@
 package info.novatec.testit.livingdoc.server;
 
 import java.util.List;
+import java.util.Vector;
 
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
@@ -65,7 +66,7 @@ public interface LivingDocServerService {
     void updateRunner(String oldRunnerName, Runner runner) throws LivingDocServerException;
 
     /**
-     * Creates a new Runner.
+     * Removes an existing Runner.
      *
      * @param name The name of the runner to remove
      */

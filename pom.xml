@@ -26,7 +26,7 @@
 		<confluence.version>5.10.8</confluence.version>
 		<confluence.data.version>5.10.8</confluence.data.version>
 		<amps.version>6.2.6</amps.version>
-		<testit.livingdoc.core.version>1.2.0</testit.livingdoc.core.version>
+		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
     <organization>
         <name>NovaTec Solutions</name>
@@ -38,15 +38,6 @@
         <developerConnection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</developerConnection>
         <url>git@github.com:testIT-LivingDoc/livingdoc-confluence.git</url>
     </scm>
-
-    <properties>
-        <project.java.version>1.8</project.java.version>
-        <project.root>.</project.root>
-        <confluence.version>5.10.7</confluence.version>
-        <confluence.data.version>5.10.7</confluence.data.version>
-        <amps.version>6.2.6</amps.version>
-        <testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
-    </properties>
 
     <!-- - LivingDoc modules -->
     <modules>
