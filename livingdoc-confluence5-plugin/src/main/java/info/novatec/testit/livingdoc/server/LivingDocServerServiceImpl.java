@@ -16,31 +16,10 @@
  * http://www.fsf.org. */
 package info.novatec.testit.livingdoc.server;
 
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.repository.DocumentRepository;
 import info.novatec.testit.livingdoc.server.database.SessionService;
-import info.novatec.testit.livingdoc.server.domain.DocumentNode;
-import info.novatec.testit.livingdoc.server.domain.Execution;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Reference;
-import info.novatec.testit.livingdoc.server.domain.ReferenceNode;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.Requirement;
-import info.novatec.testit.livingdoc.server.domain.RequirementSummary;
-import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.domain.Specification;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
+import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import info.novatec.testit.livingdoc.server.domain.dao.DocumentDao;
 import info.novatec.testit.livingdoc.server.domain.dao.ProjectDao;
@@ -48,13 +27,21 @@ import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
 import info.novatec.testit.livingdoc.server.domain.dao.SystemUnderTestDao;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
 import info.novatec.testit.livingdoc.server.transfer.SpecificationLocation;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
 
 
 public class LivingDocServerServiceImpl implements LivingDocServerService {
 
-    private static final Logger log = LoggerFactory.getLogger(LivingDocServerServiceImpl.class);
     public static final String NUMBER = " number: ";
-
+    private static final Logger log = LoggerFactory.getLogger(LivingDocServerServiceImpl.class);
     private SessionService sessionService;
     private ProjectDao projectDao;
     private RepositoryDao repositoryDao;
@@ -62,7 +49,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     private DocumentDao documentDao;
 
     public LivingDocServerServiceImpl(SessionService sessionService, ProjectDao projectDao, RepositoryDao repositoryDao,
-        SystemUnderTestDao sutDao, DocumentDao documentDao) {
+                                      SystemUnderTestDao sutDao, DocumentDao documentDao) {
 
         this.sessionService = sessionService;
         this.projectDao = projectDao;
@@ -439,7 +426,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<Repository> getSpecificationRepositoriesOfAssociatedProject(String repositoryUid)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -448,7 +435,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             List<Repository> repositories = repositoryDao.getAllTestRepositories(repository.getProject().getName());
 
             log.debug("Retrieved Test Repositories Of Associated Project of " + repository.getUid() + NUMBER + repositories
-                .size());
+                    .size());
             return repositories;
         } catch (Exception ex) {
             throw handleException(RETRIEVE_SPECIFICATION_REPOS, ex);
@@ -468,7 +455,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             List<Repository> repositories = repositoryDao.getAllTestRepositories(sut.getProject().getName());
 
             log.debug("Retrieved Test Repositories Of Associated Project of " + sut.getName() + NUMBER + repositories
-                .size());
+                    .size());
             return repositories;
         } catch (Exception ex) {
             throw handleException(RETRIEVE_SPECIFICATION_REPOS, ex);
@@ -482,14 +469,14 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<Repository> getSpecificationRepositoriesForSystemUnderTest(SystemUnderTest sut)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
             List<Repository> repositories = repositoryDao.getAllTestRepositories(sut.getProject().getName());
 
             log.debug("Retrieved Test Repositories Of Associated Project of " + sut.getName() + NUMBER + repositories
-                .size());
+                    .size());
             return repositories;
         } catch (Exception ex) {
             throw handleException(RETRIEVE_SPECIFICATION_REPOS, ex);
@@ -503,7 +490,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<Repository> getRequirementRepositoriesOfAssociatedProject(String repositoryUid)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -512,7 +499,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             List<Repository> repositories = repositoryDao.getAllRequirementRepositories(repository.getProject().getName());
 
             log.debug("Retrieved Requirement Repositories Of Associated Project of " + repository.getUid() + NUMBER
-                + repositories.size());
+                    + repositories.size());
             return repositories;
         } catch (Exception ex) {
             throw handleException(RETRIEVE_REQUIREMENT_REPOS, ex);
@@ -526,7 +513,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<SystemUnderTest> getSystemUnderTestsOfAssociatedProject(String repositoryUid)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -570,7 +557,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public void addSpecificationSystemUnderTest(SystemUnderTest sut, Specification specification)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
@@ -594,7 +581,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public void removeSpecificationSystemUnderTest(SystemUnderTest sut, Specification specification)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
@@ -621,7 +608,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         try {
             sessionService.startSession();
 
-            boolean hasReferences = ! documentDao.getAllReferences(specification).isEmpty();
+            boolean hasReferences = !documentDao.getAllReferences(specification).isEmpty();
 
             log.debug("Does Specification " + specification.getName() + "  Has References: " + hasReferences);
             return hasReferences;
@@ -658,7 +645,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<Execution> getSpecificationExecutions(Specification specification, SystemUnderTest sut, int maxResults)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -697,7 +684,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     public boolean doesRequirementHasReferences(Requirement requirement) throws LivingDocServerException {
         try {
             sessionService.startSession();
-            boolean hasReferences = ! documentDao.getAllReferences(requirement).isEmpty();
+            boolean hasReferences = !documentDao.getAllReferences(requirement).isEmpty();
 
             log.debug("Does Requirement " + requirement.getName() + " Document Has References: " + hasReferences);
             return hasReferences;
@@ -721,7 +708,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             List<Reference> references = documentDao.getAllReferences(requirement);
 
             log.debug("Retrieved Requirement " + requirement.getName() + " Document References number: " + references
-                .size());
+                    .size());
             return references;
         } catch (Exception ex) {
             throw handleException(RETRIEVE_REFERENCES, ex);
@@ -823,7 +810,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public void updateSystemUnderTest(String oldSystemUnderTestName, SystemUnderTest sut, Repository repository)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
@@ -912,7 +899,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             sessionService.startSession();
 
             Specification specificationFound = documentDao.getSpecificationByName(specification.getRepository().getUid(),
-                specification.getName());
+                    specification.getName());
 
             if (specificationFound != null) {
                 log.debug("Specification found : " + specificationFound.getName());
@@ -955,14 +942,14 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<Specification> getSpecifications(SystemUnderTest systemUnderTest, Repository repository)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
             List<Specification> specifications = documentDao.getSpecifications(systemUnderTest, repository);
 
             log.debug("Retrieved specifications for sut: " + systemUnderTest.getName() + " and repoUID:" + repository
-                .getUid());
+                    .getUid());
             return specifications;
         } catch (Exception ex) {
             throw handleException(SPECIFICATIONS_NOT_FOUND, ex);
@@ -976,7 +963,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public List<SpecificationLocation> getListOfSpecificationLocations(String repositoryUID, String systemUnderTestName)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -984,9 +971,9 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             List<SpecificationLocation> locations = new ArrayList<SpecificationLocation>();
             SystemUnderTest systemUnderTest = sutDao.getByName(repository.getProject().getName(), systemUnderTestName);
-            if(systemUnderTest == null){
-                log.warn("System under test not found : "+  systemUnderTestName);
-                throw new LivingDocServerException(SUT_NOT_FOUND, "System under test not found : "+  systemUnderTestName);
+            if (systemUnderTest == null) {
+                log.warn("System under test not found : " + systemUnderTestName);
+                throw new LivingDocServerException(SUT_NOT_FOUND, "System under test not found : " + systemUnderTestName);
             }
             List<Specification> specifications = documentDao.getSpecifications(systemUnderTest, repository);
 
@@ -1013,7 +1000,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public DocumentNode getSpecificationHierarchy(Repository repository, SystemUnderTest systemUnderTest)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             Repository repo = repository;
             sessionService.startSession();
@@ -1030,7 +1017,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             log.debug("Retrieved specification Hierarchy: " + repo.getName());
             DocumentNode hierarchy = XmlRpcDataMarshaller.toDocumentNode(new Vector<Object>(docRepo
-                .listDocumentsInHierarchy()));
+                    .listDocumentsInHierarchy()));
             setExecutionEnable(hierarchy, repo.getUid(), systemUnderTestDb);
             return hierarchy;
         } catch (Exception ex) {
@@ -1052,7 +1039,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             loadRepository(specification.getRepository().getUid());
 
             Specification specificationDb = documentDao.createSpecification(null, specification.getRepository().getUid(),
-                specification.getName());
+                    specification.getName());
 
             sessionService.commitTransaction();
             log.debug("Created Specification: " + specification.getName());
@@ -1070,7 +1057,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public void updateSpecification(Specification oldSpecification, Specification newSpecification)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
@@ -1123,7 +1110,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             sessionService.commitTransaction();
             log.debug("Created Reference: " + reference.getRequirement().getName() + "," + reference.getSpecification()
-                .getName());
+                    .getName());
         } catch (Exception ex) {
             sessionService.rollbackTransaction();
             throw handleException(REFERENCE_CREATE_FAILED, ex);
@@ -1172,7 +1159,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             documentDao.removeReference(reference);
 
             log.debug("Removed Reference: " + reference.getRequirement().getName() + "," + reference.getSpecification()
-                .getName());
+                    .getName());
             sessionService.commitTransaction();
         } catch (Exception ex) {
             sessionService.rollbackTransaction();
@@ -1187,7 +1174,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public Execution createExecution(SystemUnderTest systemUnderTest, Specification specification, XmlReport xmlReport)
-        throws LivingDocServerException {
+            throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
@@ -1214,7 +1201,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
      */
     @Override
     public Execution runSpecification(SystemUnderTest systemUnderTest, Specification specification,
-        boolean implementedVersion, String locale) throws LivingDocServerException {
+                                      boolean implementedVersion, String locale) throws LivingDocServerException {
         try {
             log.debug("Running Specification: " + specification.getName() + " ON System: " + systemUnderTest.getName());
 
@@ -1225,7 +1212,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             Execution exe = documentDao.runSpecification(systemUnderTest, specification, implementedVersion, locale);
             log.debug("Sucessfully runned Specification: " + specification.getName() + " ON System: " + systemUnderTest
-                .getName());
+                    .getName());
             sessionService.commitTransaction();
 
             return exe;
@@ -1252,7 +1239,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             ref = documentDao.runReference(ref, locale);
 
             log.debug("Runned Reference: " + ref.getRequirement().getName() + "," + ref.getSpecification().getName()
-                + " ON System: " + ref.getSystemUnderTest().getName());
+                    + " ON System: " + ref.getSystemUnderTest().getName());
             sessionService.commitTransaction();
 
             return ref;
@@ -1304,7 +1291,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         log.error(id, ex);
 
         if (ex instanceof LivingDocServerException) {
-            return ( LivingDocServerException ) ex;
+            return (LivingDocServerException) ex;
         }
         return new LivingDocServerException(id, ex);
     }
@@ -1325,7 +1312,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         }
 
         if (node instanceof ReferenceNode) {
-            ReferenceNode refNode = ( ReferenceNode ) node;
+            ReferenceNode refNode = (ReferenceNode) node;
             Specification spec = documentDao.getSpecificationByName(refNode.getRepositoryUID(), refNode.getTitle());
             node.setIsExecutable(spec != null && refNode.getSutName().equals(systemUnderTest.getName()));
         } else {
