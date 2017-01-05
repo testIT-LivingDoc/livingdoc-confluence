@@ -18,7 +18,7 @@ import info.novatec.testit.livingdoc.interpreter.flow.scenario.Then;
 import info.novatec.testit.livingdoc.interpreter.flow.scenario.When;
 import info.novatec.testit.livingdoc.reflect.annotation.FixtureClass;
 
-@FixtureClass({ "Banking", "Bankinstitut", "Financial institution" })
+@FixtureClass("Banking")
 public class BankFixture {
 	private final Bank bank;
 
