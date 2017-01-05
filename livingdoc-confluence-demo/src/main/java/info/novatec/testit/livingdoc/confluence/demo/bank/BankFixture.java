@@ -23,7 +23,7 @@ import java.util.Collection;
 import info.novatec.testit.livingdoc.reflect.annotation.Alias;
 import info.novatec.testit.livingdoc.reflect.annotation.FixtureClass;
 
-@FixtureClass({ "Banking", "Bankinstitut", "Financial institution" })
+@FixtureClass({ "Bankinstitut", "Financial institution" })
 public class BankFixture {
 
 	private final Bank bank;
@@ -78,7 +78,7 @@ public class BankFixture {
 			return false;
 		}
 	}
-	
+
 	@Alias("withdrawAmountOfInAccount")
 	public boolean withdrawFromAccount(Money amount, String accountNumber)
 			throws Exception {
@@ -99,16 +99,15 @@ public class BankFixture {
 	public Collection<?> getOpenedAccounts() {
 		return bank.getAccounts();
 	}
-	
+
 	@Alias("stopAccessToAccountNumber")
 	public void freezeAccount(String accountNumber) {
 		bank.freezeAccount(accountNumber);
 	}
 
-	@Alias({"createAccountForWithBalanceOf","addNewAccountForWithBalanceOf"})
-	public boolean addAccountWithBalance(AccountType type,
-			String number, String firstName, String lastName, Money balance)
-			throws Exception {
+	@Alias({ "createAccountForWithBalanceOf", "addNewAccountForWithBalanceOf" })
+	public boolean addAccountWithBalance(AccountType type, String number,
+			String firstName, String lastName, Money balance) throws Exception {
 		BankAccount account = (type == AccountType.SAVINGS) ? bank
 				.openSavingsAccount(number, new Owner(firstName, lastName))
 				: bank.openCheckingAccount(number, new Owner(firstName,
@@ -118,7 +117,7 @@ public class BankFixture {
 		return true;
 	}
 
-	@Alias({"transferAmountFromFirstAccountToSecondAccount"})
+	@Alias({ "transferAmountFromFirstAccountToSecondAccount" })
 	public boolean transferFromAccountToAccount(Money amountToTransfer,
 			String fromAccountNumber, String toAccountNumber) throws Exception {
 		try {
