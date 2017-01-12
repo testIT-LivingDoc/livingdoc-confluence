@@ -37,7 +37,7 @@ public class BankFixture {
 		return bank.getAccount(number).getBalance();
 	}
 
-	@Alias("openSavingsAccountWithAccountHolder")
+	@Alias({ "openSavingsAccountWithAccountHolder" })
 	public boolean openSavingsAccountUnderTheNameOf(String number,
 			String firstName, String lastName) {
 		return bank.openSavingsAccount(number, new Owner(firstName, lastName)) != null;
@@ -61,9 +61,8 @@ public class BankFixture {
 		return false;
 	}
 
-	@Alias({ "thatBalanceOfAccountIs", "thatAccountHasBalance" })
-	public Money checkBalanceByAccountNumber(String accountNumber)
-			throws Exception {
+	@Alias("thatAccountHasBalance")
+	public Money thatBalanceOfAccountIs(String accountNumber) throws Exception {
 		BankAccount account = bank.getAccount(accountNumber);
 		return account.getBalance();
 	}
@@ -105,9 +104,10 @@ public class BankFixture {
 		bank.freezeAccount(accountNumber);
 	}
 
-	@Alias({ "createAccountForWithBalanceOf", "addNewAccountForWithBalanceOf" })
-	public boolean addAccountWithBalance(AccountType type, String number,
-			String firstName, String lastName, Money balance) throws Exception {
+	@Alias({ "addNewAccountForWithBalanceOf", "addAccountWithBalance" })
+	public boolean createAccountForWithBalanceOf(AccountType type,
+			String number, String firstName, String lastName, Money balance)
+			throws Exception {
 		BankAccount account = (type == AccountType.SAVINGS) ? bank
 				.openSavingsAccount(number, new Owner(firstName, lastName))
 				: bank.openCheckingAccount(number, new Owner(firstName,
