@@ -18,44 +18,39 @@
  */
 package info.novatec.testit.livingdoc.confluence.demo.phonebook;
 
-import info.novatec.testit.livingdoc.reflect.annotation.Alias;
-
 public class PhoneBookEntry {
 
-    private String firstName;
-    private String lastName;
-    private String number;
+	private String firstName;
+	private String lastName;
+	private String number;
 
-    public PhoneBookEntry(String firstName, String lastName, String number) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.number = number;
-    }
+	public PhoneBookEntry(String firstName, String lastName, String number) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.number = number;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    @Alias({"Vorname", "name"})
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
-    	
-    @Alias({"Nachname", "family name"})
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public String getNumber() {
-        return number;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    @Alias({"Telefonnummer", "phone number", "telephone"})
-    public void setNumber(String number) {
-        this.number = number;
-    }
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
 }
