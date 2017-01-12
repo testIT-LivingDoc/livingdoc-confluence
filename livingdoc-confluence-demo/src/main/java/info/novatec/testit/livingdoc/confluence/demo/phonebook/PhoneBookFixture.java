@@ -52,8 +52,8 @@ public class PhoneBookFixture {
 		phoneBook.add(getContact());
 	}
 
-	@Alias({"addWithNumber", "insertWithNumber"})
-	public boolean addNewPhoneBookEntry(String firstName, String lastName,
+	@Alias({ "addWithNumber", "createContactWithNumber" })
+	public boolean insertWithNumber(String firstName, String lastName,
 			String number) {
 		try {
 			phoneBook.add(new PhoneBookEntry(firstName, lastName, number));
@@ -63,13 +63,13 @@ public class PhoneBookFixture {
 		}
 	}
 
-	@Alias("thatNumberOfIs")
-	public String checkNumberByName(String firstName, String lastName) {
+	@Alias("thatContactHasNumber")
+	public String thatNumberOfIs(String firstName, String lastName) {
 		return phoneBook.findNumber(firstName, lastName);
 	}
 
-	@Alias({"changeNumberOfTo", "updateNumberOfTo"})
-	public boolean updateNumberByName(String firstName, String lastName,
+	@Alias("changeNumberOfTo")
+	public boolean updateNumberOfTo(String firstName, String lastName,
 			String number) {
 		try {
 			phoneBook.updateNumber(firstName, lastName, number);
