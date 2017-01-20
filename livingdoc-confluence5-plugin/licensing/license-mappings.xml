@@ -319,7 +319,25 @@
 		<groupId>org.springframework.ldap</groupId>
 		<artifactId>spring-ldap-core</artifactId>
 		<version>2.0.2.RELEASE</version>
-		<license>unknown license. Please check the license by yourself.</license>
+		<license>The Apache Software License, Version 2.0</license>
+	</artifact>
+	<artifact>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>1.2.7</version>
+		<license>The Apache Software License, Version 2.0</license>
+	</artifact>
+	<artifact>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>1.2.7</version>
+		<license>The Apache Software License, Version 2.0</license>
+	</artifact>
+	<artifact>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>1.2.7</version>
+		<license>The Apache Software License, Version 2.0</license>
 	</artifact>
 	<artifact>
 		<groupId>org.twdata.pkgscanner</groupId>
