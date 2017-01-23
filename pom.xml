@@ -23,7 +23,7 @@
 		<name>NovaTec Solutions</name>
 		<url>http://www.novatec-gmbh.de</url>
 	</organization>
-	
+
 	<scm>
 		<connection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</connection>
 		<developerConnection>scm:git:git@github.com:testIT-LivingDoc/livingdoc-confluence.git</developerConnection>
