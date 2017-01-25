@@ -60,6 +60,12 @@
 				<groupId>info.novatec.testit</groupId>
 				<artifactId>livingdoc-client</artifactId>
 				<version>${testit.livingdoc.core.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-web</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>info.novatec.testit</groupId>

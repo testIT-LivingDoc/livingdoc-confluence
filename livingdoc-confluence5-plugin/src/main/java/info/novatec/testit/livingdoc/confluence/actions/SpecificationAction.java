@@ -18,6 +18,8 @@ import info.novatec.testit.livingdoc.server.domain.Specification;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 import info.novatec.testit.livingdoc.util.ExceptionUtils;
 import info.novatec.testit.livingdoc.util.HtmlUtil;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 
 @SuppressWarnings("serial")
@@ -277,6 +279,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
             results = results.replaceAll("livingdoc-labels-not-rendered", "livingdoc-labels");
             results = results.replaceAll("livingdoc-group-not-rendered", "livingdoc-group");
             results = results.replaceAll("Unknown macro:", "");
+            results = removeUnknownMacroElements(results);
             return HtmlUtil.cleanUpResults(results);
         }
 
@@ -300,6 +303,15 @@ public class SpecificationAction extends AbstractLivingDocAction {
         requirement.setRepository(Repository.newInstance(repositoryUid));
 
         return Reference.newInstance(requirement, specification, sut, sections);
+    }
+
+    private String removeUnknownMacroElements(String result) {
+        Document document = Jsoup.parse(result);
+        document.getElementsByClass("wysiwyg-unknown-macro").stream()
+            .filter(element -> element.attr("src").contains("livingdoc"))
+            .forEach(element -> element.remove());
+
+        return document.html();
     }
 
     public int getNextFieldId() {
