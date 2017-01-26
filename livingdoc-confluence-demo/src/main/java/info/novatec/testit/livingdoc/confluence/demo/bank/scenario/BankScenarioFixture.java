@@ -19,7 +19,7 @@ import info.novatec.testit.livingdoc.interpreter.flow.scenario.When;
 import info.novatec.testit.livingdoc.reflect.annotation.FixtureClass;
 
 @FixtureClass("Banking")
-public class BankFixture {
+public class BankScenarioFixture {
 	private final Bank bank;
 
 	static {
@@ -28,7 +28,7 @@ public class BankFixture {
 		}
 	}
 
-	public BankFixture() {
+	public BankScenarioFixture() {
 		this.bank = new Bank();
 	}
 
