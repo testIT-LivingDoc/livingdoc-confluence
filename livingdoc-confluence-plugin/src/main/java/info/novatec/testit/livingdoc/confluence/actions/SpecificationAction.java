@@ -276,6 +276,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
             results = results.replaceAll("livingdoc-children-not-rendered", "livingdoc-children");
             results = results.replaceAll("livingdoc-labels-not-rendered", "livingdoc-labels");
             results = results.replaceAll("livingdoc-group-not-rendered", "livingdoc-group");
+            results = results.replaceAll("livingdoc-page-not-rendered", "livingdoc-page");
             results = results.replaceAll("Unknown macro:", "");
             return HtmlUtil.cleanUpResults(results);
         }

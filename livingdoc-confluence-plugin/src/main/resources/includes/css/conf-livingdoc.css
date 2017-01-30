@@ -108,6 +108,10 @@
     padding: 0px 3px 0px 0px;
 }
 
+.conf_docTitle.disabled {
+    color: #cc0000
+}
+
 .conf_waiting {
     color: #666666;
     font-size: 11px;

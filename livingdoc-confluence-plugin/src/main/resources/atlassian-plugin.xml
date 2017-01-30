@@ -390,6 +390,15 @@
 
 	<!-- XHTML MACRO -->
 
+	<xhtml-macro name='livingdoc-page'
+				 class='info.novatec.testit.livingdoc.confluence.macros.LivingDocPage'
+				 key='livingdoc-page-xhtml'
+				 icon="/download/resources/info.novatec.testit.livingdoc.confluence.plugin/images/livingdoc-logo-big.png">
+		<category name="development" />
+		<description key="This macro enables the page as executable specification. It adds an execution button, SUT
+		configuration, switching between working and implemented version and a status bar for the execution results. Attention: This macro only works without activated LivingDoc Theme. If both, macro and theme, are activated the macro is disabled."/>
+		<parameters/>
+	</xhtml-macro>
 	<xhtml-macro name='livingdoc-logo'
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocLogo'
 		key='livingdoc-logo-xhtml' hidden='true'>
@@ -434,7 +443,6 @@
 			<parameter name="openInSameWindow" type="boolean" />
 		</parameters>
 	</xhtml-macro>
-
 	<xhtml-macro name='livingdoc-info'
 		class='info.novatec.testit.livingdoc.confluence.macros.LivingDocInfo'
 		key='livingdoc-info-xhtml'
@@ -718,12 +726,6 @@
 			<action name="LivingDocHeader"
 				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
 				method="loadHeader">
-				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
-				</result>
-			</action>
-			<action name="EnableLivingDoc"
-				class="info.novatec.testit.livingdoc.confluence.actions.execution.HeaderExecutionAction"
-				method="enableLivingDoc">
 				<result name="success" type="velocity">/templates/livingdoc/confluence/execution/header.ajax.vm
 				</result>
 			</action>
