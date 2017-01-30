@@ -1,7 +1,5 @@
 package info.novatec.testit.livingdoc.confluence.listeners;
 
-import org.springframework.beans.factory.DisposableBean;
-
 import com.atlassian.confluence.event.events.content.page.PageEvent;
 import com.atlassian.confluence.event.events.content.page.PageRemoveEvent;
 import com.atlassian.confluence.event.events.content.page.PageTrashedEvent;
@@ -11,10 +9,11 @@ import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
-
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Specification;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.DisposableBean;
 
 
 public class LivingDocPageListener implements DisposableBean {
@@ -68,14 +67,22 @@ public class LivingDocPageListener implements DisposableBean {
     private void updateSpecification(PageUpdateEvent pageEvt) throws LivingDocServerException {
         AbstractPage oldPage = pageEvt.getOriginalPage();
         Page newPage = pageEvt.getPage();
-
-        if (newPage != null && oldPage != null && ! newPage.getTitle().equals(oldPage.getTitle())) {
+        if (newPage != null && oldPage != null && (!newPage.getTitle().equals(oldPage.getTitle()) ||
+                !newPage.getBodyAsString().equals(oldPage.getBodyAsString()))) {
             Specification oldSpecification = Specification.newInstance(oldPage.getTitle());
             oldSpecification.setRepository(ld.getHomeRepository(newPage.getSpace().getKey()));
+            boolean oldPageIsExecutable = containsPageMacro(oldPage);
+            boolean newPageIsExecutable = containsPageMacro(newPage);
             try {
                 Specification newSpecification = Specification.newInstance(newPage.getTitle());
                 newSpecification.setRepository(ld.getHomeRepository(newPage.getSpace().getKey()));
-                ld.getLDServerService().updateSpecification(oldSpecification, newSpecification);
+               if(!newPageIsExecutable){
+                   removeSpecification(pageEvt);
+               }else if(!oldPageIsExecutable) {
+                   ld.getLDServerService().createSpecification(newSpecification);
+               }else{
+                   ld.getLDServerService().updateSpecification(oldSpecification, newSpecification);
+               }
             } catch (LivingDocServerException e) {
                 ld.getLDServerService().removeSpecification(oldSpecification);
             }
@@ -85,5 +92,10 @@ public class LivingDocPageListener implements DisposableBean {
     @Override
     public void destroy() throws Exception {
         eventPublisher.unregister(this);
+    }
+
+    private boolean containsPageMacro(AbstractPage page){
+        String content = page.getBodyAsString();
+        return StringUtils.contains(content, "livingdoc-page");
     }
 }

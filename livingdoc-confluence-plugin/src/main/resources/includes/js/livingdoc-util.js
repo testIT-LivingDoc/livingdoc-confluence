@@ -92,6 +92,13 @@ function $F(elementId){
 	return AJS.$('#' + elementId).val();
 }
 
+function addLoadEvent(func)
+{
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') { window.onload = eval(func); }
+    else { window.onload = function() { oldonload(); eval(func); } }
+}
+
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";

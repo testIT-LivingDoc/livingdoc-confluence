@@ -2,12 +2,16 @@
 	<table width="100%" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="50%" cellpadding="0" cellspacing="0">
-				<span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle"> enabled</span>
+			    #if($action.isExecutable)
+				    <span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle"> enabled</span>
+				#else
+                	<span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle disabled"> disabled</span>
+                #end
+
 				<span id="conf_spaceKey_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.spaceKey</span>
 				<span id="conf_pageId_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.id</span>
 				<span id="conf_pageTitle_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.title</span>
 				<span id="conf_implemented_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.implemented</span>
-				<input type="checkbox" id="conf_exeflag" #if($action.implemented || !$action.canEdit)disabled="true"#end #if($action.isExecutable)checked="checked"#end onclick="conf_livingDoc.enableLivingDoc('$req.contextPath', '$action.bulkUID', '$action.executionUID', '$action.spaceKey', '$action.page.id', true);" style="vertical-align:middle;">				
 			</td>
 			<td width="50%" align="right" cellpadding="0" cellspacing="0">
 				#if($action.canEdit && $action.isExecutable)
