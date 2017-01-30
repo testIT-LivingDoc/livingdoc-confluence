@@ -112,7 +112,6 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setPassword(getPwd());
             
             getService().registerRepository(registeredRepository);
-            themeManager.setSpaceTheme(getSpaceKey(), "info.novatec.testit.livingdoc.confluence.plugin:livingdoc.theme");
             projectName = isWithNewProject() ? newProjectName : projectName;
         } catch (LivingDocServerException e) {
             addActionError(e);
