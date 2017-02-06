@@ -323,7 +323,7 @@ CONFSpecificationList.prototype =
 		this.clear();
 		if(this.isHeader())
 		{ 
-			LD.View.switchView('body', 'conf_results'+this.id+'_0'); 
+			LD.View.switchView('main-content', 'conf_results'+this.id+'_0');
 			this.actions.refreshHeader(this);
 		}
 		else if(this.isLabel())
@@ -447,7 +447,7 @@ CONFSpecification.prototype =
 		LD.View.switchView('conf_hideResult_link'+this.id, 'conf_showResult_link'+this.id);
 		var specificationElement = AJS.$('#conf_specification'+this.id);
 		if(specificationElement.length){specificationElement.css('border', '2px solid rgb(187, 187, 187)');}
-		if(this.isMain()) LD.View.switchView('conf_results'+this.id, 'body');
+		if(this.isMain()) LD.View.switchView('conf_results'+this.id, 'main-content');
 	},
 	hideResults:function()
 	{
@@ -457,7 +457,7 @@ CONFSpecification.prototype =
 		LD.View.hide('conf_results'+this.id);
 		var specificationElement = AJS.$('#conf_specification'+this.id);
 		if(specificationElement.length){specificationElement.css('border', '0px solid #bbbbbb');}
-		if(this.isMain()) LD.View.switchView('body', 'conf_results'+this.id);
+		if(this.isMain()) LD.View.switchView('main-content', 'conf_results'+this.id);
 	},
 	prepareRun:function()
 	{
@@ -539,7 +539,7 @@ CONFSpecification.prototype =
 	updateExecuteChildren:function(isEditMode)
 	{ 
 		this.notifyWorking(); 
-		LD.View.switchView('body', 'conf_results'+this.id);
+		LD.View.switchView('main-content', 'conf_results'+this.id);
 		conf_livingDoc.getList(this.params.bulkUID, this.params.executionUID).clear();
 		this.actions.updateExecuteChildren(this);
 	},
