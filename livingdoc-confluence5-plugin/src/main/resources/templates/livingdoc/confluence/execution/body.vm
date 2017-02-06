@@ -1,2 +1,2 @@
 <div id="conf_results_body_${action.bulkUID}_${action.executionUID}_$action.fieldId" #if($action.implemented)style="width:99%;background-color:#F8F8F8"#end>$action.renderedContent</div>
-<script language="JavaScript" type="text/javascript">LD.View.switchView('body', 'conf_results_${action.bulkUID}_${action.executionUID}_$action.fieldId');</script>
+<script language="JavaScript" type="text/javascript">LD.View.switchView('main-content', 'conf_results_${action.bulkUID}_${action.executionUID}_$action.fieldId');</script>
