@@ -6,7 +6,7 @@
 	<div id="conf_results_body_${action.bulkUID}_${action.executionUID}_$action.fieldId" class="conf_wikiErrMsg">$action.getText($action.execution.executionErrorId)</div>
 	#if($action.isMain)<script language="JavaScript" type="text/javascript">LD.View.show('conf_results_${action.bulkUID}_${action.executionUID}_$action.fieldId');</script>#end
 #elseif($action.isMain && $action.execution.wasRunned())
-	<script language="JavaScript" type="text/javascript">LD.View.switchView('conf_results_${action.bulkUID}_${action.executionUID}_$action.fieldId', 'body');</script>
+	<script language="JavaScript" type="text/javascript">LD.View.switchView('conf_results_${action.bulkUID}_${action.executionUID}_$action.fieldId', 'main-content');</script>
 	<div id="conf_results_body_${action.bulkUID}_${action.executionUID}_$action.fieldId" #if($action.implemented)style="width:99%;background-color:#F8F8F8"#end>$action.renderedResults</div>
 #else
 	<div id="conf_results_body_${action.bulkUID}_${action.executionUID}_$action.fieldId" #if($action.implemented)style="width:99%;background-color:#F8F8F8"#end>$action.renderedResults</div>
