@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
@@ -23,6 +24,7 @@ import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import info.novatec.testit.livingdoc.server.domain.dao.DocumentDao;
 import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
 import info.novatec.testit.livingdoc.server.domain.dao.SystemUnderTestDao;
+import org.hibernate.transform.Transformers;
 
 
 public class HibernateDocumentDao implements DocumentDao {
@@ -33,6 +35,16 @@ public class HibernateDocumentDao implements DocumentDao {
     public static final String REPO = "repo";
     public static final String REPO_UID = "repo.uid";
     public static final String SUPPRESS_UNCHECKED = "unchecked";
+    private static final String SPECIFICATION_ID = "specification.id";
+    private static final String SUT_ID = "systemUnderTest.id";
+    private static final String EXECUTION_ID = "id";
+    private static final String EXECUTION_DATE = "executionDate";
+    private static final String EXECUTION_ERRORS = "errors";
+    private static final String EXECUTION_FAILURES = "failures";
+    private static final String EXECUTION_SUCCESS = "success";
+    private static final String EXECUTION_IGNORED = "ignored";
+    private static final String EXECUTION_SECTIONS = "sections";
+    private static final String EXECUTION_ERRORID = "executionErrorId";
     private SessionService sessionService;
     private RepositoryDao repositoryDao;
     private SystemUnderTestDao systemUnderTestDao;
@@ -440,12 +452,23 @@ public class HibernateDocumentDao implements DocumentDao {
     public List<Execution> getSpecificationExecutions(Specification specification, SystemUnderTest sut, int maxResults) {
         final Criteria crit = sessionService.getSession().createCriteria(Execution.class);
 
-        crit.add(Restrictions.eq("specification.id", specification.getId()));
+        crit.add(Restrictions.eq(SPECIFICATION_ID, specification.getId()));
 
         if (sut != null) {
-            crit.createAlias(SYSTEM_UNDER_TEST, SUT);
-            crit.add(Restrictions.eq(SUT_NAME, sut.getName()));
+            crit.add(Restrictions.eq(SUT_ID, sut.getId()));
         }
+
+        // Using projections to reduce complexity of query
+        crit.setProjection(Projections.projectionList()
+                .add(Projections.property(EXECUTION_ID), EXECUTION_ID)
+                .add(Projections.property(EXECUTION_DATE), EXECUTION_DATE)
+                .add(Projections.property(EXECUTION_ERRORS), EXECUTION_ERRORS)
+                .add(Projections.property(EXECUTION_FAILURES), EXECUTION_FAILURES)
+                .add(Projections.property(EXECUTION_SUCCESS), EXECUTION_SUCCESS)
+                .add(Projections.property(EXECUTION_IGNORED), EXECUTION_IGNORED)
+                .add(Projections.property(EXECUTION_SECTIONS), EXECUTION_SECTIONS)
+                .add(Projections.property(EXECUTION_ERRORID), EXECUTION_ERRORID)
+        ).setResultTransformer(Transformers.aliasToBean(Execution.class));
 
         /* crit.add(Restrictions.or(Restrictions.or(Restrictions.not(
          * Restrictions . eq("errors", 0)),
@@ -453,7 +476,7 @@ public class HibernateDocumentDao implements DocumentDao {
          * Restrictions.or(Restrictions.not(Restrictions.eq("ignored", 0)),
          * Restrictions.not(Restrictions.eq("failures", 0))))); */
 
-        crit.addOrder(Order.desc("executionDate"));
+        crit.addOrder(Order.desc(EXECUTION_DATE));
         crit.setMaxResults(maxResults);
 
         @SuppressWarnings(SUPPRESS_UNCHECKED)
