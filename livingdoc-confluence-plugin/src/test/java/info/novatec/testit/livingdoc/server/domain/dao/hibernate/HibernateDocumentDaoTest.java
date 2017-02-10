@@ -30,6 +30,7 @@ import info.novatec.testit.livingdoc.server.domain.dao.DocumentDao;
 public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest {
     private static final String DATAS = "/dbunit/datas/HibernateDocumentDaoTest.xml";
     private DocumentDao documentDao;
+    private static final long SUT1_ID = -1L;
 
     @Override
     @Before
@@ -472,6 +473,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
     public void testSpecificationExecutionsRetrieval() {
         Specification spec = documentDao.getSpecificationByName("UID-1", "SPECIFICATION-1");
         SystemUnderTest sut = SystemUnderTest.newInstance("SUT-1");
+        sut.setId(SUT1_ID);
 
         List<Execution> executions = documentDao.getSpecificationExecutions(spec, null, 100);
         assertNotNull(executions);

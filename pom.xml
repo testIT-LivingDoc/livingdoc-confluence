@@ -178,11 +178,15 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>oss-sonatype</id>
+			<id>oss-sonatype-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>oss-sonatype-releases</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -191,11 +195,15 @@
 			<url>https://maven.atlassian.com/repository/public</url>
 		</pluginRepository>
 		<pluginRepository>
-			<id>oss-sonatype</id>
+			<id>oss-sonatype-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>oss-sonatype-releases</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>
