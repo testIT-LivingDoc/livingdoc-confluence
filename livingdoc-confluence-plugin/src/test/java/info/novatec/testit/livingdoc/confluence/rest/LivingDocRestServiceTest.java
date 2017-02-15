@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
  * @author Sebastian Letzel
  */
 @RunWith(MockitoJUnitRunner.class)
-public class LivingDocRestServiceImplTest {
+public class LivingDocRestServiceTest {
 
     private static ObjectMapper objectMapper;
     private static Specification specification;
@@ -47,7 +47,7 @@ public class LivingDocRestServiceImplTest {
     LivingDocServerService clientService;
 
     @InjectMocks
-    LivingDocRestServiceImpl ldRestService;
+    LivingDocRestService ldRestService;
 
 
     @BeforeClass

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2009 Pyxis Technologies inc.
  * 
  * This is free software; you can redistribute it and/or modify it under the
@@ -21,8 +21,8 @@ package info.novatec.testit.livingdoc.confluence.macros;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Repository;
+import info.novatec.testit.livingdoc.server.rest.RestMethodName;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
-import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcMethodName;
 import info.novatec.testit.livingdoc.util.CollectionUtil;
 
 import java.io.IOException;
@@ -87,7 +87,7 @@ public abstract class AbstractHttpRetrievalMacro extends BaseHttpRetrievalMacro 
             Vector params = CollectionUtil.toVector(repository.marshallize());
             XmlRpcClient xmlrpc = new XmlRpcClient(url + "/rpc/xmlrpc");
             String cmdLine =
-                new StringBuffer(handler).append(".").append(XmlRpcMethodName.getRegisteredRepository).toString();
+                new StringBuffer(handler).append(".").append(RestMethodName.getRegisteredRepository).toString();
             response = ( Vector<Object> ) xmlrpc.execute(cmdLine, params);
         } catch (XmlRpcException e) {
             log.error(e.getMessage(), e);
