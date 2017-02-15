@@ -24,7 +24,12 @@ import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 
-
+/**
+ * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
+ * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
+ * <br> Use {@link info.novatec.testit.livingdoc.confluence.rest.LivingDocRestService} instead.
+ */
+@Deprecated
 public class LivingDocXmlRpcServerDelegator implements RpcClientService {
 
     private final LivingDocXmlRpcServer delegator;

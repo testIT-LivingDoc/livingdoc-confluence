@@ -32,7 +32,11 @@ import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.user.EntityException;
 
-
+/**
+ * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
+ * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
+ */
+@Deprecated
 public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper {
     public static final String SPACE_NOT_FOUND = "livingdoc.rpc.spacenotfound";
     public static final String PAGE_NOT_FOUND = "livingdoc.rpc.pagenotfound";

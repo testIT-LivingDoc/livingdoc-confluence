@@ -10,7 +10,12 @@ import java.util.Vector;
  * Copyright (c) 2006 Pyxis technologies inc. All Rights Reserved.
  *
  * @author JCHUET
+ *
+ * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
+ * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
+ * <br> Use {@link info.novatec.testit.livingdoc.confluence.rest.LivingDocRestService} instead.
  */
+@Deprecated
 public interface RpcServerService {
     String SERVICE_HANDLER = "livingdoc1";
 
@@ -108,7 +113,7 @@ public interface RpcServerService {
      * Removes the Repository if this one does not hold any specifications.
      * <p/>
      *
-     * @param repositoryParams
+     * @param repositoryUid
      */
     String removeRepository(String repositoryUid);
 
