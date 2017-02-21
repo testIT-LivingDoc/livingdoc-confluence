@@ -316,7 +316,16 @@
 		</conditions>
 	</web-item>
 
-	
+	<!-- LIVINGDOC TEMPLATE -->
+	<content-template key="livingdoc-template" template-title-key="my.blueprint.title">
+		<resource name="template" type="download" location="/templates/specification.xml"/>
+	</content-template>
+	<blueprint key="livingdoc-blueprint" content-template-key="livingdoc-template" index-key="my-index" disable-index-page="true"/>
+	<web-item key="create-by-sample-template" i18n-name-key="LivingDoc Specification" section="system.create.dialog/content">
+		<description key="Start with a LivingDoc Specification." />
+		<resource name="icon" type="download" location="/includes/images/livingdoc-logo-big.png"/>
+		<param name="blueprintKey" value="livingdoc-blueprint" />
+	</web-item>
 
 	<!-- WIKI MACRO -->
 
