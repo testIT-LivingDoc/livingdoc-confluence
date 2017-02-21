@@ -21,8 +21,10 @@ import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
+import info.novatec.testit.livingdoc.server.database.hibernate.DefaultRunners;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1295,6 +1297,20 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         } catch (Exception ex) {
             sessionService.rollbackTransaction();
             throw handleException(PROJECT_REMOVE_FAILED, ex);
+        } finally {
+            sessionService.closeSession();
+        }
+    }
+
+    @Override
+    public void createDefaultRunner(Properties properties) throws LivingDocServerException {
+        try {
+            sessionService.beginTransaction();
+            new DefaultRunners(sessionService, properties).insertJavaRunner();
+            sessionService.commitTransaction();
+        } catch (Exception ex) {
+            sessionService.rollbackTransaction();
+            throw handleException(RUNNER_CREATE_FAILED, ex);
         } finally {
             sessionService.closeSession();
         }
