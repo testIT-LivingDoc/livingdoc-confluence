@@ -153,6 +153,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
         demoRepository.setBaseRepositoryUrl(getDemoSpaceUrl());
 
+        // TODO With REST you don't need the handler or /rpc/xmlrpc
         String baseTestUrl = String.format("%s/rpc/xmlrpc?handler=%s#%s", confluenceLivingDoc.getBaseUrl(),
             RpcServerService.SERVICE_HANDLER, demoSpace.getKey());
         demoRepository.setBaseTestUrl(baseTestUrl);

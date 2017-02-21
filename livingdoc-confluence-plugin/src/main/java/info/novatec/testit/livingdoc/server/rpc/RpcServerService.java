@@ -1,5 +1,7 @@
 package info.novatec.testit.livingdoc.server.rpc;
 
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
+
 import java.util.Vector;
 
 
@@ -10,10 +12,9 @@ import java.util.Vector;
  * Copyright (c) 2006 Pyxis technologies inc. All Rights Reserved.
  *
  * @author JCHUET
- *
  * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
  * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
- * <br> Use {@link info.novatec.testit.livingdoc.confluence.rest.LivingDocRestService} instead.
+ * <br> Use {@link LivingDocRestServiceImpl} instead.
  */
 @Deprecated
 public interface RpcServerService {
@@ -305,7 +306,7 @@ public interface RpcServerService {
      * @return error id if an error occurred
      */
     String updateSystemUnderTest(String oldSystemUnderTestName, Vector<Object> systemUnderTestParams,
-        Vector<Object> repositoryParams);
+                                 Vector<Object> repositoryParams);
 
     /**
      * Removes the systemUnderTest
@@ -365,7 +366,7 @@ public interface RpcServerService {
      * @return the Specification location list for a given SystemUnderTest and
      * Repository
      */
-    Vector< ? > getListOfSpecificationLocations(String repositoryUID, String systemUnderTestName);
+    Vector<?> getListOfSpecificationLocations(String repositoryUID, String systemUnderTestName);
 
     /**
      * Creates the Specification
@@ -437,7 +438,7 @@ public interface RpcServerService {
      * SystemUnderTest.
      */
     Vector<Object> runSpecification(Vector<Object> systemUnderTestParams, Vector<Object> specificationParams,
-        boolean implementedVersion, String locale);
+                                    boolean implementedVersion, String locale);
 
     /**
      * Executes the Reference.
