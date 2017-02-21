@@ -19,7 +19,7 @@ package info.novatec.testit.livingdoc.confluence;
 import java.io.File;
 import java.util.Properties;
 
-import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestService;
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 import org.hibernate.dialect.HSQLDialect;
 import org.osgi.framework.Bundle;
@@ -92,13 +92,13 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final LivingDocServerServiceImpl service;
 
     private final LivingDocXmlRpcServer xmlRpcServer;
-    private final LivingDocRestService restService;
+    private final LivingDocRestServiceImpl restService;
 
     private final EventPublisher eventPublisher;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-        LivingDocServerServiceImpl service,  LivingDocXmlRpcServer xmlRpcServer, LivingDocRestService restService,
+        LivingDocServerServiceImpl service,  LivingDocXmlRpcServer xmlRpcServer, LivingDocRestServiceImpl restService,
         EventPublisher eventPublisher) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
@@ -192,7 +192,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         service.setSutDao(sutDao);
 
         xmlRpcServer.setService(service);
-        restService.setLivingDocServerService(service);
+        restService.setService(service);
     }
 
     private String getLivingDocBundleFilePath() throws Exception {

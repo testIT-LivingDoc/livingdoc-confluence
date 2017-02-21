@@ -556,10 +556,11 @@ public class RegistrationAction extends LivingDocServerAction {
         return sb.toString();
     }
 
+    // TODO With REST you don't need the handler or /rpc/xmlrpc
     private String newTestUrl() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getBaseUrl()).append("/rpc/xmlrpc");
-        sb.append("?handler=").append(getHandler());
+        sb.append(getBaseUrl()).append("/rpc/xmlrpc");  // TODO remove this line
+        sb.append("?handler=").append(getHandler());     // TODO remove this line
         sb.append("#").append(getSpaceKey());
         return sb.toString();
     }

@@ -16,15 +16,16 @@
  * http://www.fsf.org. */
 package info.novatec.testit.livingdoc.confluence.rpc;
 
-import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 
 /**
  * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
  * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
- * <br> Use {@link info.novatec.testit.livingdoc.confluence.rest.LivingDocRestService} instead.
+ * <br> Use {@link LivingDocRestServiceImpl} instead.
  */
 @Deprecated
-public interface RpcClientService extends RpcServerService, LivingDocRpcHelper {
+public interface RpcClientService extends RpcServerService, LivingDocRestHelper {
 
 }

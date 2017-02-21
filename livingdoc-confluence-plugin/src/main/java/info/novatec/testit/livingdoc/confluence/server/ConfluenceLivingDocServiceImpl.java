@@ -1,4 +1,4 @@
-package info.novatec.testit.livingdoc.confluence.rpc.xmlrpc;
+package info.novatec.testit.livingdoc.confluence.server;
 
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
@@ -6,7 +6,7 @@ import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
-import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
 import info.novatec.testit.livingdoc.server.transfer.ExecutionResult;
 
@@ -32,24 +32,21 @@ import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.user.EntityException;
 
-/**
- * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
- * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
- */
-@Deprecated
-public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper {
+
+public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
+
     public static final String SPACE_NOT_FOUND = "livingdoc.rpc.spacenotfound";
     public static final String PAGE_NOT_FOUND = "livingdoc.rpc.pagenotfound";
     public static final String INVALID_SESSION = "livingdoc.rpc.invalidsession";
     public static final String PERMISSION_DENIED = "livingdoc.rpc.permissiondenied";
     public static final String GENERAL_EXCEPTION = "livingdoc.server.generalexeerror";
 
-    private final Logger log = LoggerFactory.getLogger(ConfluenceXmlRpcLivingDocServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ConfluenceLivingDocServiceImpl.class);
 
     private final ConfluenceLivingDoc ldUtil;
     private final StyleSheetExtractor styleSheetExtractor;
 
-    public ConfluenceXmlRpcLivingDocServiceImpl(ConfluenceLivingDoc ldUtil, StyleSheetExtractor styleSheetExtractor) {
+    public ConfluenceLivingDocServiceImpl(ConfluenceLivingDoc ldUtil, StyleSheetExtractor styleSheetExtractor) {
         this.ldUtil = ldUtil;
         this.styleSheetExtractor = styleSheetExtractor;
     }
@@ -131,17 +128,13 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
         }
 
         TransactionTemplate txTemplate = ldUtil.getTransactionTemplate();
-        return ( String ) txTemplate.execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction() {
-
+        return txTemplate.execute(() -> {
                 try {
                     ConfluenceUser user = login(username, password);
                     Page page = ldUtil.getPageManager().getPage(( String ) args.get(0), ( String ) args.get(1));
                     if (page == null) {
                         return error(PAGE_NOT_FOUND);
                     }
-
                     checkPermissions(page.getSpace(), user);
                     ldUtil.saveImplementedVersion(page, page.getVersion());
                     return LivingDocServerErrorKey.SUCCESS;
@@ -152,8 +145,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
                 } finally {
                     logout();
                 }
-            }
-        });
+            });
     }
 
     @Override
