@@ -39,7 +39,7 @@
 		PASSWORD="LD" />
 
 
-	<RUNNER ID="-1" VERSION="0" NAME="LDCore JAVA v. dummy"
+	<RUNNER ID="-1" VERSION="0" NAME="Demo Space runner v. dummy"
 		SERVER_NAME="1" SERVER_PORT="1" SECURED="false" />
 	<SUT ID="-1" VERSION="0" NAME="SUT-1" PROJECT_ID="-1" RUNNER_ID="-1"
 		SELECTED="0" UUID="-1" />
