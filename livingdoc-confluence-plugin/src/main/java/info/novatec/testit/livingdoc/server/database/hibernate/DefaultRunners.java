@@ -24,6 +24,7 @@ public class DefaultRunners {
 
     private final SystemUnderTestDao sutDao;
     private final Properties properties;
+    private final String RUNNER_NAME = "Demo Space runner";
 
     private String version;
     private String jarFile;
@@ -65,7 +66,7 @@ public class DefaultRunners {
     }
 
     private boolean shouldCreateJavaRunner() {
-        return version != null && sutDao.getRunnerByName("LDCore JAVA v. " + version) == null;
+        return version != null && sutDao.getRunnerByName(RUNNER_NAME + " v. " + version) == null;
     }
 
     private void insertJavaRunnerFromFile(File runnerJarFile) {
@@ -135,8 +136,8 @@ public class DefaultRunners {
 
     private void createJavaRunner(ClasspathSet classpaths, String hint) throws LivingDocServerException {
 
-        log.info(String.format("Registrating Runner: LDCore JAVA v. %s (%s)", version, hint));
-        Runner runner = Runner.newInstance("LDCore JAVA v. " + version);
+        log.info(String.format("Registrating Runner: " + RUNNER_NAME + " v. %s (%s)", version, hint));
+        Runner runner = Runner.newInstance(RUNNER_NAME + " v. " + version);
         runner.setClasspaths(classpaths);
         sutDao.create(runner);
     }

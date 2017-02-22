@@ -105,6 +105,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
             if (getUsername() != null) {
                 confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
             }
+            doAddDefaultRunner();
 
             doImportDemoSite();
 
@@ -129,6 +130,14 @@ public class DemoSpaceAction extends LivingDocServerAction {
         }
 
         return SUCCESS;
+    }
+
+    private void doAddDefaultRunner() {
+        try {
+            getService().createDefaultRunner(confluenceLivingDoc.getLDServerConfiguration().getProperties());
+        } catch (LivingDocServerException ex) {
+            addActionError(ex.getId());
+        }
     }
 
     private Repository doRegisterSpace(Space demoSpace) throws LivingDocServerException {
@@ -260,7 +269,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
         List<Runner> runners = confluenceLivingDoc.getLDServerService().getAllRunners();
 
         for (Runner runner : runners) {
-            if (runner.getName().startsWith("LDCore JAVA v.")) {
+            if (runner.getName().startsWith(getText("livingdoc.runners.demospace"))) {
                 return runner;
             }
         }

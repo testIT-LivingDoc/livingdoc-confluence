@@ -25,6 +25,7 @@ import info.novatec.testit.livingdoc.util.URIUtil;
 
 public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
     private static final String DATAS = "/dbunit/datas/InitializedDataBase-latest.xml";
+    private static final String RUNNER_NAME = "Demo Space runner";
     private URL configURL = DefaultRunnersTest.class.getResource("configuration-test.xml");
     private Properties properties;
 
@@ -58,7 +59,7 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         new DefaultRunners(this, properties).insertJavaRunner();
         session.getTransaction().commit();
 
-        Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
+        Runner runner = sutDao.getRunnerByName(RUNNER_NAME + " v. dummy");
 
         assertNotNull(runner);
         assertNull(runner.getServerName());
@@ -77,7 +78,7 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         new DefaultRunners(this, properties).insertJavaRunner();
         session.getTransaction().commit();
 
-        Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
+        Runner runner = sutDao.getRunnerByName(RUNNER_NAME + " v. dummy");
 
         assertNotNull(runner);
         assertEquals("1", runner.getServerName());
@@ -100,7 +101,7 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         new DefaultRunners(this, properties).insertJavaRunner();
         session.getTransaction().commit();
 
-        Runner runner = sutDao.getRunnerByName("LDCore JAVA v. dummy");
+        Runner runner = sutDao.getRunnerByName(RUNNER_NAME + " v. dummy");
 
         assertNotNull(runner);
         assertNull(runner.getServerName());
@@ -134,7 +135,7 @@ public class DefaultRunnersTest extends AbstractDBUnitHibernateMemoryTest {
         new DefaultRunners(this, customProperties).insertJavaRunner();
         session.getTransaction().commit();
 
-        Runner runner = sutDao.getRunnerByName("LDCore JAVA v. " + jarVersion);
+        Runner runner = sutDao.getRunnerByName(RUNNER_NAME + " v. " + jarVersion);
 
         assertNotNull(runner);
         assertNull(runner.getServerName());
