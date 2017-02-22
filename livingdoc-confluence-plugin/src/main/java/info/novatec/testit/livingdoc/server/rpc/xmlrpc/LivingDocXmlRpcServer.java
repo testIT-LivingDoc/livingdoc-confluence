@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,12 @@ import info.novatec.testit.livingdoc.server.transfer.SpecificationLocation;
  * Copyright (c) 2006 Pyxis technologies inc. All Rights Reserved.
  *
  * @author jchuet
+ *
+ * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
+ * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
+ * <br> Use {@link LivingDocRestServiceImpl} instead.
  */
+@Deprecated
 public class LivingDocXmlRpcServer implements RpcServerService {
     private static final Logger log = LoggerFactory.getLogger(LivingDocXmlRpcServer.class);
     public static final String NUMBER = " number: ";

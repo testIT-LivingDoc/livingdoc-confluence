@@ -18,24 +18,31 @@ package info.novatec.testit.livingdoc.confluence.rpc.xmlrpc;
 
 import java.util.Vector;
 
+import info.novatec.testit.livingdoc.confluence.server.ConfluenceLivingDocServiceImpl;
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
 import info.novatec.testit.livingdoc.confluence.rpc.RpcClientService;
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
-import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 
-
+/**
+ * @deprecated The XML-RPC and SOAP APIs are deprecated since Confluence 5.5.
+ * More info <a href="https://developer.atlassian.com/confdev/deprecated-apis/confluence-xml-rpc-and-soap-apis">here</a>
+ * <br> Use {@link LivingDocRestServiceImpl} instead.
+ */
+@Deprecated
 public class LivingDocXmlRpcServerDelegator implements RpcClientService {
 
     private final LivingDocXmlRpcServer delegator;
-    private final LivingDocRpcHelper confluenceServiceDelegator;
+    private final LivingDocRestHelper confluenceServiceDelegator;
 
     /**
      * Constructor for IoC
      */
     public LivingDocXmlRpcServerDelegator(ConfluenceLivingDoc confluenceLivingDoc,
         LivingDocXmlRpcServer livingDocXmlRpcServer, StyleSheetExtractor styleSheetExtractor) {
-        confluenceServiceDelegator = new ConfluenceXmlRpcLivingDocServiceImpl(confluenceLivingDoc, styleSheetExtractor);
+        confluenceServiceDelegator = new ConfluenceLivingDocServiceImpl(confluenceLivingDoc, styleSheetExtractor);
         delegator = livingDocXmlRpcServer;
     }
 

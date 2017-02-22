@@ -19,6 +19,8 @@ package info.novatec.testit.livingdoc.confluence;
 import java.io.File;
 import java.util.Properties;
 
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
+import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 import org.hibernate.dialect.HSQLDialect;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -57,7 +59,6 @@ import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateDocume
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateProjectDao;
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateRepositoryDao;
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateSystemUnderTestDao;
-import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 
 
 /**
@@ -89,17 +90,21 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final BandanaManager bandanaManager;
     private final BootstrapManager bootstrapManager;
     private final LivingDocServerServiceImpl service;
+
     private final LivingDocXmlRpcServer xmlRpcServer;
+    private final LivingDocRestServiceImpl restService;
+
     private final EventPublisher eventPublisher;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-        LivingDocServerServiceImpl service, LivingDocXmlRpcServer xmlRpcServer, 
+        LivingDocServerServiceImpl service,  LivingDocXmlRpcServer xmlRpcServer, LivingDocRestServiceImpl restService,
         EventPublisher eventPublisher) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.service = service;
         this.xmlRpcServer = xmlRpcServer;
+        this.restService = restService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -185,9 +190,9 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         service.setRepositoryDao(repositoryDao);
         service.setSessionService(customSessionService);
         service.setSutDao(sutDao);
-        service.setSessionService(customSessionService);
 
         xmlRpcServer.setService(service);
+        restService.setService(service);
     }
 
     private String getLivingDocBundleFilePath() throws Exception {

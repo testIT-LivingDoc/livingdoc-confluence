@@ -1,12 +1,18 @@
 package info.novatec.testit.livingdoc.confluence.rest;
 
+import info.novatec.testit.livingdoc.confluence.StaticAccessor;
+import info.novatec.testit.livingdoc.confluence.server.ConfluenceLivingDocServiceImpl;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.*;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import info.novatec.testit.livingdoc.server.rest.requests.*;
 import info.novatec.testit.livingdoc.server.rest.responses.*;
+import info.novatec.testit.livingdoc.util.ClientUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.slf4j.Logger;
@@ -15,38 +21,56 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Vector;
 
 
 @Path("/command")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class LivingDocRestServiceImpl implements LivingDocRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LivingDocRestServiceImpl.class);
 
-    private final LivingDocServerService ldServerService;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private LivingDocRestHelper livingDocRestHelper;
+    private LivingDocServerService livingDocServerService;
+    private ObjectMapper objectMapper;
+    private String username;
+    private String password;
 
 
-    public LivingDocRestServiceImpl(LivingDocServerService serverService) {
+    /**
+     * Constructor for IoC
+     */
+    public LivingDocRestServiceImpl() {
 
-        ldServerService = serverService;
+        this.livingDocRestHelper = new ConfluenceLivingDocServiceImpl(StaticAccessor.getConfluenceLivingDoc(), StaticAccessor.getStyleSheetExtractor());
 
-        objectMapper.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+        this.objectMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
+
+    public void setService(LivingDocServerService livingDocServerService) {
+        this.livingDocServerService = livingDocServerService;
     }
 
     @POST
-    public String dispatchCommand(@HeaderParam("method-name") final String methodName, final String body)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String dispatchCommand(@HeaderParam("authorization") String authorization,
+                                  @HeaderParam("method-name") final String methodName, final String body)
             throws LivingDocServerException {
+
+        decodedAuthorization(authorization);
+
         return dispatchByMethodName(methodName, body);
     }
 
-    String dispatchByMethodName(final String methodName, final String body) throws LivingDocServerException {
+    private String dispatchByMethodName(final String methodName, final String body) {
+
         String result;
 
         try {
@@ -54,250 +78,271 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
             result = (String) method.invoke(this, body);
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            LOGGER.warn(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new IllegalArgumentException(
-                    String.format("Method %s not handled by this REST endpoint!", methodName));
+                    String.format("Method '%s()' not handled by this REST endpoint!", methodName), e);
         }
 
         return StringUtils.defaultString(result);
     }
 
-    String getRequirementSummary(final String body) throws IOException, LivingDocServerException {
+    private void decodedAuthorization(final String authorization) throws LivingDocServerException {
+        if (StringUtils.startsWith(authorization, "Basic")) {
+            try {
+                String[] result = ClientUtils.decodeFromBase64(authorization.substring("Basic".length()).trim(), ":");
+                this.username = result[0];
+                this.password = result[1];
+            } catch (UnsupportedEncodingException uee) {
+                LOGGER.error(uee.getMessage(), uee);
+                throw new LivingDocServerException(uee);
+            }
+        } else {
+            throw new LivingDocServerException("livingdoc.rest.authorization.not.supported", "Authorization not supported.");
+        }
+    }
+
+    private String setSpecificationAsImplemented(final String body) throws IOException {
+        SetSpecificationAsImplementedRequest setSpecificationAsImplementedRequest = deserializeRequestBody(body, SetSpecificationAsImplementedRequest.class);
+        String message = livingDocRestHelper.setSpecificationAsImplemented(username, password, new Vector<>(setSpecificationAsImplementedRequest.arguments));
+        return serializeResponseBody(new SetSpecificationAsImplementedResponse(message));
+    }
+
+    private String getRequirementSummary(final String body) throws IOException, LivingDocServerException {
         GetSummaryRequest getSummaryRequest = deserializeRequestBody(body, GetSummaryRequest.class);
-        RequirementSummary requirementSummary = ldServerService.getRequirementSummary(getSummaryRequest.requirement);
+        RequirementSummary requirementSummary = livingDocServerService.getRequirementSummary(getSummaryRequest.requirement);
         return serializeResponseBody(new GetSummaryResponse(requirementSummary));
     }
 
-    String getSpecificationHierarchy(final String body) throws IOException, LivingDocServerException {
+    private String getSpecificationHierarchy(final String body) throws IOException, LivingDocServerException {
         GetSpecificationHierarchyRequest getSpecificationHierarchyRequest = deserializeRequestBody(body, GetSpecificationHierarchyRequest.class);
-        DocumentNode documentNode = ldServerService.getSpecificationHierarchy(getSpecificationHierarchyRequest.repository, getSpecificationHierarchyRequest.systemUnderTest);
+        DocumentNode documentNode = livingDocServerService.getSpecificationHierarchy(getSpecificationHierarchyRequest.repository, getSpecificationHierarchyRequest.systemUnderTest);
         return serializeResponseBody(new GetSpecificationHierarchyResponse(documentNode));
     }
 
-    String runReference(final String body) throws IOException, LivingDocServerException {
+    private String runReference(final String body) throws IOException, LivingDocServerException {
         RunReferenceRequest runReferenceRequest = deserializeRequestBody(body, RunReferenceRequest.class);
-        Reference runReference = ldServerService.runReference(runReferenceRequest.reference, runReferenceRequest.locale);
+        Reference runReference = livingDocServerService.runReference(runReferenceRequest.reference, runReferenceRequest.locale);
         return serializeResponseBody(new RunReferenceResponse(runReference));
     }
 
-    String runSpecification(final String body) throws IOException, LivingDocServerException {
+    private String runSpecification(final String body) throws IOException, LivingDocServerException {
         RunSpecificationRequest runSpecificationRequest = deserializeRequestBody(body, RunSpecificationRequest.class);
-        Execution execution = ldServerService.runSpecification(runSpecificationRequest.systemUnderTest, runSpecificationRequest.specification, runSpecificationRequest.implementedVersion, runSpecificationRequest.locale);
+        Execution execution = livingDocServerService.runSpecification(runSpecificationRequest.systemUnderTest, runSpecificationRequest.specification, runSpecificationRequest.implementedVersion, runSpecificationRequest.locale);
         return serializeResponseBody(new RunSpecificationResponse(execution));
     }
 
-    void removeReference(final String body) throws IOException, LivingDocServerException {
+    private void removeReference(final String body) throws IOException, LivingDocServerException {
         RemoveReferenceRequest removeReferenceRequest = deserializeRequestBody(body, RemoveReferenceRequest.class);
-        ldServerService.removeReference(removeReferenceRequest.reference);
+        livingDocServerService.removeReference(removeReferenceRequest.reference);
     }
 
-    String updateReference(final String body) throws IOException, LivingDocServerException {
+    private String updateReference(final String body) throws IOException, LivingDocServerException {
         UpdateReferenceRequest updateReferenceRequest = deserializeRequestBody(body, UpdateReferenceRequest.class);
-        Reference updateReference = ldServerService.updateReference(updateReferenceRequest.oldReference, updateReferenceRequest.newReference);
+        Reference updateReference = livingDocServerService.updateReference(updateReferenceRequest.oldReference, updateReferenceRequest.newReference);
         return serializeResponseBody(new UpdateReferenceResponse(updateReference));
     }
 
-    void createReference(final String body) throws IOException, LivingDocServerException {
+    private void createReference(final String body) throws IOException, LivingDocServerException {
         CreateReferenceRequest createReferenceRequest = deserializeRequestBody(body, CreateReferenceRequest.class);
-        ldServerService.createReference(createReferenceRequest.reference);
+        livingDocServerService.createReference(createReferenceRequest.reference);
     }
 
-    void removeSpecification(final String body) throws IOException, LivingDocServerException {
+    private void removeSpecification(final String body) throws IOException, LivingDocServerException {
         RemoveSpecificationRequest removeSpecificationRequest = deserializeRequestBody(body, RemoveSpecificationRequest.class);
-        ldServerService.removeSpecification(removeSpecificationRequest.specification);
+        livingDocServerService.removeSpecification(removeSpecificationRequest.specification);
     }
 
-    void updateSpecification(final String body) throws IOException, LivingDocServerException {
+    private void updateSpecification(final String body) throws IOException, LivingDocServerException {
         UpdateSpecificationRequest updateSpecificationRequest = deserializeRequestBody(body, UpdateSpecificationRequest.class);
-        ldServerService.updateSpecification(updateSpecificationRequest.oldSpecification, updateSpecificationRequest.newSpecification);
+        livingDocServerService.updateSpecification(updateSpecificationRequest.oldSpecification, updateSpecificationRequest.newSpecification);
     }
 
-    String createSpecification(final String body) throws IOException, LivingDocServerException {
+    private String createSpecification(final String body) throws IOException, LivingDocServerException {
         CreateSpecificationRequest createSpecificationRequest = deserializeRequestBody(body, CreateSpecificationRequest.class);
-        Specification createSpecification = ldServerService.createSpecification(createSpecificationRequest.specification);
+        Specification createSpecification = livingDocServerService.createSpecification(createSpecificationRequest.specification);
         return serializeResponseBody(new CreateSpecificationResponse(createSpecification));
     }
 
-    String getSpecification(final String body) throws IOException, LivingDocServerException {
+    private String getSpecification(final String body) throws IOException, LivingDocServerException {
         GetSpecificationRequest getSpecificationRequest = deserializeRequestBody(body, GetSpecificationRequest.class);
-        Specification specification = ldServerService.getSpecification(getSpecificationRequest.specification);
+        Specification specification = livingDocServerService.getSpecification(getSpecificationRequest.specification);
         return serializeResponseBody(new GetSpecificationResponse(specification));
     }
 
-    void removeRequirement(final String body) throws IOException, LivingDocServerException {
+    private void removeRequirement(final String body) throws IOException, LivingDocServerException {
         RemoveRequirementRequest removeRequirementRequest = deserializeRequestBody(body, RemoveRequirementRequest.class);
-        ldServerService.removeRequirement(removeRequirementRequest.requirement);
+        livingDocServerService.removeRequirement(removeRequirementRequest.requirement);
     }
 
-    void setSystemUnderTestAsDefault(final String body) throws IOException, LivingDocServerException {
+    private void setSystemUnderTestAsDefault(final String body) throws IOException, LivingDocServerException {
         SetSystemUnderTestAsDefaultRequest setSystemUnderTestAsDefaultRequest = deserializeRequestBody(body, SetSystemUnderTestAsDefaultRequest.class);
-        ldServerService.setSystemUnderTestAsDefault(setSystemUnderTestAsDefaultRequest.systemUnderTest, setSystemUnderTestAsDefaultRequest.repository);
+        livingDocServerService.setSystemUnderTestAsDefault(setSystemUnderTestAsDefaultRequest.systemUnderTest, setSystemUnderTestAsDefaultRequest.repository);
     }
 
-    void removeSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private void removeSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         RemoveSystemUnderTestRequest removeSystemUnderTestRequest = deserializeRequestBody(body, RemoveSystemUnderTestRequest.class);
-        ldServerService.removeSystemUnderTest(removeSystemUnderTestRequest.systemUnderTest, removeSystemUnderTestRequest.repository);
+        livingDocServerService.removeSystemUnderTest(removeSystemUnderTestRequest.systemUnderTest, removeSystemUnderTestRequest.repository);
     }
 
-    String testConnection(final String body) throws IOException {
+    private String testConnection(final String body) throws IOException {
         return serializeResponseBody(new TestConnectionResponse(Boolean.TRUE));
     }
 
-    void updateSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private void updateSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         UpdateSystemUnderTestRequest updateSystemUnderTestRequest = deserializeRequestBody(body, UpdateSystemUnderTestRequest.class);
-        ldServerService.updateSystemUnderTest(updateSystemUnderTestRequest.oldSystemUnderTestName, updateSystemUnderTestRequest.newSystemUnderTest, updateSystemUnderTestRequest.repository);
+        livingDocServerService.updateSystemUnderTest(updateSystemUnderTestRequest.oldSystemUnderTestName, updateSystemUnderTestRequest.newSystemUnderTest, updateSystemUnderTestRequest.repository);
     }
 
-    String getSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private String getSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         GetSystemUnderTestRequest getSystemUnderTestRequest = deserializeRequestBody(body, GetSystemUnderTestRequest.class);
-        SystemUnderTest systemUnderTest = ldServerService.getSystemUnderTest(getSystemUnderTestRequest.systemUnderTest, getSystemUnderTestRequest.repository);
+        SystemUnderTest systemUnderTest = livingDocServerService.getSystemUnderTest(getSystemUnderTestRequest.systemUnderTest, getSystemUnderTestRequest.repository);
         return serializeResponseBody(new GetSystemUnderTestResponse(systemUnderTest));
     }
 
-    void createSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private void createSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         CreateSystemUnderTestRequest createSystemUnderTestRequest = deserializeRequestBody(body, CreateSystemUnderTestRequest.class);
-        ldServerService.createSystemUnderTest(createSystemUnderTestRequest.systemUnderTest, createSystemUnderTestRequest.repository);
+        livingDocServerService.createSystemUnderTest(createSystemUnderTestRequest.systemUnderTest, createSystemUnderTestRequest.repository);
     }
 
-    String getReference(final String body) throws IOException, LivingDocServerException {
+    private String getReference(final String body) throws IOException, LivingDocServerException {
         GetReferenceRequest getReferenceRequest = deserializeRequestBody(body, GetReferenceRequest.class);
-        Reference reference = ldServerService.getReference(getReferenceRequest.reference);
+        Reference reference = livingDocServerService.getReference(getReferenceRequest.reference);
         return serializeResponseBody(new GetReferenceResponse(reference));
     }
 
-    String getRequirementReferences(final String body) throws IOException, LivingDocServerException {
+    private String getRequirementReferences(final String body) throws IOException, LivingDocServerException {
         GetRequirementReferencesRequest getRequirementReferencesRequest = deserializeRequestBody(body, GetRequirementReferencesRequest.class);
-        Set<Reference> reqReferences = new HashSet<>(ldServerService.getRequirementReferences(getRequirementReferencesRequest.requirement));
+        Set<Reference> reqReferences = new HashSet<>(livingDocServerService.getRequirementReferences(getRequirementReferencesRequest.requirement));
         return serializeResponseBody(new GetRequirementReferencesResponse(reqReferences));
     }
 
-    String doesRequirementHasReferences(final String body) throws IOException, LivingDocServerException {
+    private String doesRequirementHasReferences(final String body) throws IOException, LivingDocServerException {
         HasRequirementReferencesRequest hasRequirementReferencesRequest = deserializeRequestBody(body, HasRequirementReferencesRequest.class);
-        boolean hasRequirementReferences = ldServerService.doesRequirementHasReferences(hasRequirementReferencesRequest.requirement);
+        boolean hasRequirementReferences = livingDocServerService.doesRequirementHasReferences(hasRequirementReferencesRequest.requirement);
         return serializeResponseBody(new HasRequirementReferencesResponse(hasRequirementReferences));
     }
 
-    String getSpecificationReferences(final String body) throws IOException, LivingDocServerException {
+    private String getSpecificationReferences(final String body) throws IOException, LivingDocServerException {
         GetSpecificationReferencesRequest getSpecificationReferencesRequest = deserializeRequestBody(body, GetSpecificationReferencesRequest.class);
-        Set<Reference> references = new HashSet<>(ldServerService.getSpecificationReferences(getSpecificationReferencesRequest.specification));
+        Set<Reference> references = new HashSet<>(livingDocServerService.getSpecificationReferences(getSpecificationReferencesRequest.specification));
         return serializeResponseBody(new GetSpecificationReferencesResponse(references));
     }
 
-    String doesSpecificationHasReferences(final String body) throws IOException, LivingDocServerException {
+    private String doesSpecificationHasReferences(final String body) throws IOException, LivingDocServerException {
         DoesSpecificationHasReferencesRequest doesSpecificationHasReferencesRequest = deserializeRequestBody(body, DoesSpecificationHasReferencesRequest.class);
-        boolean doesSpecificationHasReferences = ldServerService.doesSpecificationHasReferences(doesSpecificationHasReferencesRequest.specification);
+        boolean doesSpecificationHasReferences = livingDocServerService.doesSpecificationHasReferences(doesSpecificationHasReferencesRequest.specification);
         return serializeResponseBody(new DoesSpecificationHasReferencesResponse(doesSpecificationHasReferences));
     }
 
-    void removeSpecificationSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private void removeSpecificationSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         RemoveSpecificationSystemUnderTestRequest removeSpecificationSystemUnderTestRequest = deserializeRequestBody(body, RemoveSpecificationSystemUnderTestRequest.class);
-        ldServerService.removeSpecificationSystemUnderTest(removeSpecificationSystemUnderTestRequest.systemUnderTest, removeSpecificationSystemUnderTestRequest.specification);
+        livingDocServerService.removeSpecificationSystemUnderTest(removeSpecificationSystemUnderTestRequest.systemUnderTest, removeSpecificationSystemUnderTestRequest.specification);
     }
 
-    void addSpecificationSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private void addSpecificationSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         AddSpecificationSystemUnderTestRequest addSpecificationSystemUnderTestRequest = deserializeRequestBody(body, AddSpecificationSystemUnderTestRequest.class);
-        ldServerService.addSpecificationSystemUnderTest(addSpecificationSystemUnderTestRequest.systemUnderTest, addSpecificationSystemUnderTestRequest.specification);
+        livingDocServerService.addSpecificationSystemUnderTest(addSpecificationSystemUnderTestRequest.systemUnderTest, addSpecificationSystemUnderTestRequest.specification);
     }
 
-    String getSystemUnderTestsOfProject(final String body) throws IOException, LivingDocServerException {
+    private String getSystemUnderTestsOfProject(final String body) throws IOException, LivingDocServerException {
         GetSystemUnderTestsOfProjectRequest getSystemUnderTestsOfProjectRequest = deserializeRequestBody(body, GetSystemUnderTestsOfProjectRequest.class);
-        Set<SystemUnderTest> systemUnderTestsOfProject = new HashSet<>(ldServerService.getSystemUnderTestsOfProject(getSystemUnderTestsOfProjectRequest.projectName));
+        Set<SystemUnderTest> systemUnderTestsOfProject = new HashSet<>(livingDocServerService.getSystemUnderTestsOfProject(getSystemUnderTestsOfProjectRequest.projectName));
         return serializeResponseBody(new GetSystemUnderTestsOfProjectResponse(systemUnderTestsOfProject));
     }
 
-    String getSystemUnderTestsOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
+    private String getSystemUnderTestsOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
         GetSystemUnderTestsOfAssociatedProjectRequest getSystemUnderTestsOfAssociatedProjectRequest = deserializeRequestBody(body, GetSystemUnderTestsOfAssociatedProjectRequest.class);
-        Set<SystemUnderTest> systemUnderTestsOfAssociatedProject = new HashSet<>(ldServerService.getSystemUnderTestsOfAssociatedProject(getSystemUnderTestsOfAssociatedProjectRequest.repository.getUid()));
+        Set<SystemUnderTest> systemUnderTestsOfAssociatedProject = new HashSet<>(livingDocServerService.getSystemUnderTestsOfAssociatedProject(getSystemUnderTestsOfAssociatedProjectRequest.repository.getUid()));
         return serializeResponseBody(new GetSystemUnderTestsOfAssociatedProjectResponse(systemUnderTestsOfAssociatedProject));
     }
 
-    String getRequirementRepositoriesOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
+    private String getRequirementRepositoriesOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
         GetRequirementRepositoriesOfAssociatedProjectRequest getRequirementRepositoriesOfAssociatedProjectRequest = deserializeRequestBody(body, GetRequirementRepositoriesOfAssociatedProjectRequest.class);
-        Set<Repository> requirementRepositoriesOfAssociatedProject = new HashSet<>(ldServerService.getRequirementRepositoriesOfAssociatedProject(getRequirementRepositoriesOfAssociatedProjectRequest.repository.getUid()));
+        Set<Repository> requirementRepositoriesOfAssociatedProject = new HashSet<>(livingDocServerService.getRequirementRepositoriesOfAssociatedProject(getRequirementRepositoriesOfAssociatedProjectRequest.repository.getUid()));
         return serializeResponseBody(new GetRequirementRepositoriesOfAssociatedProjectResponse(requirementRepositoriesOfAssociatedProject));
     }
 
-    String getAllRepositoriesForSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private String getAllRepositoriesForSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         GetAllRepositoriesForSystemUnderTestRequest getAllRepositoriesForSystemUnderTestRequest = deserializeRequestBody(body, GetAllRepositoriesForSystemUnderTestRequest.class);
-        Set<Repository> allRepositories4Sut = new HashSet<>(ldServerService.getAllRepositoriesForSystemUnderTest(getAllRepositoriesForSystemUnderTestRequest.systemUnderTest));
+        Set<Repository> allRepositories4Sut = new HashSet<>(livingDocServerService.getAllRepositoriesForSystemUnderTest(getAllRepositoriesForSystemUnderTestRequest.systemUnderTest));
         return serializeResponseBody(new GetAllRepositoriesForSystemUnderTestResponse(allRepositories4Sut));
     }
 
-    String getAllSpecificationRepositories(final String body) throws IOException, LivingDocServerException {
-        Set<Repository> allSpecificationRepositories = new HashSet<>(ldServerService.getAllSpecificationRepositories());
+    private String getAllSpecificationRepositories(final String body) throws IOException, LivingDocServerException {
+        Set<Repository> allSpecificationRepositories = new HashSet<>(livingDocServerService.getAllSpecificationRepositories());
         return serializeResponseBody(new GetAllSpecificationRepositoriesResponse(allSpecificationRepositories));
     }
 
-    String getSpecificationRepositoriesForSystemUnderTest(final String body) throws IOException, LivingDocServerException {
+    private String getSpecificationRepositoriesForSystemUnderTest(final String body) throws IOException, LivingDocServerException {
         GetSpecificationRepositoriesForSystemUnderTestRequest getSpecificationRepositoriesForSystemUnderTestRequest = deserializeRequestBody(body, GetSpecificationRepositoriesForSystemUnderTestRequest.class);
-        Set<Repository> repositoriesListForSut = new HashSet<>(ldServerService.getSpecificationRepositoriesForSystemUnderTest(getSpecificationRepositoriesForSystemUnderTestRequest.systemUnderTest));
+        Set<Repository> repositoriesListForSut = new HashSet<>(livingDocServerService.getSpecificationRepositoriesForSystemUnderTest(getSpecificationRepositoriesForSystemUnderTestRequest.systemUnderTest));
         return serializeResponseBody(new GetSpecificationRepositoriesForSystemUnderTestResponse(repositoriesListForSut));
     }
 
-    String getSpecificationRepositoriesOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
+    private String getSpecificationRepositoriesOfAssociatedProject(final String body) throws IOException, LivingDocServerException {
         GetSpecificationRepositoriesOfAssociatedProjectRequest getSpecificationRepositoriesOfAssociatedProjectRequest = deserializeRequestBody(body, GetSpecificationRepositoriesOfAssociatedProjectRequest.class);
-        Set<Repository> repositoriesList = new HashSet<>(ldServerService.getSpecificationRepositoriesOfAssociatedProject(getSpecificationRepositoriesOfAssociatedProjectRequest.repository.getUid()));
+        Set<Repository> repositoriesList = new HashSet<>(livingDocServerService.getSpecificationRepositoriesOfAssociatedProject(getSpecificationRepositoriesOfAssociatedProjectRequest.repository.getUid()));
         return serializeResponseBody(new GetSpecificationRepositoriesOfAssociatedProjectResponse(repositoriesList));
     }
 
-    String getAllProjects(final String body) throws IOException, LivingDocServerException {
-        Set<Project> projects = new HashSet<>(ldServerService.getAllProjects());
+    private String getAllProjects(final String body) throws IOException, LivingDocServerException {
+        Set<Project> projects = new HashSet<>(livingDocServerService.getAllProjects());
         return serializeResponseBody(new GetAllProjectsResponse(projects));
     }
 
-    void removeRepository(final String body) throws IOException, LivingDocServerException {
+    private void removeRepository(final String body) throws IOException, LivingDocServerException {
         RemoveRepositoryRequest removeRepositoryRequest = deserializeRequestBody(body, RemoveRepositoryRequest.class);
-        ldServerService.removeRepository(removeRepositoryRequest.repositoryUid);
+        livingDocServerService.removeRepository(removeRepositoryRequest.repositoryUid);
     }
 
-    void updateRepositoryRegistration(final String body) throws IOException, LivingDocServerException {
+    private void updateRepositoryRegistration(final String body) throws IOException, LivingDocServerException {
         UpdateRepositoryRegistrationRequest updateRepositoryRegistrationRequest = deserializeRequestBody(body, UpdateRepositoryRegistrationRequest.class);
-        ldServerService.updateRepositoryRegistration(updateRepositoryRegistrationRequest.repository);
+        livingDocServerService.updateRepositoryRegistration(updateRepositoryRegistrationRequest.repository);
     }
 
-    String registerRepository(final String body) throws IOException, LivingDocServerException {
+    private String registerRepository(final String body) throws IOException, LivingDocServerException {
         RegisterRepositoryRequest registerRepositoryRequest = deserializeRequestBody(body, RegisterRepositoryRequest.class);
-        Repository repository = ldServerService.registerRepository(registerRepositoryRequest.repository);
+        Repository repository = livingDocServerService.registerRepository(registerRepositoryRequest.repository);
         return serializeResponseBody(new RegisterRepositoryResponse(repository));
     }
 
-    String getRegisteredRepository(final String body) throws IOException, LivingDocServerException {
+    private String getRegisteredRepository(final String body) throws IOException, LivingDocServerException {
         GetRegisteredRepositoryRequest getRegisteredRepositoryRequest = deserializeRequestBody(body, GetRegisteredRepositoryRequest.class);
-        Repository registeredRepository = ldServerService.getRegisteredRepository(getRegisteredRepositoryRequest.repository);
+        Repository registeredRepository = livingDocServerService.getRegisteredRepository(getRegisteredRepositoryRequest.repository);
         return serializeResponseBody(new GetRegisteredRepositoryResponse(registeredRepository));
     }
 
-    void removeRunner(final String body) throws IOException, LivingDocServerException {
+    private void removeRunner(final String body) throws IOException, LivingDocServerException {
         RemoveRunnerRequest removeRunnerRequest = deserializeRequestBody(body, RemoveRunnerRequest.class);
-        ldServerService.removeRunner(removeRunnerRequest.name);
+        livingDocServerService.removeRunner(removeRunnerRequest.name);
     }
 
-    void updateRunner(final String body) throws IOException, LivingDocServerException {
+    private void updateRunner(final String body) throws IOException, LivingDocServerException {
         UpdateRunnerRequest updateRunnerRequest = deserializeRequestBody(body, UpdateRunnerRequest.class);
-        ldServerService.updateRunner(updateRunnerRequest.oldRunnerName, updateRunnerRequest.runner);
+        livingDocServerService.updateRunner(updateRunnerRequest.oldRunnerName, updateRunnerRequest.runner);
     }
 
-    void createRunner(final String body) throws IOException, LivingDocServerException {
+    private void createRunner(final String body) throws IOException, LivingDocServerException {
         CreateRunnerRequest createRunnerRequest = deserializeRequestBody(body, CreateRunnerRequest.class);
-        ldServerService.createRunner(createRunnerRequest.runner);
+        livingDocServerService.createRunner(createRunnerRequest.runner);
     }
 
-    String getAllRunners(final String body) throws LivingDocServerException, IOException {
-        Set<Runner> runners = new HashSet<>(ldServerService.getAllRunners());
+    private String getAllRunners(final String body) throws LivingDocServerException, IOException {
+        Set<Runner> runners = new HashSet<>(livingDocServerService.getAllRunners());
         return serializeResponseBody(new GetAllRunnersResponse(runners));
     }
 
-    String getRunner(final String body) throws IOException, LivingDocServerException {
+    private String getRunner(final String body) throws IOException, LivingDocServerException {
         GetRunnerRequest getRunnerRequest = deserializeRequestBody(body, GetRunnerRequest.class);
-        Runner runner = ldServerService.getRunner(getRunnerRequest.name);
+        Runner runner = livingDocServerService.getRunner(getRunnerRequest.name);
         return serializeResponseBody(new GetRunnerResponse(runner));
     }
 
-    String ping(final String body) throws IOException {
+    private String ping(final String body) throws IOException {
         PingRequest pingRequest = deserializeRequestBody(body, PingRequest.class);
         boolean success = true;
         try {
-            ldServerService.getRepository(pingRequest.repository.getUid(), pingRequest.repository.getMaxUsers());
+            livingDocServerService.getRepository(pingRequest.repository.getUid(), pingRequest.repository.getMaxUsers());
 
         } catch (LivingDocServerException ldse) {
             LOGGER.warn(ldse.getMessage(), ldse);
@@ -307,7 +352,15 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
     }
 
     private String serializeResponseBody(Object response) throws IOException {
-        return objectMapper.writeValueAsString(response);
+        String result;
+        try {
+            result = objectMapper.writeValueAsString(response);
+
+        } catch (JsonGenerationException | JsonMappingException jsone) {
+            LOGGER.error(jsone.getMessage(), jsone);
+            throw new IOException(jsone);
+        }
+        return result;
     }
 
     private <T> T deserializeRequestBody(String body, Class<T> clazz) throws IOException {

@@ -1,7 +1,10 @@
 package info.novatec.testit.livingdoc.confluence.rest;
 
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.*;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
+import org.apache.commons.lang3.CharEncoding;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.hamcrest.CoreMatchers;
@@ -12,10 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +31,7 @@ import static org.mockito.Mockito.when;
  * @author Sebastian Letzel
  */
 @RunWith(MockitoJUnitRunner.class)
-public class LivingDocRestServiceImplTest {
+public class LivingDocRestServiceTest {
 
     private static ObjectMapper objectMapper;
     private static Specification specification;
@@ -42,16 +49,20 @@ public class LivingDocRestServiceImplTest {
     private static String specificationAsString;
     private static String requirementAsString;
     private static String referenceAsString;
+    private static String credentials;
 
     @Mock
-    LivingDocServerService clientService;
-
+    private static LivingDocRestHelper clientHelperService;
+    @Mock
+    private static LivingDocServerService clientService;
     @InjectMocks
-    LivingDocRestServiceImpl ldRestService;
+    private static LivingDocRestServiceImpl ldRestService;
 
 
     @BeforeClass
     static public void setUp() throws Exception {
+
+        credentials = "Basic " + Base64.getEncoder().encodeToString("username:password".getBytes(CharEncoding.UTF_8));
 
         objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
@@ -95,11 +106,23 @@ public class LivingDocRestServiceImplTest {
     }
 
     @Test
+    public void setSpecificationAsImplementedTest() throws LivingDocServerException, IOException {
+
+        List<?> params = new ArrayList<>();
+        when(clientHelperService.setSpecificationAsImplemented(anyString(), anyString(), anyVararg())).thenReturn("<success>");
+
+        String result = ldRestService.dispatchCommand(credentials,
+                "setSpecificationAsImplemented", "{\"arguments\": " + objectMapper.writeValueAsString(params) + "}");
+
+        assertThat(result, CoreMatchers.is("{\"message\":\"<success>\"}"));
+    }
+
+    @Test
     public void getRunner() throws Exception {
 
         when(clientService.getRunner("DocumentRunner")).thenReturn(runners.get(0));
 
-        String result = ldRestService.dispatchByMethodName("getRunner", "{\"name\":\"DocumentRunner\"}");
+        String result = ldRestService.dispatchCommand(credentials, "getRunner", "{\"name\":\"DocumentRunner\"}");
         assertThat(result, CoreMatchers.is(runnerAsString));
     }
 
@@ -109,7 +132,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getAllRunners()).thenReturn(runners);
 
         String expected = "{\"runners\":" + objectMapper.writeValueAsString(runners) + "}";
-        String result = ldRestService.dispatchByMethodName("getAllRunners", null);
+        String result = ldRestService.dispatchCommand(credentials, "getAllRunners", null);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -118,7 +141,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).createRunner(runners.get(0));
 
-        String result = ldRestService.dispatchByMethodName("createRunner", runnerAsString);
+        String result = ldRestService.dispatchCommand(credentials, "createRunner", runnerAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -128,7 +151,7 @@ public class LivingDocRestServiceImplTest {
         doNothing().when(clientService).updateRunner(runners.get(0).getName(), runners.get(0));
 
         String body = "{\"oldRunnerName\":\"DocumentRunner\",\"runner\":" + objectMapper.writeValueAsString(runners.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("updateRunner", body);
+        String result = ldRestService.dispatchCommand(credentials, "updateRunner", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -137,7 +160,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).removeRunner(runners.get(0).getName());
 
-        String result = ldRestService.dispatchByMethodName("removeRunner", "{\"name\":\"DocumentRunner\"}");
+        String result = ldRestService.dispatchCommand(credentials, "removeRunner", "{\"name\":\"DocumentRunner\"}");
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -146,7 +169,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getRegisteredRepository(repositories.get(0))).thenReturn(repositories.get(0));
 
-        String result = ldRestService.dispatchByMethodName("getRegisteredRepository", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getRegisteredRepository", repositoryAsString);
         assertThat(result, CoreMatchers.is(repositoryAsString));
     }
 
@@ -155,7 +178,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.registerRepository(repositories.get(0))).thenReturn(repositories.get(0));
 
-        String result = ldRestService.dispatchByMethodName("registerRepository", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "registerRepository", repositoryAsString);
         assertThat(result, CoreMatchers.is(repositoryAsString));
     }
 
@@ -164,7 +187,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).updateRepositoryRegistration(repositories.get(0));
 
-        String result = ldRestService.dispatchByMethodName("updateRepositoryRegistration", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "updateRepositoryRegistration", repositoryAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -173,7 +196,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).removeRepository(repositories.get(0).getUid());
 
-        String result = ldRestService.dispatchByMethodName("removeRepository", "{\"repositoryUid\":\"1\"}");
+        String result = ldRestService.dispatchCommand(credentials, "removeRepository", "{\"repositoryUid\":\"1\"}");
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -183,7 +206,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getAllProjects()).thenReturn(projects);
 
         String expected = "{\"allProjects\":" + objectMapper.writeValueAsString(projects) + "}";
-        String result = ldRestService.dispatchByMethodName("getAllProjects", null);
+        String result = ldRestService.dispatchCommand(credentials, "getAllProjects", null);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -192,7 +215,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getSpecificationRepositoriesOfAssociatedProject(repositories.get(0).getUid())).thenReturn(repositories);
 
-        String result = ldRestService.dispatchByMethodName("getSpecificationRepositoriesOfAssociatedProject", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getSpecificationRepositoriesOfAssociatedProject", repositoryAsString);
         assertThat(result, CoreMatchers.is(repositoriesExpected));
     }
 
@@ -201,7 +224,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getSpecificationRepositoriesForSystemUnderTest(systemUnderTests.get(0))).thenReturn(repositories);
 
-        String result = ldRestService.dispatchByMethodName("getSpecificationRepositoriesForSystemUnderTest", systemUnderTestAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getSpecificationRepositoriesForSystemUnderTest", systemUnderTestAsString);
         assertThat(result, CoreMatchers.is(repositoriesExpected));
     }
 
@@ -211,7 +234,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getAllSpecificationRepositories()).thenReturn(repositories);
 
         String expected = "{\"allSpecificationRepositories\":" + objectMapper.writeValueAsString(repositories) + "}";
-        String result = ldRestService.dispatchByMethodName("getAllSpecificationRepositories", null);
+        String result = ldRestService.dispatchCommand(credentials, "getAllSpecificationRepositories", null);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -221,7 +244,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getAllRepositoriesForSystemUnderTest(systemUnderTests.get(0))).thenReturn(repositories);
 
         String expected = "{\"allRepositoriesForSystemUnderTest\":" + objectMapper.writeValueAsString(repositories) + "}";
-        String result = ldRestService.dispatchByMethodName("getAllRepositoriesForSystemUnderTest", systemUnderTestAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getAllRepositoriesForSystemUnderTest", systemUnderTestAsString);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -231,7 +254,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getRequirementRepositoriesOfAssociatedProject(repositories.get(0).getUid())).thenReturn(repositories);
 
         String expected = "{\"requirementRepositoriesOfAssociatedProject\":" + objectMapper.writeValueAsString(repositories) + "}";
-        String result = ldRestService.dispatchByMethodName("getRequirementRepositoriesOfAssociatedProject", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getRequirementRepositoriesOfAssociatedProject", repositoryAsString);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -241,7 +264,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getSystemUnderTestsOfAssociatedProject(repositories.get(0).getUid())).thenReturn(systemUnderTests);
 
         String expected = "{\"systemUnderTestsOfAssociatedProject\":" + objectMapper.writeValueAsString(systemUnderTests) + "}";
-        String result = ldRestService.dispatchByMethodName("getSystemUnderTestsOfAssociatedProject", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getSystemUnderTestsOfAssociatedProject", repositoryAsString);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -251,7 +274,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getSystemUnderTestsOfProject(projects.get(0).getName())).thenReturn(systemUnderTests);
 
         String expected = "{\"systemUnderTestsOfProject\":" + objectMapper.writeValueAsString(systemUnderTests) + "}";
-        String result = ldRestService.dispatchByMethodName("getSystemUnderTestsOfProject", "{\"projectName\":\"LDProject\"}");
+        String result = ldRestService.dispatchCommand(credentials, "getSystemUnderTestsOfProject", "{\"projectName\":\"LDProject\"}");
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -261,7 +284,7 @@ public class LivingDocRestServiceImplTest {
         doNothing().when(clientService).addSpecificationSystemUnderTest(systemUnderTests.get(0), specification);
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0)) + ", \"specification\":" + objectMapper.writeValueAsString(specification) + "}";
-        String result = ldRestService.dispatchByMethodName("addSpecificationSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "addSpecificationSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -271,7 +294,7 @@ public class LivingDocRestServiceImplTest {
         doNothing().when(clientService).removeSpecificationSystemUnderTest(systemUnderTests.get(0), specification);
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0)) + ", \"specification\":" + objectMapper.writeValueAsString(specification) + "}";
-        String result = ldRestService.dispatchByMethodName("removeSpecificationSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "removeSpecificationSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -280,7 +303,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.doesSpecificationHasReferences(specification)).thenReturn(Boolean.TRUE);
 
-        String result = ldRestService.dispatchByMethodName("doesSpecificationHasReferences", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "doesSpecificationHasReferences", specificationAsString);
         assertThat(result, CoreMatchers.is("{\"hasReferences\":true}"));
     }
 
@@ -289,7 +312,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getSpecificationReferences(specification)).thenReturn(references);
 
-        String result = ldRestService.dispatchByMethodName("getSpecificationReferences", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getSpecificationReferences", specificationAsString);
         assertThat(result, CoreMatchers.is("{\"references\":" + objectMapper.writeValueAsString(references) + "}"));
     }
 
@@ -298,7 +321,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.doesRequirementHasReferences(requirement)).thenReturn(Boolean.TRUE);
 
-        String result = ldRestService.dispatchByMethodName("doesRequirementHasReferences", requirementAsString);
+        String result = ldRestService.dispatchCommand(credentials, "doesRequirementHasReferences", requirementAsString);
         assertThat(result, CoreMatchers.is("{\"value\":true}"));
     }
 
@@ -307,7 +330,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getRequirementReferences(requirement)).thenReturn(references);
 
-        String result = ldRestService.dispatchByMethodName("getRequirementReferences", requirementAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getRequirementReferences", requirementAsString);
         assertThat(result, CoreMatchers.is("{\"references\":" + objectMapper.writeValueAsString(references) + "}"));
     }
 
@@ -316,7 +339,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getReference(references.get(0))).thenReturn(references.get(0));
 
-        String result = ldRestService.dispatchByMethodName("getReference", referenceAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getReference", referenceAsString);
         assertThat(result, CoreMatchers.is(referenceAsString));
     }
 
@@ -326,7 +349,7 @@ public class LivingDocRestServiceImplTest {
         doNothing().when(clientService).createSystemUnderTest(systemUnderTests.get(0), repositories.get(0));
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0)) + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("createSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "createSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -336,7 +359,7 @@ public class LivingDocRestServiceImplTest {
         when(clientService.getSystemUnderTest(systemUnderTests.get(0), repositories.get(0))).thenReturn(systemUnderTests.get(0));
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0)) + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("getSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "getSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(systemUnderTestAsString));
     }
 
@@ -348,7 +371,7 @@ public class LivingDocRestServiceImplTest {
         String body = "{\"oldSystemUnderTestName\":\"sut\""
                 + ", \"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0))
                 + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("updateSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "updateSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -359,7 +382,7 @@ public class LivingDocRestServiceImplTest {
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0))
                 + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("removeSystemUnderTest", body);
+        String result = ldRestService.dispatchCommand(credentials, "removeSystemUnderTest", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -370,7 +393,7 @@ public class LivingDocRestServiceImplTest {
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0))
                 + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("setSystemUnderTestAsDefault", body);
+        String result = ldRestService.dispatchCommand(credentials, "setSystemUnderTestAsDefault", body);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -379,7 +402,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).removeRequirement(requirement);
 
-        String result = ldRestService.dispatchByMethodName("removeRequirement", requirementAsString);
+        String result = ldRestService.dispatchCommand(credentials, "removeRequirement", requirementAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -388,7 +411,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getSpecification(specification)).thenReturn(specification);
 
-        String result = ldRestService.dispatchByMethodName("getSpecification", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getSpecification", specificationAsString);
         assertThat(result, CoreMatchers.is(specificationAsString));
     }
 
@@ -397,7 +420,7 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.createSpecification(specification)).thenReturn(specification);
 
-        String result = ldRestService.dispatchByMethodName("createSpecification", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "createSpecification", specificationAsString);
         assertThat(result, CoreMatchers.is(specificationAsString));
     }
 
@@ -406,7 +429,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).updateSpecification(specification, specification);
 
-        String result = ldRestService.dispatchByMethodName("updateSpecification", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "updateSpecification", specificationAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -415,7 +438,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).removeSpecification(specification);
 
-        String result = ldRestService.dispatchByMethodName("removeSpecification", specificationAsString);
+        String result = ldRestService.dispatchCommand(credentials, "removeSpecification", specificationAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -424,7 +447,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).createReference(references.get(0));
 
-        String result = ldRestService.dispatchByMethodName("createReference", referenceAsString);
+        String result = ldRestService.dispatchCommand(credentials, "createReference", referenceAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -436,7 +459,7 @@ public class LivingDocRestServiceImplTest {
         String body =
                 "{\"oldReference\": " + objectMapper.writeValueAsString(references.get(0)) + "," +
                         "\"newReference\":" + objectMapper.writeValueAsString(references.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("updateReference", body);
+        String result = ldRestService.dispatchCommand(credentials, "updateReference", body);
         assertThat(result, CoreMatchers.is(referenceAsString));
     }
 
@@ -445,7 +468,7 @@ public class LivingDocRestServiceImplTest {
 
         doNothing().when(clientService).removeReference(references.get(0));
 
-        String result = ldRestService.dispatchByMethodName("removeReference", referenceAsString);
+        String result = ldRestService.dispatchCommand(credentials, "removeReference", referenceAsString);
         assertThat(result, CoreMatchers.is(""));
     }
 
@@ -459,7 +482,7 @@ public class LivingDocRestServiceImplTest {
                 ",\"specification\":" + objectMapper.writeValueAsString(specification) +
                 ",\"implementedVersion\":true" +
                 ",\"locale\":\"en\"}";
-        String result = ldRestService.dispatchByMethodName("runSpecification", body);
+        String result = ldRestService.dispatchCommand(credentials, "runSpecification", body);
         assertThat(result, CoreMatchers.is(expected));
     }
 
@@ -470,7 +493,7 @@ public class LivingDocRestServiceImplTest {
 
         String body = "{\"reference\":" + objectMapper.writeValueAsString(references.get(0)) +
                 ",\"locale\":\"en\"}";
-        String result = ldRestService.dispatchByMethodName("runReference", body);
+        String result = ldRestService.dispatchCommand(credentials, "runReference", body);
         assertThat(result, CoreMatchers.is(referenceAsString));
     }
 
@@ -482,7 +505,7 @@ public class LivingDocRestServiceImplTest {
 
         String body = "{\"systemUnderTest\": " + objectMapper.writeValueAsString(systemUnderTests.get(0))
                 + ", \"repository\":" + objectMapper.writeValueAsString(repositories.get(0)) + "}";
-        String result = ldRestService.dispatchByMethodName("getSpecificationHierarchy", body);
+        String result = ldRestService.dispatchCommand(credentials, "getSpecificationHierarchy", body);
         assertThat(result, CoreMatchers.is("{\"documentNode\":" + objectMapper.writeValueAsString(documentNode) + "}"));
     }
 
@@ -492,7 +515,7 @@ public class LivingDocRestServiceImplTest {
         RequirementSummary requirementSummary = new RequirementSummary();
         when(clientService.getRequirementSummary(requirement)).thenReturn(requirementSummary);
 
-        String result = ldRestService.dispatchByMethodName("getRequirementSummary", requirementAsString);
+        String result = ldRestService.dispatchCommand(credentials, "getRequirementSummary", requirementAsString);
         assertThat(result, CoreMatchers.is("{\"requirementSummary\":" + objectMapper.writeValueAsString(requirementSummary) + "}"));
     }
 
@@ -501,20 +524,20 @@ public class LivingDocRestServiceImplTest {
 
         when(clientService.getRepository(repositories.get(0).getUid(), repositories.get(0).getMaxUsers())).thenReturn(repositories.get(0));
 
-        String result = ldRestService.dispatchByMethodName("ping", repositoryAsString);
+        String result = ldRestService.dispatchCommand(credentials, "ping", repositoryAsString);
         assertThat(result, CoreMatchers.is("{\"success\":true}"));
     }
 
     @Test
     public void testConnection() throws Exception {
-        String result = ldRestService.dispatchByMethodName("testConnection", null);
+        String result = ldRestService.dispatchCommand(credentials, "testConnection", null);
         assertThat(result, CoreMatchers.is("{\"success\":true}"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void dispatchByMethodNameException() throws Exception {
+    public void dispatchCommandException() throws Exception {
 
-        ldRestService.dispatchByMethodName("getMethodNotHandled", null);
+        ldRestService.dispatchCommand(credentials, "getMethodNotHandled", null);
     }
 
 }
