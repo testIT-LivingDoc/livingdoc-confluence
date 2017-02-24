@@ -43,7 +43,6 @@ public class BootstrapData {
             sessionService.beginTransaction();
 
             new InitialDatas(systemInfoDao, repositoryDao).insert();
-            new DefaultRunners(systemUnderTestDao, properties).insertJavaRunner();
 
             sessionService.commitTransaction();
         } catch (Exception e) {

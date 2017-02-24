@@ -187,8 +187,6 @@
 		<label key="" />
 		<condition
 			class="com.atlassian.confluence.plugin.descriptor.web.conditions.ViewingContentCondition" />
-		<condition
-			class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeEnabledCondition" />
 	</web-item>
 	<!-- DOCHTHEME XWORK -->
 	<xwork name="Documentation Theme Actions" key="docthemeactions">

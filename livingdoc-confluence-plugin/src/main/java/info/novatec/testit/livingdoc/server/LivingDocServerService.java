@@ -17,6 +17,7 @@
 package info.novatec.testit.livingdoc.server;
 
 import java.util.List;
+import java.util.Properties;
 
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
@@ -514,4 +515,12 @@ public interface LivingDocServerService {
      * @throws LivingDocServerException
      */
     void removeProject(Project project, boolean cascade) throws LivingDocServerException;
+
+    /**
+     * Create a default runner
+     *
+     * @param properties
+     * @throws LivingDocServerException
+     */
+    void createDefaultRunner(Properties properties) throws LivingDocServerException;
 }
