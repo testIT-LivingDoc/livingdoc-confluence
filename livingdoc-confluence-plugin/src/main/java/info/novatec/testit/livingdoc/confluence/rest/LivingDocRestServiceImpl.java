@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -99,6 +100,18 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
         } else {
             throw new LivingDocServerException("livingdoc.rest.authorization.not.supported", "Authorization not supported.");
         }
+    }
+
+    private String getRenderedSpecification(final String body) throws IOException {
+        GetRenderedSpecificationRequest getRenderedSpecificationRequest = deserializeRequestBody(body, GetRenderedSpecificationRequest.class);
+        String specification = livingDocRestHelper.getRenderedSpecification(username, password, new Vector<>(getRenderedSpecificationRequest.arguments));
+        return serializeResponseBody(new GetRenderedSpecificationResponse(specification));
+    }
+
+    private String listDocumentsInHierarchy(final String body) throws IOException {
+        ListDocumentsInHierarchyRequest listDocumentsInHierarchyRequest = deserializeRequestBody(body, ListDocumentsInHierarchyRequest.class);
+        List<?> specifications = livingDocRestHelper.getSpecificationHierarchy(username, password, new Vector<>(listDocumentsInHierarchyRequest.arguments));
+        return serializeResponseBody(new ListDocumentsInHierarchyResponse(specifications));
     }
 
     private String setSpecificationAsImplemented(final String body) throws IOException {

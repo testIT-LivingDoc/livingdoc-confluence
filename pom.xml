@@ -33,8 +33,8 @@
 	<properties>
 		<project.java.version>1.8</project.java.version>
 		<project.root>.</project.root>
-		<confluence.version>6.0.3</confluence.version>
-		<confluence.data.version>6.0.3</confluence.data.version>
+		<confluence.version>6.0.5</confluence.version>
+		<confluence.data.version>6.0.5</confluence.data.version>
 		<amps.version>6.2.6</amps.version>
 		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
@@ -61,12 +61,6 @@
 				<groupId>info.novatec.testit</groupId>
 				<artifactId>livingdoc-client</artifactId>
 				<version>${testit.livingdoc.core.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-web</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>info.novatec.testit</groupId>

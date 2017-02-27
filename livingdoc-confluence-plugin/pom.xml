@@ -20,13 +20,15 @@
 		<plugin.testrunner.version>1.4-SNAPSHOT</plugin.testrunner.version>
 		<licenses.mapping>./licensing/license-mappings.xml</licenses.mapping>
 		<licenses.template>./licensing/NOTICE.template</licenses.template>
+		<hibernate.version>5.1.0.Final</hibernate.version>
 	</properties>
 
 	<!-- Please read the following guides before making changes: -->
-	<!-- https://developer.atlassian.com/display/DOCS/Managing+Dependencies -->
+	<!-- https://developer.atlassian.com/docs/getting-started/working-with-the-pom/managing-dependencies-->
+	<!-- https://developer.atlassian.com/docs/advanced-topics/working-with-maven/using-the-amps-maven-plugin-directly -->
 	<!-- https://developer.atlassian.com/display/DOCS/Bundling+extra+dependencies+in+an+OBR -->
-	<!-- Exclusions are necessary because Confluence provides already some classes -->
 
+	<!-- Exclusions are necessary because Confluence provides already some classes -->
 	<dependencies>
 		<!-- Bundle dependencies -->
 		<dependency>
@@ -49,6 +51,14 @@
 					<artifactId>xmlrpc</artifactId>
 					<groupId>xmlrpc</groupId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -65,7 +75,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.1.0.Final</version>
+			<version>${hibernate.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.javassist</groupId>
@@ -76,7 +86,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-envers</artifactId>
-			<version>5.1.0.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.common</groupId>
@@ -238,6 +248,7 @@
 			</resource>
 		</resources>
 		<plugins>
+			<!--Atlassian Maven Plugin Suite (AMPS) to add OSGi manifest instructions -->
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
 				<artifactId>maven-confluence-plugin</artifactId>
@@ -249,11 +260,13 @@
 					<productVersion>${confluence.version}</productVersion>
 					<productDataVersion>${confluence.data.version}</productDataVersion>
 					<instructions>
+						<!-- OSGi instructions go here -->
 						<Import-Package>
 							javax.transaction.xa;resolution:=optional,
 							javax.el;resolution:=optional,
 							javax.interceptor;resolution:=optional,
 							com.opensymphony.module.sitemesh;resolution:=optional,
+							org.springframework.web;resolution:=optional,
 							org.springframework.beans.factory;resolution:=optional,
 							com.atlassian.confluence.event.events.content.page;resolution:=optional,
 							org.slf4j;resolution:=optional,
@@ -270,11 +283,12 @@
 						</Import-Package>
 						<Require-Bundle><!-- Bundle symbolic name -->
 							org.apache.felix.framework;bundle-version="[4.2.0,4.2.9]",
-							org.apache.servicemix.bundles.spring-beans;bundle-version="[4.2.0,4.2.9]"
+							org.apache.servicemix.bundles.spring-beans;bundle-version="[4.2.0,4.2.9]",
+							org.apache.servicemix.bundles.spring-web;bundle-version="[4.2.0,4.2.9]"
 						</Require-Bundle>
 
 					</instructions>
-					<pluginDependencies><!-- this section declares the following as dependent 
+					<pluginDependencies><!-- this section declares the following as dependent
 							bundles to be incorporated into the OBR -->
 						<pluginDependency>
 							<groupId>com.google.code.gson</groupId>

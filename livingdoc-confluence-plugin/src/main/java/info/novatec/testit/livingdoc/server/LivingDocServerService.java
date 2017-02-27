@@ -415,7 +415,7 @@ public interface LivingDocServerService {
         throws LivingDocServerException;
 
     /**
-     * Retrieve the spcifications hierarchy for a Repository.
+     * Retrieve the specifications hierarchy for a Repository.
      *
      * @param repository
      * @param systemUnderTest
