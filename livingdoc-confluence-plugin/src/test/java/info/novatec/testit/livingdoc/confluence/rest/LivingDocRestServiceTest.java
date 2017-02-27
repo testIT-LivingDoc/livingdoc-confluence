@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Vector;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -106,13 +107,38 @@ public class LivingDocRestServiceTest {
     }
 
     @Test
+    public void getRenderedSpecification() throws IOException, LivingDocServerException {
+
+        when(clientHelperService.getRenderedSpecification(anyString(), anyString(), anyVararg())).thenReturn("<body></body>");
+
+        List<?> params = new ArrayList<>();
+        String result = ldRestService.dispatchCommand(credentials, "getRenderedSpecification", "{\"arguments\":" + objectMapper.writeValueAsString(params) + "}");
+
+        assertThat(result, CoreMatchers.is("{\"specification\":" + objectMapper.writeValueAsString("<body></body>") + "}"));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void listDocumentsInHierarchy() throws IOException, LivingDocServerException {
+
+        Vector specifications = new Vector<>();
+        specifications.add(specification);
+        when(clientHelperService.getSpecificationHierarchy(anyString(), anyString(), anyVararg())).thenReturn(specifications);
+
+        List<?> params = new ArrayList<>();
+        String result = ldRestService.dispatchCommand(credentials, "listDocumentsInHierarchy", "{\"arguments\":" + objectMapper.writeValueAsString(params) + "}");
+
+        assertThat(result, CoreMatchers.is("{\"specifications\":" + objectMapper.writeValueAsString(specifications) + "}"));
+    }
+
+    @Test
     public void setSpecificationAsImplementedTest() throws LivingDocServerException, IOException {
 
         List<?> params = new ArrayList<>();
         when(clientHelperService.setSpecificationAsImplemented(anyString(), anyString(), anyVararg())).thenReturn("<success>");
 
         String result = ldRestService.dispatchCommand(credentials,
-                "setSpecificationAsImplemented", "{\"arguments\": " + objectMapper.writeValueAsString(params) + "}");
+                "setSpecificationAsImplemented", "{\"arguments\":" + objectMapper.writeValueAsString(params) + "}");
 
         assertThat(result, CoreMatchers.is("{\"message\":\"<success>\"}"));
     }
