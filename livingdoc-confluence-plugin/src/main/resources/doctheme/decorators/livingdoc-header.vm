@@ -1,11 +1,3 @@
-<script language="JavaScript" type="text/javascript">
-	function addLoadEvent(func)
-	{ 
-		var oldonload = window.onload; 
-		if (typeof window.onload != 'function') { window.onload = eval(func); } 
-		else { window.onload = function() { oldonload(); eval(func); } } 
-	}
-</script>
 #requireResourcesForContext("livingdoc-context")
 <tr>
 	<td class="conf_pageMacro" colspan="2">

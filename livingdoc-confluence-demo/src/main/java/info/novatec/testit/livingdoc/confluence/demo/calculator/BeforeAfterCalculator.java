@@ -84,6 +84,6 @@ public class BeforeAfterCalculator {
      * method manually.
      */
     public void resetCounter() {
-        tablecount.setCount(0);
+        tablecount.setCount(1);
     }
 }

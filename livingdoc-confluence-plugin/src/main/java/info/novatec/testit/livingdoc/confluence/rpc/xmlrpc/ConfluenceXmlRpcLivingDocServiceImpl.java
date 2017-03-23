@@ -249,6 +249,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
             content = content.replaceAll("livingdoc-labels", "livingdoc-labels-not-rendered");
             content = content.replaceAll("livingdoc-group", "livingdoc-group-not-rendered");
             content = content.replaceAll("livingdoc-historic", "livingdoc-historic-not-rendered");
+            content = content.replaceAll("livingdoc-page", "livingdoc-page-not-rendered");
             content = StringUtils.replacePattern(content, "<ac:structured-macro ac:macro-id=\"(.{5,50}?)\" ac:name=\"jira\"(.*?)</ac:structured-macro>","<span>Jira macro removed</span>");
 
                     // This macro breaks the labels/children macro with Javascript error

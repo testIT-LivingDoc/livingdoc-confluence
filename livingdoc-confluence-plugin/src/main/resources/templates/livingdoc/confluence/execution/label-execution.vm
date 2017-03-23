@@ -1,5 +1,6 @@
 #if($action.searchQuery) <script language="JavaScript" type="text/javascript">LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);</script>
-		#else <script language="JavaScript" type="text/javascript">addLoadEvent("LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);");</script>
+		#else
+		<script language="JavaScript" type="text/javascript">addLoadEvent("LD.View.fade('conf_waiting_display_${action.bulkUID}_${action.executionUID}', 0.3);");</script>
 		#end
 		#if (!$action.actionErrors.isEmpty())
 			<div id="conf_actionError_display_${action.bulkUID}_${action.executionUID}" class="ldErrMsg">
