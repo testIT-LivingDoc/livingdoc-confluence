@@ -38,96 +38,6 @@
 			</Require-Bundle>
 		</bundle-instructions>
 	</plugin-info>
-
-	<!-- DOC THEME RESOURCES -->
-	<resource type="i18n" name="i18n" location="doctheme.i18n" />
-	<!-- DOCTHEME MACRO -->
-	<macro name='spacejump'
-		class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro'
-		key='spacejump'>
-		<description />
-		<category name="navigation" />
-	</macro>
-	
-	<!-- DOCTHEME XHTML MACRO -->
-	<xhtml-macro name='spacejump'
-		class='info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacro'
-		key='spacejump-xhtml'>
-		<description key="doctheme.description.space.jump.macro" />
-		<category name="navigation" />
-		<parameters>
-			<parameter name="space" type="spacekey" required="true"
-				multiple="false" />
-			<parameter name="alias" type="string" />
-		</parameters>
-	</xhtml-macro>
-<!-- DOCTHEME MACRO MIGRATOR -->
-	<macro-migrator key="spacejump-migrator" macro-name="spacejump"
-		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.SpaceJumpMacroMigrator" />
-	<!-- DOCTHEME COMPONENT -->
-	<component key="themeService" name="Theme Service"
-		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DefaultThemeService">
-		<description>Services to store and retrieve theme configuration
-			information.
-		</description>
-		<interface>info.novatec.testit.livingdoc.confluence.velocity.doctheme.ThemeService
-		</interface>
-	</component>
-	<web-resource name="Doc Theme Resources" key="resources">
-		<transformation extension="js">
-			<transformer key="jsI18n" />
-		</transformation>
-		<resource name="doc-theme.js" type="download" location="doctheme/doc-theme.js" />
-		<dependency>${project.plugin.key}:splitter
-		</dependency>
-		<context>theme.doc</context>
-	</web-resource>
-	<web-resource name="Splitter" key="splitter">
-		<resource name="splitter.js" type="download"
-			location="doctheme/splitter-1.5.1/splitter.js" />
-		<resource name="space-specific-quicknav.js" type="download"
-			location="doctheme/space-specific-quicknav.js" />
-		<dependency>confluence.web.resources:ajs</dependency>
-		<dependency>confluence.web.resources:contentnamesearch</dependency>
-	</web-resource>
-	<!-- LIVINGDOC THEME -->
-	<theme key="livingdoc.theme" name="${project.plugin.name}"
-		class="com.atlassian.confluence.themes.BasicTheme">
-		<description key="doctheme.description" />
-		<param name="includeClassicStyles" value="false" />
-		<param name="space-config-path" value="/spaces/doctheme/configuretheme.action" />
-		<param name="global-config-path" value="/admin/doctheme/configuretheme.action" />
-		<!-- Decorators -->
-		<layout key="${project.plugin.key}:main" />
-		<layout	key="${project.plugin.key}:page" />
-		<layout key="${project.plugin.key}:blogpost" />
-
-		<colour-scheme key="${project.plugin.key}:livingdoc-colours" />
-		<body-class>theme-documentation</body-class>
-	</theme>
-	<!-- Make sure CSS resources get batched by not putting them in the theme -->
-	<web-resource name="Doc Theme CSS Resources" key="css-resources">
-		<transformation extension="less">
-			<transformer key="less-transformer" />
-		</transformation>
-		<dependency>com.atlassian.confluence.themes.default:styles
-		</dependency>
-		<resource type="download" name="doc-theme.css" location="doctheme/doc-theme.less" />
-		<resource type="download" name="splitter.css"
-			location="doctheme/splitter-1.5.1/splitter.css" />
-
-		<!-- Images -->
-		<resource type="download" name="sidebar-shadow.png"
-			location="doctheme/images/sidebar-shadow.png" />
-		<resource type="download" name="tree.png" location="doctheme/images/tree.png" />
-		<resource type="download" name="tree-off.png" location="doctheme/images/tree-off.png" />
-		<resource type="download" name="vgrabber.gif"
-			location="doctheme/splitter-1.5.1/img/vgrabber.gif" />
-		<resource name="themeicon.gif" type="download" location="doctheme/themeicon.gif">
-			<property key="content-type" value="image/gif" />
-		</resource>
-		<context>theme.doc</context>
-	</web-resource>
 	<colour-scheme key="livingdoc-colours"
 		name="LivingDoc Documentation Theme Colour Scheme" class="com.atlassian.confluence.themes.BaseColourScheme">
 		<colour key="property.style.topbarcolour" value="#205081" />
@@ -151,82 +61,11 @@
 		<colour key="property.style.searchfieldbgcolour" value="rgba(0, 0, 0, 0.2)" />
 		<colour key="property.style.searchfieldtextcolour" value="#ffffff" />
 	</colour-scheme>
-	
-	<layout key="main" name="Main Decorator"
-		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/main.vmd">
-		<resource type="velocity" name="decorator" location="doctheme/decorators/main.vmd" />
-	</layout>
-	<layout key="page" name="Page Decorator"
-		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/page.vmd">
-		<resource type="velocity" name="decorator" location="doctheme/decorators/page.vmd" />
-	</layout>
-	<layout key="blogpost" name="Blogpost Decorator"
-		class="com.atlassian.confluence.themes.VelocityDecorator" overrides="/decorators/blogpost.vmd">
-		<resource type="velocity" name="decorator"
-			location="doctheme/decorators/blogpost.vmd" />
-	</layout>
-	<velocity-context-item key="velocityHelper" name="Velocity Helper"
-		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
-		context-key="docThemeHelper" />
-		
+
 	<velocity-context-item key="livingdoc.velocity"
 		name="LivingDoc velocity" context-key="livingDoc"
 		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
 
-	
-
-	<component key="docThemeHelper" name="Doc Theme Helper"
-		interface="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
-		class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.DocThemeHelper"
-		public="true" />
-
-	<web-item key="sidebar-splitter" name="Show or Hide Sidebar"
-		section="system.header/right">
-		<link linkId="doctheme-anchor" />
-		<label key="" />
-		<condition
-			class="com.atlassian.confluence.plugin.descriptor.web.conditions.ViewingContentCondition" />
-	</web-item>
-	<!-- DOCHTHEME XWORK -->
-	<xwork name="Documentation Theme Actions" key="docthemeactions">
-		<package name="docthemespace" extends="default" namespace="/spaces/doctheme">
-			<default-interceptor-ref name="validatingStack" />
-			<action name="configuretheme"
-				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
-				method="doDefault">
-				<result name="input" type="velocity">doctheme/templates/configuretheme-space.vm
-				</result>
-			</action>
-			<action name="doconfiguretheme"
-				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
-				<param name="RequireSecurityToken">true</param>
-				<result name="input" type="velocity">/spaces/choosetheme.vm</result>
-				<result name="success" type="redirect">/spaces/choosetheme.action?key=${key}
-				</result>
-				<result name="cancel" type="redirect">/spaces/choosetheme.action?key=${key}
-				</result>
-			</action>
-		</package>
-		<package name="docthemeadmin" extends="default" namespace="/admin/doctheme">
-			<default-interceptor-ref name="validatingStack" />
-			<action name="configuretheme"
-				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction"
-				method="doDefault">
-				<result name="input" type="velocity">doctheme/templates/configuretheme-admin.vm
-				</result>
-			</action>
-			<action name="doconfiguretheme"
-				class="info.novatec.testit.livingdoc.confluence.velocity.doctheme.ConfigureThemeAction">
-				<param name="RequireSecurityToken">true</param>
-				<result name="input" type="velocity">/admin/lookandfeel/choosetheme.vm
-				</result>
-				<result name="success" type="redirect">/admin/choosetheme.action
-				</result>
-				<result name="cancel" type="redirect">/admin/choosetheme.action</result>
-			</action>
-		</package>
-	</xwork>
-	
 	<web-resource name="testIt - LivingDoc CSS Resources" key="livingdoc-css-resources">
 		<resource type="download" name="conf-livingdoc.css"
 			location="includes/css/conf-livingdoc.css" />
