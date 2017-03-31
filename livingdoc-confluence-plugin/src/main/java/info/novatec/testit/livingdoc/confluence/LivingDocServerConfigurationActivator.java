@@ -16,32 +16,15 @@
  * http://www.fsf.org. */
 package info.novatec.testit.livingdoc.confluence;
 
-import java.io.File;
-import java.util.Properties;
-
-import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
-import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
-import org.hibernate.dialect.HSQLDialect;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
-import com.atlassian.confluence.event.events.plugin.PluginDisableEvent;
-import com.atlassian.confluence.event.events.plugin.PluginEnableEvent;
-import com.atlassian.confluence.event.events.plugin.PluginFrameworkStartedEvent;
-import com.atlassian.confluence.event.events.plugin.PluginInstallEvent;
-import com.atlassian.confluence.event.events.plugin.PluginUninstallEvent;
+import com.atlassian.confluence.event.events.plugin.*;
 import com.atlassian.confluence.setup.BootstrapManager;
 import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
 import com.google.gson.Gson;
-
+import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
 import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
 import info.novatec.testit.livingdoc.server.LivingDocServer;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
@@ -59,12 +42,22 @@ import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateDocume
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateProjectDao;
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateRepositoryDao;
 import info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateSystemUnderTestDao;
+import org.hibernate.dialect.HSQLDialect;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+import java.io.File;
+import java.util.Properties;
 
 
 /**
  * This component is responsible to bootstrap the LivingDoc database
  * and manage it's state and configuration data.
- * 
+ * <p>
  * Note: The {@link BandanaManager} has some problems storing classes
  * (ClassCastException during a re installation), so you should store objects
  * only as string (e.g. using Gson).
@@ -74,36 +67,28 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private static final String EXECUTION_TIMEOUT_DEFAULT = "60";
 
     private final BandanaContext bandanaContext = new ConfluenceBandanaContext("_LIVINGDOC");
-
+    private final BandanaManager bandanaManager;
+    private final BootstrapManager bootstrapManager;
+    private final LivingDocServerServiceImpl service;
+    private final LivingDocRestServiceImpl restService;
+    private final EventPublisher eventPublisher;
     private LivingDocServerConfiguration configuration;
     private HibernateSessionService hibernateSessionService;
-
     private boolean isPluginEnabled = false;
-
     /**
      * If you want to check if the database has been created before use the
      * {@code LivingDocServerConfiguration#isSetupComplete()} method of
      * {@link #getConfiguration()}
      */
     private boolean isDatabaseInitialized = false;
-
-    private final BandanaManager bandanaManager;
-    private final BootstrapManager bootstrapManager;
-    private final LivingDocServerServiceImpl service;
-
-    private final LivingDocXmlRpcServer xmlRpcServer;
-    private final LivingDocRestServiceImpl restService;
-
-    private final EventPublisher eventPublisher;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-        LivingDocServerServiceImpl service,  LivingDocXmlRpcServer xmlRpcServer, LivingDocRestServiceImpl restService,
-        EventPublisher eventPublisher) {
+                                                 LivingDocServerServiceImpl service, LivingDocRestServiceImpl restService,
+                                                 EventPublisher eventPublisher) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.service = service;
-        this.xmlRpcServer = xmlRpcServer;
         this.restService = restService;
         this.eventPublisher = eventPublisher;
     }
@@ -121,7 +106,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     /**
      * Note that you should check if the configuration setup was already
      * completed before using this method.
-     * 
+     *
      * @throws LivingDocServerException
      */
     public void setupDatabaseFromStoredConfiguration() throws LivingDocServerException {
@@ -130,8 +115,8 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     }
 
     private void setupDatabaseFromConfiguration(LivingDocServerConfiguration customConfiguration)
-        throws LivingDocServerException {
-        if ( ! isPluginEnabled)
+            throws LivingDocServerException {
+        if (!isPluginEnabled)
             return;
 
         try {
@@ -142,7 +127,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
             Properties properties = customConfiguration.getProperties();
 
             properties.setProperty("confluence.home", getConfluenceHome());
-            if(properties.getProperty("executionTimeout")==null){
+            if (properties.getProperty("executionTimeout") == null) {
                 properties.setProperty("executionTimeout", EXECUTION_TIMEOUT_DEFAULT);
             }
 
@@ -191,7 +176,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         service.setSessionService(customSessionService);
         service.setSutDao(sutDao);
 
-        xmlRpcServer.setService(service);
         restService.setService(service);
     }
 
@@ -214,7 +198,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     /**
      * Returns the stored configuration or creates a new one if none exists.
-     * 
+     *
      * @return
      */
     public LivingDocServerConfiguration getConfiguration() {
@@ -247,26 +231,26 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     }
 
     private <T> T getValue(Class<T> classKey) {
-        String storedJsonObject = ( String ) bandanaManager.getValue(bandanaContext, classKey.getName());
+        String storedJsonObject = (String) bandanaManager.getValue(bandanaContext, classKey.getName());
         T castedObject = gson.fromJson(storedJsonObject, classKey);
         return castedObject;
     }
 
-    private void setValue(Class< ? > classKey, Object value) {
+    private void setValue(Class<?> classKey, Object value) {
         String jsobObject = gson.toJson(value);
         bandanaManager.setValue(bandanaContext, classKey.getName(), jsobObject);
     }
 
-    private void removeValue(Class< ? > classKey) {
+    private void removeValue(Class<?> classKey) {
         bandanaManager.removeValue(bandanaContext, classKey.getName());
     }
 
     public String getConfigJnriUrl() {
-        return ( String ) getConfiguration().getProperties().get("config$hibernate.connection.datasource");
+        return (String) getConfiguration().getProperties().get("config$hibernate.connection.datasource");
     }
 
     public String getConfigDialect() {
-        return ( String ) getConfiguration().getProperties().get("config$hibernate.dialect");
+        return (String) getConfiguration().getProperties().get("config$hibernate.dialect");
     }
 
     public void initQuickInstallConfiguration() throws LivingDocServerException {
@@ -303,7 +287,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         properties.put("config$hibernate.dialect", hibernateDialect);
         // properties.put("hibernate.show_sql", "true");
 
-        if (hibernateDialect.indexOf("Oracle") != - 1) {
+        if (hibernateDialect.indexOf("Oracle") != -1) {
             // The Oracle JDBC driver doesn't like prepared statement caching
             // very much.
             properties.put("hibernate.statement_cache.size", "0");

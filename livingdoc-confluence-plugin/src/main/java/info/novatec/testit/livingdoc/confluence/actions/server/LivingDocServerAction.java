@@ -1,17 +1,7 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
-
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.LivingDocServerService;
@@ -19,8 +9,11 @@ import info.novatec.testit.livingdoc.server.ServerPropertiesManager;
 import info.novatec.testit.livingdoc.server.domain.Project;
 import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
-import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import info.novatec.testit.livingdoc.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 
 @SuppressWarnings("serial")
@@ -29,24 +22,20 @@ public class LivingDocServerAction extends AbstractSpaceAction {
 
     private static final String RESOURCE_BUNDLE = ConfigurationAction.class.getName();
     private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
-    private ResourceBundle resourceBundle;
-
     protected ConfluenceLivingDoc confluenceLivingDoc;
-    private List<SystemUnderTest> systemUnderTests;
-
     protected String projectName;
     protected Repository registeredRepository;
     protected Repository homeRepository;
-    private String spaceKey;
-
-    private String url;
-    private String handler = RpcServerService.SERVICE_HANDLER;
-    private Boolean isRegistered;
     protected LinkedList<Project> projects;
+    private ResourceBundle resourceBundle;
+    private List<SystemUnderTest> systemUnderTests;
+    private String spaceKey;
+    private String url;
+    private Boolean isRegistered;
 
     /**
      * Setter for IoC
-     * 
+     *
      * @param confluenceLivingDoc
      */
     public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
@@ -89,14 +78,6 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         this.url = url.trim();
     }
 
-    public String getHandler() {
-        return handler;
-    }
-
-    public void setHandler(String handler) {
-        this.handler = handler.trim();
-    }
-
     public String getIdentifier() {
         return key;
     }
@@ -127,7 +108,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public List<SystemUnderTest> getSystemUnderTests() {
-        if ( ! isServerSetupComplete()) {
+        if (!isServerSetupComplete()) {
             return new ArrayList<SystemUnderTest>();
         }
 
@@ -149,7 +130,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         if (isRegistered != null) {
             return isRegistered;
         }
-        if ( ! isServerReady()) {
+        if (!isServerReady()) {
             return false;
         }
 
@@ -203,7 +184,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
 
     /**
      * Custom I18n. Based on WebWork i18n.
-     * 
+     *
      * @param propertyKey Key
      * @return the i18nzed message. If none found key is returned.
      */
@@ -268,6 +249,6 @@ public class LivingDocServerAction extends AbstractSpaceAction {
             log.error("Error in action", ldse.getCause());
         }
     }
-    
-    
+
+
 }
