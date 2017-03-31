@@ -1,31 +1,22 @@
 /**
  * Copyright (c) 2008 Pyxis Technologies inc.
- * 
+ * <p>
  * This is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ * <p>
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF site:
  * http://www.fsf.org.
  */
 package info.novatec.testit.livingdoc.confluence.actions.server;
-
-import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.atlassian.confluence.core.ConfluenceEntityObject;
 import com.atlassian.confluence.importexport.DefaultImportContext;
@@ -35,19 +26,20 @@ import com.atlassian.confluence.importexport.ImportedObjectPostProcessor;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
-
 import info.novatec.testit.livingdoc.confluence.demo.phonebook.PhoneBookSystemUnderDevelopment;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.RepositoryType;
-import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.domain.Specification;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
+import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
-import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import info.novatec.testit.livingdoc.util.I18nUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 @SuppressWarnings("serial")
@@ -84,7 +76,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     }
 
     public String doGetDemo() {
-        if ( ! confluenceLivingDoc.isServerReady()) {
+        if (!confluenceLivingDoc.isServerReady()) {
             addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
             return SUCCESS;
         }
@@ -162,9 +154,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
         demoRepository.setBaseRepositoryUrl(getDemoSpaceUrl());
 
-        // TODO With REST you don't need the handler or /rpc/xmlrpc
-        String baseTestUrl = String.format("%s/rpc/xmlrpc?handler=%s#%s", confluenceLivingDoc.getBaseUrl(),
-            RpcServerService.SERVICE_HANDLER, demoSpace.getKey());
+        String baseTestUrl = String.format("%s?#%s", confluenceLivingDoc.getBaseUrl(), demoSpace.getKey());
         demoRepository.setBaseTestUrl(baseTestUrl);
 
         return getService().registerRepository(demoRepository);
@@ -201,7 +191,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
         List<Page> demoPages = confluenceLivingDoc.getPageManager().getPages(demoSpace, true);
 
         for (Page demoPage : demoPages) {
-            if (demoSpace.getHomePage().getId() != demoPage.getId() && ! demoPage.getTitle().endsWith(".java")) {
+            if (demoSpace.getHomePage().getId() != demoPage.getId() && !demoPage.getTitle().endsWith(".java")) {
                 doEnableLivingDocPage(demoRepository, demoPage);
             }
         }
@@ -222,7 +212,6 @@ public class DemoSpaceAction extends LivingDocServerAction {
         }
     }
 
-    
 
     private Space getDemoSpace() {
         return confluenceLivingDoc.getSpaceManager().getSpace(DEMO_SPACE_KEY);
@@ -230,7 +219,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
     private SystemUnderTest getSUT(Repository demoRepository, String name) throws LivingDocServerException {
         List<SystemUnderTest> suts = confluenceLivingDoc.getLDServerService().getSystemUnderTestsOfAssociatedProject(demoRepository
-            .getUid());
+                .getUid());
 
         for (SystemUnderTest sut : suts) {
             if (sut.getName().equals(name)) {
@@ -280,7 +269,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
     private void doImportDemoSite() throws FileNotFoundException, ImportExportException {
         URL demoSiteZipUrl = DemoSpaceAction.class.getResource(
-            "/info/novatec/testit/livingdoc/confluence/demo/demo-site.zip");
+                "/info/novatec/testit/livingdoc/confluence/demo/demo-site.zip");
 
         if (demoSiteZipUrl == null) {
             throw new FileNotFoundException("Cannot find demo-site.zip");
@@ -293,7 +282,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
             @Override
             public boolean process(Object obj) {
                 if (obj instanceof ConfluenceEntityObject) {
-                    ConfluenceEntityObject entityObject = ( ConfluenceEntityObject ) obj;
+                    ConfluenceEntityObject entityObject = (ConfluenceEntityObject) obj;
 
                     // Make pages appear in recent updated in preference to
                     // non-pages.
@@ -337,7 +326,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
     /**
      * Custom I18n. Based on WebWork i18n.
-     * 
+     *
      * @param key Key
      * @return the i18nzed message. If none found key is returned.
      */
@@ -374,7 +363,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
     /**
      * Setter for IoC
-     * 
+     *
      * @param importExportManager
      */
     public void setImportExportManager(ImportExportManager importExportManager) {
@@ -387,6 +376,6 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
     public String getGeneralConfigSecurityRemoteApiUrl() {
         return String.format("%s/admin/editgeneralconfig.action#security", confluenceLivingDoc.getSettingsManager().getGlobalSettings()
-            .getBaseUrl());
+                .getBaseUrl());
     }
 }

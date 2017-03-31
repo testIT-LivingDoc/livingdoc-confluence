@@ -857,18 +857,6 @@
 
 	<component key="livingDocServerService" name="LivingDoc Server Service"
 		class="info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl" />
-	<component key="livingDocXmlRpcServer" name="LivingDoc XML-RPC Server"
-		class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer" />
-
-	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService"
-		name="LivingDoc XML-RPC Service Delegator"
-		class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
-		<description />
-		<service-path>livingdoc1</service-path>
-		<published-interface>info.novatec.testit.livingdoc.confluence.rpc.RpcClientService
-		</published-interface>
-		<authenticate>false</authenticate>
-	</rpc-xmlrpc>
 
 	<component key="livingdocRestService" name="Livingdoc Rest Service"
 			   class="info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl" />

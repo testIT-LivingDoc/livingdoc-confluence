@@ -1,23 +1,17 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
-import static info.novatec.testit.livingdoc.confluence.utils.HtmlUtils.stringSetToTextArea;
+import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
+import info.novatec.testit.livingdoc.server.domain.*;
+import info.novatec.testit.livingdoc.server.domain.component.ContentType;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.domain.ClasspathSet;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.RepositoryType;
-import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
-import info.novatec.testit.livingdoc.server.domain.component.ContentType;
+import static info.novatec.testit.livingdoc.confluence.utils.HtmlUtils.stringSetToTextArea;
 
 
 /**
@@ -61,7 +55,7 @@ public class RegistrationAction extends LivingDocServerAction {
 
     public String doGetRegistration() {
 
-        if ( ! isServerReady()) {
+        if (!isServerReady()) {
             addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
             readonly = true;
             editMode = false;
@@ -84,7 +78,7 @@ public class RegistrationAction extends LivingDocServerAction {
 
             return doGetSystemUnderTests();
         } catch (LivingDocServerException e) {
-            if (editMode && StringUtils.isEmpty(projectName) && ! isWithNewProject())
+            if (editMode && StringUtils.isEmpty(projectName) && !isWithNewProject())
                 projectName = getProjects().getLast().getName();
 
             readonly = true;
@@ -110,7 +104,7 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setBaseTestUrl(newTestUrl());
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
-            
+
             getService().registerRepository(registeredRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
         } catch (LivingDocServerException e) {
@@ -556,20 +550,18 @@ public class RegistrationAction extends LivingDocServerAction {
         return sb.toString();
     }
 
-    // TODO With REST you don't need the handler or /rpc/xmlrpc
     private String newTestUrl() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getBaseUrl()).append("/rpc/xmlrpc");  // TODO remove this line
-        sb.append("?handler=").append(getHandler());     // TODO remove this line
-        sb.append("#").append(getSpaceKey());
+        sb.append(getBaseUrl());
+        sb.append("?#").append(getSpaceKey());
         return sb.toString();
     }
 
     private void checkRepositoryBaseUrl() throws LivingDocServerException {
 
-        if ( ! editMode && ! addMode && ! getRegisteredRepository().getBaseUrl().equals(getBaseUrl())) {
-            addActionError(getText(ConfluenceLivingDoc.REPOSITORY_BASEURL_OUTOFSYNC, new String[] { getRegisteredRepository()
-                .getBaseUrl(), getBaseUrl() }));
+        if (!editMode && !addMode && !getRegisteredRepository().getBaseUrl().equals(getBaseUrl())) {
+            addActionError(getText(ConfluenceLivingDoc.REPOSITORY_BASEURL_OUTOFSYNC, new String[]{getRegisteredRepository()
+                    .getBaseUrl(), getBaseUrl()}));
         }
     }
 }
