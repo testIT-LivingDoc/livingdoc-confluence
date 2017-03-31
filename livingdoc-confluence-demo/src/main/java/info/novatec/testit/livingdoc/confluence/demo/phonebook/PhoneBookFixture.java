@@ -24,55 +24,58 @@ import info.novatec.testit.livingdoc.reflect.EnterRow;
 import info.novatec.testit.livingdoc.reflect.annotation.Alias;
 import info.novatec.testit.livingdoc.reflect.annotation.FixtureClass;
 
-
-@FixtureClass({ "Telefonbuch" })
+@FixtureClass({ "Telefonbuch", "Contacts list" })
 public class PhoneBookFixture {
 
-    private final PhoneBook phoneBook;
-    private PhoneBookEntry contact;
+	private final PhoneBook phoneBook;
+	private PhoneBookEntry contact;
 
-    public PhoneBookFixture() {
-        phoneBook = new PhoneBook();
-    }
+	public PhoneBookFixture() {
+		phoneBook = new PhoneBook();
+	}
 
-    public PhoneBookEntry getContact() {
-        return contact;
-    }
+	public PhoneBookEntry getContact() {
+		return contact;
+	}
 
-    public void setContact(PhoneBookEntry contact) {
-        this.contact = contact;
-    }
+	@Alias("phone book entry")
+	public void setContact(PhoneBookEntry contact) {
+		this.contact = contact;
+	}
 
-    public List<PhoneBookEntry> query() {
-        return phoneBook.getEntries();
-    }
+	public List<PhoneBookEntry> query() {
+		return phoneBook.getEntries();
+	}
 
-    @EnterRow
-    public void insertNewContact() {
-        phoneBook.add(getContact());
-    }
+	@EnterRow
+	public void insertNewContact() {
+		phoneBook.add(getContact());
+	}
 
-    @Alias("addWithNumber")
-    public boolean insertWithNumber(String firstName, String lastName, String number) {
-        try {
-            phoneBook.add(new PhoneBookEntry(firstName, lastName, number));
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+	@Alias({ "addWithNumber", "createContactWithNumber" })
+	public boolean insertWithNumber(String firstName, String lastName,
+			String number) {
+		try {
+			phoneBook.add(new PhoneBookEntry(firstName, lastName, number));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-    public String thatNumberOfIs(String firstName, String lastName) {
-        return phoneBook.findNumber(firstName, lastName);
-    }
+	@Alias("thatContactHasNumber")
+	public String thatNumberOfIs(String firstName, String lastName) {
+		return phoneBook.findNumber(firstName, lastName);
+	}
 
-    @Alias("changeNumberOfTo")
-    public boolean updateNumberOfTo(String firstName, String lastName, String number) {
-        try {
-            phoneBook.updateNumber(firstName, lastName, number);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+	@Alias("changeNumberOfTo")
+	public boolean updateNumberOfTo(String firstName, String lastName,
+			String number) {
+		try {
+			phoneBook.updateNumber(firstName, lastName, number);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

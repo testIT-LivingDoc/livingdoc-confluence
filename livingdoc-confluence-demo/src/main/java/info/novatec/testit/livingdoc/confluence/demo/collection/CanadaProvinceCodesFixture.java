@@ -22,56 +22,61 @@ import java.util.Set;
 
 import info.novatec.testit.livingdoc.reflect.CollectionProvider;
 import info.novatec.testit.livingdoc.reflect.EnterRow;
+import info.novatec.testit.livingdoc.reflect.annotation.Alias;
+import info.novatec.testit.livingdoc.reflect.annotation.FixtureClass;
 
-
+@FixtureClass("KanadaProvinzCodes")
 public class CanadaProvinceCodesFixture {
-    private static Country country = new Country("CANADA");
+	private static Country country = new Country("CANADA");
 
-    private String name;
-    private String code;
+	private String name;
+	private String code;
 
-    public CanadaProvinceCodesFixture() {
-    }
+	public CanadaProvinceCodesFixture() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@Alias("province name")
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	@Alias("province code")
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public void insertProvinceWithCode(String name, String code) {
-        country.addProvince(name, code);
-    }
+	@Alias("addProvinceWithCode")
+	public void insertProvinceWithCode(String name, String code) {
+		country.addProvince(name, code);
+	}
 
-    @EnterRow
-    public void insertProvince() {
-        country.addProvince(name, code);
-    }
+	@EnterRow
+	public void insertProvince() {
+		country.addProvince(name, code);
+	}
 
-    @CollectionProvider
-    public Set<Province> getListOfProvinces() {
-        return country.provinces();
-    }
+	@CollectionProvider
+	public Set<Province> getListOfProvinces() {
+		return country.provinces();
+	}
 
-    /**
-     * This method can be called using a new table at the end of a
-     * specification.
-     * 
-     * Note: static fields are cleared by default after a specification run. The
-     * confluence demo is in a special OSGI context, so we have to call this
-     * method manually.
-     */
-    public static void teardown() {
-        country = new Country("CANADA");
-    }
+	/**
+	 * This method can be called using a new table at the end of a
+	 * specification.
+	 * 
+	 * Note: static fields are cleared by default after a specification run. The
+	 * confluence demo is in a special OSGI context, so we have to call this
+	 * method manually.
+	 */
+	public static void teardown() {
+		country = new Country("CANADA");
+	}
 }

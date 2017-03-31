@@ -14,24 +14,7 @@ var conf_livingDoc = new function()
 		    }
 		});
 	};
-	this.enableLivingDoc=function(ctx, bUID, exeUID, spaceKey, pageId, refresh)
-	{
-		if(AJS.$('#conf_exeflag') && !AJS.$('#conf_exeflag').is(':checked'))
-		{
-			this.getBulk(bUID).removeList(exeUID); 
-			LD.View.switchView('main-content', 'conf_results_'+bUID+'_'+exeUID+'_0');
-		}
-		LD.View.switchView('conf_waiting_display_'+bUID+'_'+exeUID, 'conf_actionError_display_'+ bUID + '_'  + exeUID);
-		AJS.$.ajax({
-			url: ctx + "/livingdoc/EnableLivingDoc.action",
-			type: 'POST',
-		    data: { decorator: 'none', spaceKey: spaceKey, pageId: pageId, refreshAll: true, enableLivingDoc: AJS.$('#conf_exeflag').is(':checked') },
-		    dataType: 'html',
-		    complete: function(jqXHR) {
-		    	AJS.$('#livingdoc_header_display').html(jqXHR.responseText);
-		    }
-		});
-	};
+
 	this.search=function(ctx, bUID, exeUID, openInSameWindow, forcedSuts, spaceKey)
 	{ 
 		if($F('conf_labels_' + bUID + '_' + exeUID) == ''){return;}
