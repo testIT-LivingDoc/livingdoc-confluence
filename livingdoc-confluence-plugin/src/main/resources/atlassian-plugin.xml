@@ -503,6 +503,12 @@
 				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/registrationPane.ajax.vm
 				</result>
 			</action>
+			<action name="MigrateRegistration"
+					class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
+					method="doMigrateRegistration">
+				<result name="success" type="velocity">/templates/livingdoc/configuration/registration/migrateRegistration.ajax.vm
+				</result>
+			</action>
 			<action name="Register"
 				class="info.novatec.testit.livingdoc.confluence.actions.server.RegistrationAction"
 				method="doRegister">

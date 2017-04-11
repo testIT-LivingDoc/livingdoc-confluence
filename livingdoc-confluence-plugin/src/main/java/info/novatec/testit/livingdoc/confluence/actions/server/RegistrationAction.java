@@ -1,5 +1,7 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
+import com.atlassian.confluence.pages.Page;
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.*;
@@ -7,6 +9,7 @@ import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +55,8 @@ public class RegistrationAction extends LivingDocServerAction {
     private boolean editPropertiesMode;
     private boolean editClasspathsMode;
     private boolean editFixturesMode;
+
+    private List<Page> migratedPages;
 
     public String doGetRegistration() {
 
@@ -311,6 +316,35 @@ public class RegistrationAction extends LivingDocServerAction {
         }
 
         return doGetSystemUnderTests();
+    }
+
+    public String doMigrateRegistration() {
+        migratedPages = new ArrayList<>();
+        confluenceLivingDoc.getPageManager().getPages(getSpace(), false)
+            .forEach(page -> {
+                try {
+                    Specification specificationPage = confluenceLivingDoc.getSpecification(getSpaceKey(), page.getTitle());
+
+                    String pageBody = page.getBodyAsString();
+
+                    if (specificationPage != null && !pageBody.contains(LivingDocPage.MACRO_KEY)) {
+                        StringBuilder newPageBody = new StringBuilder(LivingDocPage.MACRO_HTML_CONTENT);
+                        page.setBodyAsString(newPageBody.append(pageBody).toString());
+                        migratedPages.add(page);
+                    }
+                } catch (LivingDocServerException e) {
+                    addActionError(e);
+                }
+            });
+
+        return SUCCESS;
+    }
+
+    public List<Page> getMigratedPages() {
+        if(migratedPages != null) {
+            return migratedPages;
+        }
+        return null;
     }
 
     @Override
