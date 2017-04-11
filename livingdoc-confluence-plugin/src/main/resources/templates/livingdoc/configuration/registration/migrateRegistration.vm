@@ -1,0 +1,16 @@
+<h2>Migration result</h2>
+<p>
+#if($action.migratedPages.isEmpty())
+    No page required to update.
+#else
+    The migration process is done, the following $action.migratedPages.size() pages were updated.
+    <ul>
+    #foreach($page in $action.migratedPages)
+        <li>$page.title</li>
+    #end
+    </ul>
+#end
+</p>
+<p>
+    <a class="aui-button aui-button-link" onclick="ldProperties.getRegistration('$action.spaceKey')">Return to the space registration</a>
+</p>

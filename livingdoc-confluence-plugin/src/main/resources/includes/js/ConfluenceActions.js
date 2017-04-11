@@ -48,6 +48,7 @@ LD.ConfluenceActions=
 	
 	getRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/GetRegistration.action", params); },
 	editRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/EditRegistration.action", params); },
+	migrateRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/MigrateRegistration.action", params); },
 	refreshRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/RefreshEditRegistration.action", params); },
 	register:function(params) { this.confQuery("registrationPane_display", "/livingdoc/Register.action", params); },
 	updateRegistration:function(params) { this.confQuery("registrationPane_display", "/livingdoc/UpdateRegistration.action", params); },
