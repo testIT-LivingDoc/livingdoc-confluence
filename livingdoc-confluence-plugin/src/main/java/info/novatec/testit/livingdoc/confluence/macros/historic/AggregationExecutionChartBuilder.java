@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -55,14 +56,19 @@ public class AggregationExecutionChartBuilder extends AbstractChartBuilder {
 
     private final List<Execution> executions;
 
-    private AggregationExecutionChartBuilder(HistoricParameters settings, List<Execution> executions) {
+    private ConfluenceLivingDoc ldUtil;
+
+    private AggregationExecutionChartBuilder(HistoricParameters settings, List<Execution> executions,
+                                             ConfluenceLivingDoc ldUtil) {
         super(settings);
 
         this.executions = executions;
+        this.ldUtil = ldUtil;
     }
 
-    public static AggregationExecutionChartBuilder newInstance(HistoricParameters settings, List<Execution> executions) {
-        return new AggregationExecutionChartBuilder(settings, executions);
+    public static AggregationExecutionChartBuilder newInstance(HistoricParameters settings, List<Execution> executions,
+                                                               ConfluenceLivingDoc confluenceLivingDoc) {
+        return new AggregationExecutionChartBuilder(settings, executions, confluenceLivingDoc);
     }
 
     @Override

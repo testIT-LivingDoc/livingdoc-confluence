@@ -9,7 +9,6 @@ import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 
@@ -18,7 +17,7 @@ import info.novatec.testit.livingdoc.server.LivingDocServerException;
 public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractLivingDocAction.class);
-    protected ConfluenceLivingDoc confluenceLivingDoc = StaticAccessor.getConfluenceLivingDoc();
+    protected ConfluenceLivingDoc confluenceLivingDoc;
 
     protected String bulkUID = "PAGE";
     protected String executionUID;
@@ -30,6 +29,10 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     protected Boolean canEdit;
     protected boolean refreshAll;
     protected boolean isEditMode;
+
+    public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
+        this.confluenceLivingDoc = confluenceLivingDoc;
+    }
 
     private String pageConent;
 

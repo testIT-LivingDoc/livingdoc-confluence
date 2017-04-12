@@ -708,8 +708,6 @@
 		<authenticate>false</authenticate>
 	</rpc-xmlrpc>
 
-	<component key="staticAccessor"
-		class="info.novatec.testit.livingdoc.confluence.StaticAccessor" />
 	<component key="confluenceLivingDoc"
 		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
 	<component key="bundleFileLocatorHelper"

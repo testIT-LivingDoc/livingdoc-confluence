@@ -91,16 +91,18 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final LivingDocServerServiceImpl service;
     private final LivingDocXmlRpcServer xmlRpcServer;
     private final EventPublisher eventPublisher;
+    private final BundleFileLocatorHelper bundleFileLocatorHelper;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
         LivingDocServerServiceImpl service, LivingDocXmlRpcServer xmlRpcServer, 
-        EventPublisher eventPublisher) {
+        EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.service = service;
         this.xmlRpcServer = xmlRpcServer;
         this.eventPublisher = eventPublisher;
+        this.bundleFileLocatorHelper = bundleFileLocatorHelper;
     }
 
     @Override
@@ -192,7 +194,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     private String getLivingDocBundleFilePath() throws Exception {
         Bundle bundle = FrameworkUtil.getBundle(getClass());
-        BundleFileLocatorHelper helper = StaticAccessor.getBundleFileLocatorHelper();
+        BundleFileLocatorHelper helper = bundleFileLocatorHelper;
         File location = helper.getBundleInstallLocation(bundle);
         String pathToBundle = location.getAbsolutePath();
         return pathToBundle;

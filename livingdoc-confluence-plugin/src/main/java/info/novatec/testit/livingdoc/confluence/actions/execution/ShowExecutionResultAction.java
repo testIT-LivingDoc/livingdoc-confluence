@@ -23,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.actions.AbstractLivingDocAction;
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
@@ -32,10 +31,14 @@ import info.novatec.testit.livingdoc.server.domain.Execution;
 
 @SuppressWarnings("serial")
 public class ShowExecutionResultAction extends AbstractLivingDocAction {
-    private final StyleSheetExtractor styleSheetExtractor = StaticAccessor.getStyleSheetExtractor();
+    private StyleSheetExtractor styleSheetExtractor;
 
     private Long id;
     private Execution execution;
+
+    public void setStyleSheetExtractor(StyleSheetExtractor styleSheetExtractor) {
+        this.styleSheetExtractor = styleSheetExtractor;
+    }
 
     public Long getId() {
         return id;

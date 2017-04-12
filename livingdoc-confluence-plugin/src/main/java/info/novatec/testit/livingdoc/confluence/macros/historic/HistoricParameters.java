@@ -23,7 +23,6 @@ import java.util.Map;
 
 import com.atlassian.confluence.pages.Page;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Repository;
@@ -68,7 +67,7 @@ public class HistoricParameters {
         }
     }
 
-    private final ConfluenceLivingDoc ldUtil = StaticAccessor.getConfluenceLivingDoc();
+    private final ConfluenceLivingDoc ldUtil;
 
     private final String spaceKey;
     private final Page page;
@@ -87,11 +86,13 @@ public class HistoricParameters {
     private final int popupWidth;
     private final int popupHeight;
 
-    public HistoricParameters(Map< ? , ? > parameters, String spaceKey, Page page, String executionUID)
+    public HistoricParameters(Map< ? , ? > parameters, String spaceKey, Page page, String executionUID,
+                              ConfluenceLivingDoc confluenceLivingDoc)
         throws LivingDocServerException {
         this.spaceKey = spaceKey;
         this.page = page;
         this.executionUID = executionUID;
+        this.ldUtil = confluenceLivingDoc;
 
         width = getParameters(parameters, WIDTH, DEFAULT_WIDTH);
         height = getParameters(parameters, HEIGHT, DEFAULT_HEIGHT);
