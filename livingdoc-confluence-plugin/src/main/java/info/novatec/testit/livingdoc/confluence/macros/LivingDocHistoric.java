@@ -61,7 +61,7 @@ public class LivingDocHistoric extends AbstractLivingDocMacro {
             if (settings.getLabels() == null && settings.isNoChildren()) {
                 Specification specification = ldUtil.getSpecification(page.getSpaceKey(), page.getTitle().trim());
 
-                List<Execution> executions = ldUtil.getLDServerService().getSpecificationExecutions(specification, settings
+                List<Execution> executions = ldUtil.getPersistenceService().getSpecificationExecutions(specification, settings
                     .getTargetedSystemUnderTest(), settings.getMaxResult());
 
                 chartBuilder = LinearExecutionChartBuilder.newInstance(settings, executions, ldUtil);
@@ -168,7 +168,7 @@ public class LivingDocHistoric extends AbstractLivingDocMacro {
         List<Execution> executions = new ArrayList<Execution>();
 
         for (Specification specification : specifications) {
-            List<Execution> execs = ldUtil.getLDServerService().getSpecificationExecutions(specification,
+            List<Execution> execs = ldUtil.getPersistenceService().getSpecificationExecutions(specification,
                 targetedSystemUnderTest, maxResult);
 
             int failureCount = 0;

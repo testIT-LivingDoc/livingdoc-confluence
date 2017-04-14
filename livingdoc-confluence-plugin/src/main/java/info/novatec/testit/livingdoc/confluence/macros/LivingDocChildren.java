@@ -77,7 +77,7 @@ public class LivingDocChildren extends AbstractLivingDocMacro {
 
             String spaceKey = getSpaceKey(parameters, renderContext, true);
             boolean allChildren = withAllChildren(parameters);
-            ChildrenExecutionAction action = new ChildrenExecutionAction();
+            ChildrenExecutionAction action = new ChildrenExecutionAction(ldUtil);
             action.setBulkUID(getBulkUID(parameters));
             action.setExecutionUID("CHILDREN_" + ( allChildren ? "ALL_" : "" ) + MacroCounter.instance().getNextCount());
             action.setSpaceKey(spaceKey);

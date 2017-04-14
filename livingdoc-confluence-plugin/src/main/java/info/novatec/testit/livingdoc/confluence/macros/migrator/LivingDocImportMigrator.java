@@ -8,7 +8,7 @@ import com.atlassian.confluence.macro.xhtml.MacroMigration;
 import com.atlassian.confluence.xhtml.api.MacroDefinition;
 
 import info.novatec.testit.livingdoc.confluence.macros.LivingDocImport;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 
 
 public class LivingDocImportMigrator implements MacroMigration {
@@ -38,7 +38,7 @@ public class LivingDocImportMigrator implements MacroMigration {
 
         while (importParam != null) {
             buffer.append(",");
-            buffer.append(ConfluenceLivingDoc.clean(importParam));
+            buffer.append(LivingDocConfluenceManager.clean(importParam));
             importParam = parameters.get("" + ++ index);
         }
         return buffer.toString();

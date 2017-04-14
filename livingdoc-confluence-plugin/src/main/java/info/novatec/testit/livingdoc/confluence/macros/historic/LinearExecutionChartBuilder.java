@@ -25,7 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -43,8 +43,6 @@ import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import com.atlassian.confluence.core.DateFormatter;
-
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Execution;
 
@@ -53,10 +51,10 @@ public class LinearExecutionChartBuilder extends AbstractChartBuilder {
 
     private final List<Execution> executions;
     private DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM HH:mm");
-    private ConfluenceLivingDoc ldUtil;
+    private LivingDocConfluenceManager ldUtil;
 
     private LinearExecutionChartBuilder(HistoricParameters settings, List<Execution> executions,
-                                        ConfluenceLivingDoc confluenceLivingDoc) {
+                                        LivingDocConfluenceManager confluenceLivingDoc) {
         super(settings);
 
         this.executions = executions;
@@ -64,7 +62,7 @@ public class LinearExecutionChartBuilder extends AbstractChartBuilder {
     }
 
     public static AbstractChartBuilder newInstance(HistoricParameters settings, List<Execution> executions,
-                                                   ConfluenceLivingDoc confluenceLivingDoc) {
+                                                   LivingDocConfluenceManager confluenceLivingDoc) {
         return new LinearExecutionChartBuilder(settings, executions, confluenceLivingDoc);
     }
 

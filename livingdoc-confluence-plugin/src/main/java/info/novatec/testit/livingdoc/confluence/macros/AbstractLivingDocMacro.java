@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
@@ -22,17 +23,16 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 
 
 public abstract class AbstractLivingDocMacro extends BaseMacro implements Macro {
-    protected ConfluenceLivingDoc ldUtil;
+    protected LivingDocConfluenceManager ldUtil;
 
     /**
      * Setter for IoC
      */
-    public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
+    public void setConfluenceLivingDoc(LivingDocConfluenceManager confluenceLivingDoc) {
         this.ldUtil = confluenceLivingDoc;
     }
 

@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.atlassian.confluence.pages.Page;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
@@ -67,7 +67,7 @@ public class HistoricParameters {
         }
     }
 
-    private final ConfluenceLivingDoc ldUtil;
+    private final LivingDocConfluenceManager ldUtil;
 
     private final String spaceKey;
     private final Page page;
@@ -87,7 +87,7 @@ public class HistoricParameters {
     private final int popupHeight;
 
     public HistoricParameters(Map< ? , ? > parameters, String spaceKey, Page page, String executionUID,
-                              ConfluenceLivingDoc confluenceLivingDoc)
+                              LivingDocConfluenceManager confluenceLivingDoc)
         throws LivingDocServerException {
         this.spaceKey = spaceKey;
         this.page = page;
@@ -264,7 +264,7 @@ public class HistoricParameters {
             } else {
                 Repository repository = ldUtil.getHomeRepository(getSpaceKey());
 
-                List<SystemUnderTest> allSuts = ldUtil.getLDServerService().getSystemUnderTestsOfAssociatedProject(repository
+                List<SystemUnderTest> allSuts = ldUtil.getPersistenceService().getSystemUnderTestsOfAssociatedProject(repository
                     .getUid());
 
                 for (SystemUnderTest s : allSuts) {

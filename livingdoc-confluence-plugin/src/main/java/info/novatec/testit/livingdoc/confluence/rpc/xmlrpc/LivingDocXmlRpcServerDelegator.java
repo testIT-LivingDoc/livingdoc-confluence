@@ -20,7 +20,7 @@ import java.util.Vector;
 
 import info.novatec.testit.livingdoc.confluence.rpc.RpcClientService;
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.rpc.LivingDocRpcHelper;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 
@@ -33,7 +33,7 @@ public class LivingDocXmlRpcServerDelegator implements RpcClientService {
     /**
      * Constructor for IoC
      */
-    public LivingDocXmlRpcServerDelegator(ConfluenceLivingDoc confluenceLivingDoc,
+    public LivingDocXmlRpcServerDelegator(LivingDocConfluenceManager confluenceLivingDoc,
         LivingDocXmlRpcServer livingDocXmlRpcServer, StyleSheetExtractor styleSheetExtractor) {
         confluenceServiceDelegator = new ConfluenceXmlRpcLivingDocServiceImpl(confluenceLivingDoc, styleSheetExtractor);
         delegator = livingDocXmlRpcServer;

@@ -1,7 +1,7 @@
 package info.novatec.testit.livingdoc.confluence.rpc.xmlrpc;
 
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
@@ -42,10 +42,10 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
 
     private final Logger log = LoggerFactory.getLogger(ConfluenceXmlRpcLivingDocServiceImpl.class);
 
-    private final ConfluenceLivingDoc ldUtil;
+    private final LivingDocConfluenceManager ldUtil;
     private final StyleSheetExtractor styleSheetExtractor;
 
-    public ConfluenceXmlRpcLivingDocServiceImpl(ConfluenceLivingDoc ldUtil, StyleSheetExtractor styleSheetExtractor) {
+    public ConfluenceXmlRpcLivingDocServiceImpl(LivingDocConfluenceManager ldUtil, StyleSheetExtractor styleSheetExtractor) {
         this.ldUtil = ldUtil;
         this.styleSheetExtractor = styleSheetExtractor;
     }
@@ -269,7 +269,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
 
             return basicRenderedPage.toString();
         } catch (LivingDocServerException e) {
-            return e.getId().equals(ConfluenceLivingDoc.NEVER_IMPLEMENTED) ? warning(e.getId()) : error(e.getId());
+            return e.getId().equals(LivingDocConfluenceManager.NEVER_IMPLEMENTED) ? warning(e.getId()) : error(e.getId());
         }
     }
 
@@ -286,7 +286,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
         return hierarchy.marshallize();
     }
 
-    private DocumentNode buildNodeHierarchy(Page page, ConfluenceLivingDoc util) {
+    private DocumentNode buildNodeHierarchy(Page page, LivingDocConfluenceManager util) {
         DocumentNode node = new DocumentNode(page.getTitle());
         node.setCanBeImplemented(util.canBeImplemented(page));
 

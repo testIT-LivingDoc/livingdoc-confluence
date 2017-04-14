@@ -52,28 +52,28 @@ import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
 import info.novatec.testit.livingdoc.server.transfer.SpecificationLocation;
 
 
-public class LivingDocServerServiceImpl implements LivingDocServerService {
+public class LivingDocPersistenceService {
 
-    private static final Logger log = LoggerFactory.getLogger(LivingDocServerServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(LivingDocPersistenceService.class);
     public static final String NUMBER = " number: ";
 
     private SessionService sessionService;
     private ProjectDao projectDao;
     private RepositoryDao repositoryDao;
-    private SystemUnderTestDao sutDao;
+    private SystemUnderTestDao systemUnderTestDao;
     private DocumentDao documentDao;
 
-    public LivingDocServerServiceImpl(SessionService sessionService, ProjectDao projectDao, RepositoryDao repositoryDao,
-        SystemUnderTestDao sutDao, DocumentDao documentDao) {
+    public LivingDocPersistenceService(SessionService sessionService, ProjectDao projectDao, RepositoryDao repositoryDao,
+                                       SystemUnderTestDao systemUnderTestDao, DocumentDao documentDao) {
 
         this.sessionService = sessionService;
         this.projectDao = projectDao;
         this.repositoryDao = repositoryDao;
-        this.sutDao = sutDao;
+        this.systemUnderTestDao = systemUnderTestDao;
         this.documentDao = documentDao;
     }
 
-    public LivingDocServerServiceImpl() {
+    public LivingDocPersistenceService() {
 
     }
 
@@ -89,8 +89,8 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         this.repositoryDao = repositoryDao;
     }
 
-    public void setSutDao(SystemUnderTestDao sutDao) {
-        this.sutDao = sutDao;
+    public void setSystemUnderTestDao(SystemUnderTestDao systemUnderTestDao) {
+        this.systemUnderTestDao = systemUnderTestDao;
     }
 
     public void setDocumentDao(DocumentDao documentDao) {
@@ -100,12 +100,12 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Runner getRunner(String name) throws LivingDocServerException {
         try {
             sessionService.startSession();
 
-            Runner runner = sutDao.getRunnerByName(name);
+            Runner runner = systemUnderTestDao.getRunnerByName(name);
 
             log.debug("Retrieved Runner name: " + name);
 
@@ -120,12 +120,12 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public List<Runner> getAllRunners() throws LivingDocServerException {
         try {
             sessionService.startSession();
 
-            List<Runner> runners = sutDao.getAllRunners();
+            List<Runner> runners = systemUnderTestDao.getAllRunners();
 
             log.debug("Retrieved All Runner number: " + runners.size());
 
@@ -140,13 +140,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public void createRunner(Runner runner) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.create(runner);
+            systemUnderTestDao.create(runner);
 
             sessionService.commitTransaction();
             log.debug("Created Runner: " + runner.getName());
@@ -161,13 +161,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public void updateRunner(String oldRunnerName, Runner runner) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.update(oldRunnerName, runner);
+            systemUnderTestDao.update(oldRunnerName, runner);
 
             sessionService.commitTransaction();
             log.debug("Updated Runner: " + oldRunnerName);
@@ -182,13 +182,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public void removeRunner(String name) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.removeRunner(name);
+            systemUnderTestDao.removeRunner(name);
 
             sessionService.commitTransaction();
             log.debug("Removed Runner: " + name);
@@ -203,7 +203,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Repository getRepository(String uid, Integer maxUsers) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -215,7 +215,9 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             }
 
             return repository;
-        } finally {
+        } catch (Exception ex) {
+            throw handleException(PROJECT_CREATE_FAILED, ex);
+        }  finally {
             sessionService.closeSession();
         }
     }
@@ -223,7 +225,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Repository getRegisteredRepository(Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -233,7 +235,9 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             registeredRepository.setMaxUsers(repository.getMaxUsers());
 
             return registeredRepository;
-        } finally {
+        } catch (Exception ex) {
+            throw handleException(REPOSITORY_NOT_FOUND, ex);
+        }  finally {
             sessionService.closeSession();
         }
     }
@@ -241,7 +245,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Repository registerRepository(Repository repository) throws LivingDocServerException {
         try {
             Repository repo = repository;
@@ -262,7 +266,6 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             return repo;
         } catch (Exception ex) {
-            sessionService.rollbackTransaction();
             throw handleException(REPOSITORY_REGISTRATION_FAILED, ex);
         } finally {
             sessionService.closeSession();
@@ -272,7 +275,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void updateRepositoryRegistration(Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -299,7 +302,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public void removeRepository(String repositoryUid) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -320,14 +323,17 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public List<Repository> getRepositoriesOfAssociatedProject(String projectName) throws LivingDocServerException {
 
         try {
             sessionService.startSession();
 
             return repositoryDao.getAll(projectName);
-        } finally {
+        } catch (Exception ex) {
+            sessionService.rollbackTransaction();
+            throw handleException(REPOSITORY_NOT_FOUND, ex);
+        }  finally {
             sessionService.closeSession();
         }
     }
@@ -335,7 +341,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Project getProject(String name) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -344,7 +350,10 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             log.debug("Retrieved Project name: " + name);
             return project;
-        } finally {
+        } catch (Exception ex) {
+            sessionService.rollbackTransaction();
+            throw handleException(PROJECT_NOT_FOUND, ex);
+        }  finally {
             sessionService.closeSession();
         }
     }
@@ -352,8 +361,8 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
-    public List<Project> getAllProjects() {
+    
+    public List<Project> getAllProjects() throws LivingDocServerException {
         try {
             sessionService.startSession();
 
@@ -361,6 +370,9 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             log.debug("Retrieved All Projects number: " + projects.size());
             return projects;
+        } catch (Exception ex) {
+            sessionService.rollbackTransaction();
+            throw handleException(PROJECT_NOT_FOUND, ex);
         } finally {
             sessionService.closeSession();
         }
@@ -369,7 +381,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Project createProject(Project project) throws LivingDocServerException {
 
         Project newProject;
@@ -395,7 +407,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Project updateProject(String oldProjectName, Project project) throws LivingDocServerException {
 
         Project projectUpdated;
@@ -420,7 +432,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public List<Repository> getAllSpecificationRepositories() throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -439,7 +451,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<Repository> getSpecificationRepositoriesOfAssociatedProject(String repositoryUid)
         throws LivingDocServerException {
         try {
@@ -462,7 +474,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * CANT SECURE
      */
-    @Override
+    
     public List<Repository> getAllRepositoriesForSystemUnderTest(SystemUnderTest sut) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -482,7 +494,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * CANT SECURE
      */
-    @Override
+    
     public List<Repository> getSpecificationRepositoriesForSystemUnderTest(SystemUnderTest sut)
         throws LivingDocServerException {
         try {
@@ -503,7 +515,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<Repository> getRequirementRepositoriesOfAssociatedProject(String repositoryUid)
         throws LivingDocServerException {
         try {
@@ -526,7 +538,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<SystemUnderTest> getSystemUnderTestsOfAssociatedProject(String repositoryUid)
         throws LivingDocServerException {
         try {
@@ -534,7 +546,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             Repository repository = loadRepository(repositoryUid);
 
-            List<SystemUnderTest> suts = sutDao.getAllForProject(repository.getProject().getName());
+            List<SystemUnderTest> suts = systemUnderTestDao.getAllForProject(repository.getProject().getName());
 
             log.debug("Retrieved SUTs Of Associated Project of " + repository.getUid() + NUMBER + suts.size());
             return suts;
@@ -548,11 +560,11 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public List<SystemUnderTest> getSystemUnderTestsOfProject(String projectName) throws LivingDocServerException {
         try {
             sessionService.startSession();
-            List<SystemUnderTest> suts = sutDao.getAllForProject(projectName);
+            List<SystemUnderTest> suts = systemUnderTestDao.getAllForProject(projectName);
 
             log.debug("Retrieved SUTs of Project: " + projectName + NUMBER + suts.size());
             return suts;
@@ -570,7 +582,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void addSpecificationSystemUnderTest(SystemUnderTest sut, Specification specification)
         throws LivingDocServerException {
         try {
@@ -594,7 +606,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void removeSpecificationSystemUnderTest(SystemUnderTest sut, Specification specification)
         throws LivingDocServerException {
         try {
@@ -618,7 +630,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public boolean doesSpecificationHasReferences(Specification specification) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -637,7 +649,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<Reference> getSpecificationReferences(Specification specification) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -658,7 +670,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public List<Execution> getSpecificationExecutions(Specification specification, SystemUnderTest sut, int maxResults)
         throws LivingDocServerException {
         try {
@@ -679,7 +691,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Execution getSpecificationExecution(Long id) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -695,7 +707,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public boolean doesRequirementHasReferences(Requirement requirement) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -713,7 +725,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<Reference> getRequirementReferences(Requirement requirement) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -735,7 +747,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public RequirementSummary getRequirementSummary(Requirement requirement) throws LivingDocServerException {
         try {
             Requirement req = requirement;
@@ -757,7 +769,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Reference getReference(Reference reference) throws LivingDocServerException {
         try {
             Reference ref = reference;
@@ -782,12 +794,12 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public SystemUnderTest getSystemUnderTest(SystemUnderTest sut, Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
 
-            SystemUnderTest sutDb = sutDao.getByName(sut.getProject().getName(), sut.getName());
+            SystemUnderTest sutDb = systemUnderTestDao.getByName(sut.getProject().getName(), sut.getName());
 
             sessionService.commitTransaction();
             log.debug("Retrieved SystemUnderTest: " + sut.getName());
@@ -802,13 +814,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void createSystemUnderTest(SystemUnderTest sut, Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            SystemUnderTest newSut = sutDao.create(sut);
+            SystemUnderTest newSut = systemUnderTestDao.create(sut);
 
             sessionService.commitTransaction();
             log.debug("Updated SystemUnderTest: " + newSut.getName());
@@ -823,14 +835,14 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void updateSystemUnderTest(String oldSystemUnderTestName, SystemUnderTest sut, Repository repository)
         throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.update(oldSystemUnderTestName, sut);
+            systemUnderTestDao.update(oldSystemUnderTestName, sut);
 
             sessionService.commitTransaction();
             log.debug("Updated SystemUnderTest: " + oldSystemUnderTestName);
@@ -845,13 +857,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void removeSystemUnderTest(SystemUnderTest sut, Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.remove(sut.getProject().getName(), sut.getName());
+            systemUnderTestDao.remove(sut.getProject().getName(), sut.getName());
 
             sessionService.commitTransaction();
             log.debug("Removed SystemUnderTest: " + sut.getName());
@@ -866,13 +878,13 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void setSystemUnderTestAsDefault(SystemUnderTest sut, Repository repository) throws LivingDocServerException {
         try {
             sessionService.startSession();
             sessionService.beginTransaction();
 
-            sutDao.setAsDefault(sut);
+            systemUnderTestDao.setAsDefault(sut);
 
             sessionService.commitTransaction();
             log.debug("Setted as default SystemUnderTest: " + sut.getName());
@@ -887,7 +899,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NOT SECURED FOR SYNCHRONIZATION PURPOSES
      */
-    @Override
+    
     public void removeRequirement(Requirement requirement) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -908,7 +920,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Specification getSpecification(Specification specification) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -932,7 +944,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public Specification getSpecificationById(Long id) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -955,7 +967,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<Specification> getSpecifications(SystemUnderTest systemUnderTest, Repository repository)
         throws LivingDocServerException {
         try {
@@ -976,7 +988,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public List<SpecificationLocation> getListOfSpecificationLocations(String repositoryUID, String systemUnderTestName)
         throws LivingDocServerException {
         try {
@@ -985,7 +997,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
             Repository repository = loadRepository(repositoryUID);
 
             List<SpecificationLocation> locations = new ArrayList<SpecificationLocation>();
-            SystemUnderTest systemUnderTest = sutDao.getByName(repository.getProject().getName(), systemUnderTestName);
+            SystemUnderTest systemUnderTest = systemUnderTestDao.getByName(repository.getProject().getName(), systemUnderTestName);
             if(systemUnderTest == null){
                 log.warn("System under test not found : "+  systemUnderTestName);
                 throw new LivingDocServerException(SUT_NOT_FOUND, "System under test not found : "+  systemUnderTestName);
@@ -1013,7 +1025,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public DocumentNode getSpecificationHierarchy(Repository repository, SystemUnderTest systemUnderTest)
         throws LivingDocServerException {
         try {
@@ -1027,7 +1039,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
 
             ClassLoader currentClassLoader = this.getClass().getClassLoader();
 
-            SystemUnderTest systemUnderTestDb = sutDao.getByName(repo.getProject().getName(), systemUnderTest.getName());
+            SystemUnderTest systemUnderTestDb = systemUnderTestDao.getByName(repo.getProject().getName(), systemUnderTest.getName());
             DocumentRepository docRepo = repo.asDocumentRepository(currentClassLoader, user, pwd);
 
             log.debug("Retrieved specification Hierarchy: " + repo.getName());
@@ -1045,7 +1057,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Specification createSpecification(Specification specification) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -1070,7 +1082,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NOT SECURED FOR SYNCHRONIZATION PURPOSES
      */
-    @Override
+    
     public void updateSpecification(Specification oldSpecification, Specification newSpecification)
         throws LivingDocServerException {
         try {
@@ -1092,7 +1104,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NOT SECURED FOR SYNCHRONIZATION PURPOSES
      */
-    @Override
+    
     public void removeSpecification(Specification specification) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -1113,7 +1125,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void createReference(Reference reference) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -1137,7 +1149,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Reference updateReference(Reference oldReference, Reference newReference) throws LivingDocServerException {
         try {
             Reference newRef = newReference;
@@ -1163,7 +1175,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public void removeReference(Reference reference) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -1187,7 +1199,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Execution createExecution(SystemUnderTest systemUnderTest, Specification specification, XmlReport xmlReport)
         throws LivingDocServerException {
         try {
@@ -1214,7 +1226,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Execution runSpecification(SystemUnderTest systemUnderTest, Specification specification,
         boolean implementedVersion, String locale) throws LivingDocServerException {
         try {
@@ -1242,7 +1254,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * SECURED
      */
-    @Override
+    
     public Reference runReference(Reference reference, String locale) throws LivingDocServerException {
         try {
             Reference ref = reference;
@@ -1269,7 +1281,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
     /**
      * NO NEEDS TO SECURE THIS
      */
-    @Override
+    
     public void removeProject(Project project, boolean cascade) throws LivingDocServerException {
         try {
             sessionService.startSession();
@@ -1282,10 +1294,10 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
                     repositoryDao.remove(repo.getUid());
                 }
 
-                List<SystemUnderTest> systemUnderTests = sutDao.getAllForProject(project.getName());
+                List<SystemUnderTest> systemUnderTests = systemUnderTestDao.getAllForProject(project.getName());
 
                 for (SystemUnderTest sut : systemUnderTests) {
-                    sutDao.remove(sut.getProject().getName(), sut.getName());
+                    systemUnderTestDao.remove(sut.getProject().getName(), sut.getName());
                 }
             }
 
@@ -1302,7 +1314,7 @@ public class LivingDocServerServiceImpl implements LivingDocServerService {
         }
     }
 
-    @Override
+    
     public void createDefaultRunner(Properties properties) throws LivingDocServerException {
         try {
             sessionService.beginTransaction();

@@ -41,12 +41,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.DocumentNode;
 import info.novatec.testit.livingdoc.server.domain.Execution;
 import info.novatec.testit.livingdoc.server.domain.Project;
@@ -72,16 +72,16 @@ public class LivingDocXmlRpcServer implements RpcServerService {
     private static final Logger log = LoggerFactory.getLogger(LivingDocXmlRpcServer.class);
     public static final String NUMBER = " number: ";
 
-    private LivingDocServerService service;
+    private LivingDocPersistenceService service;
 
-    public LivingDocXmlRpcServer(LivingDocServerService service) {
+    public LivingDocXmlRpcServer(LivingDocPersistenceService service) {
         this.service = service;
     }
 
     public LivingDocXmlRpcServer() {
     }
 
-    public void setService(LivingDocServerService service) {
+    public void setService(LivingDocPersistenceService service) {
         this.service = service;
     }
 
