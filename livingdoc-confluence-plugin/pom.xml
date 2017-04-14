@@ -259,6 +259,7 @@
 					<allowGoogleTracking>false</allowGoogleTracking>
 					<productVersion>${confluence.version}</productVersion>
 					<productDataVersion>${confluence.data.version}</productDataVersion>
+					<enableQuickReload>true</enableQuickReload>
 					<instructions>
 						<!-- OSGi instructions go here -->
 						<Import-Package>
