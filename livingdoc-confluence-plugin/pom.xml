@@ -248,6 +248,7 @@
 					<allowGoogleTracking>false</allowGoogleTracking>
 					<productVersion>${confluence.version}</productVersion>
 					<productDataVersion>${confluence.data.version}</productDataVersion>
+					<enableQuickReload>true</enableQuickReload>
 					<instructions>
 						<Import-Package>
 							javax.transaction.xa;resolution:=optional,
