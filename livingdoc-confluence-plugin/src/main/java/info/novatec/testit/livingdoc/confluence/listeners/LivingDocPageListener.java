@@ -1,6 +1,5 @@
 package info.novatec.testit.livingdoc.confluence.listeners;
 
-import com.atlassian.confluence.event.events.content.page.PageEvent;
 import com.atlassian.confluence.event.events.content.page.PageRemoveEvent;
 import com.atlassian.confluence.event.events.content.page.PageTrashedEvent;
 import com.atlassian.confluence.event.events.content.page.PageUpdateEvent;
@@ -9,82 +8,78 @@ import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
+import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.Specification;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 
 
 public class LivingDocPageListener implements DisposableBean {
-    private final ConfluenceLivingDoc ld;
+
+    private static Logger log = LoggerFactory.getLogger(LivingDocPageListener.class);
+    private final LivingDocConfluenceManager ld;
 
     protected EventPublisher eventPublisher;
 
-    public LivingDocPageListener(EventPublisher eventPublisher, ConfluenceLivingDoc ld) {
+    public LivingDocPageListener(EventPublisher eventPublisher, LivingDocConfluenceManager ld) {
         this.eventPublisher = eventPublisher;
         this.ld = ld;
         eventPublisher.register(this);
     }
 
-    @EventListener
-    public void pageUpdateEvent(PageUpdateEvent event) throws LivingDocServerException {
-        updateSpecification(event);
-    }
 
     @EventListener
     public void spaceRemoveEvent(SpaceRemoveEvent event) throws LivingDocServerException {
-        removeRepository(event);
+        String spaceKey = event.getSpace().getKey();
+        try{
+            Repository repository = ld.getHomeRepository(spaceKey);
+            ld.getPersistenceService().removeRepository(repository.getUid());
+        }catch(LivingDocServerException ldse){
+            log.error("error removing repository für space "+ spaceKey,ldse);
+        }
     }
 
     @EventListener
-    public void pageRemoveEvent(PageRemoveEvent event) throws LivingDocServerException {
-        removeSpecification(event);
+    public void pageRemoveEvent(PageRemoveEvent event) {
+        removeSpecificationSafe(event.getPage());
     }
 
     @EventListener
-    public void pageTrashedEvent(PageTrashedEvent event) throws LivingDocServerException {
-        removeSpecification(event);
+    public void pageTrashedEvent(PageTrashedEvent event) {
+        removeSpecificationSafe(event.getPage());
     }
 
-    private void removeSpecification(PageEvent pageEvt) throws LivingDocServerException {
-        Page page = pageEvt.getPage();
 
-        Specification specification = Specification.newInstance(page.getTitle());
-        specification.setRepository(ld.getHomeRepository(page.getSpaceKey()));
+    @EventListener
+    public void pageUpdateEvent(PageUpdateEvent event) throws LivingDocServerException {
+        log.debug("Updating specification");
 
-        ld.getLDServerService().removeSpecification(specification);
-
-        ld.saveExecuteChildren(page, null);
-        ld.saveImplementedVersion(page, null);
-        ld.savePreviousImplementedVersion(page, null);
-    }
-
-    private void removeRepository(SpaceRemoveEvent spaceEvt) throws LivingDocServerException {
-        ld.getLDServerService().removeRepository(ld.getHomeRepository(spaceEvt.getSpace().getKey()).getUid());
-    }
-
-    private void updateSpecification(PageUpdateEvent pageEvt) throws LivingDocServerException {
-        AbstractPage oldPage = pageEvt.getOriginalPage();
-        Page newPage = pageEvt.getPage();
+        Page oldPage = (Page)event.getOriginalPage();
+        Page newPage = event.getPage();
         if (newPage != null && oldPage != null && (!newPage.getTitle().equals(oldPage.getTitle()) ||
                 !newPage.getBodyAsString().equals(oldPage.getBodyAsString()))) {
-            Specification oldSpecification = Specification.newInstance(oldPage.getTitle());
-            oldSpecification.setRepository(ld.getHomeRepository(newPage.getSpace().getKey()));
             boolean oldPageIsExecutable = containsPageMacro(oldPage);
             boolean newPageIsExecutable = containsPageMacro(newPage);
             try {
+                Specification oldSpecification = Specification.newInstance(oldPage.getTitle());
+                oldSpecification.setRepository(ld.getHomeRepository(newPage.getSpace().getKey()));
                 Specification newSpecification = Specification.newInstance(newPage.getTitle());
                 newSpecification.setRepository(ld.getHomeRepository(newPage.getSpace().getKey()));
                if(!newPageIsExecutable){
-                   removeSpecification(pageEvt);
+                   removeSpecification(newPage);
                }else if(!oldPageIsExecutable) {
-                   ld.getLDServerService().createSpecification(newSpecification);
+                   ld.getPersistenceService().createSpecification(newSpecification);
                }else{
-                   ld.getLDServerService().updateSpecification(oldSpecification, newSpecification);
+                   ld.getPersistenceService().updateSpecification(oldSpecification, newSpecification);
                }
+                log.debug("Successfully updated specification");
+
             } catch (LivingDocServerException e) {
-                ld.getLDServerService().removeSpecification(oldSpecification);
+                removeSpecificationSafe(oldPage);
             }
         }
     }
@@ -97,5 +92,24 @@ public class LivingDocPageListener implements DisposableBean {
     private boolean containsPageMacro(AbstractPage page){
         String content = page.getBodyAsString();
         return StringUtils.contains(content, "livingdoc-page");
+    }
+    private void removeSpecificationSafe(Page page){
+        try {
+            removeSpecification(page);
+        }catch(LivingDocServerException ldse){
+            log.error("error saving specification ",ldse);
+        }
+    }
+    private void removeSpecification(Page page) throws LivingDocServerException {
+            log.debug("Removing specification");
+            Specification specification = Specification.newInstance(page.getTitle());
+            specification.setRepository(ld.getHomeRepository(page.getSpaceKey()));
+
+            ld.getPersistenceService().removeSpecification(specification);
+
+            ld.saveExecuteChildren(page, null);
+            ld.saveImplementedVersion(page, null);
+            ld.savePreviousImplementedVersion(page, null);
+            log.debug("Successfully removed specification");
     }
 }
