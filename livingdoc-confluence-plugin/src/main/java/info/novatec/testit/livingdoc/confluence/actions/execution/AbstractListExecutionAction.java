@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 
 import com.atlassian.confluence.pages.Page;
@@ -17,6 +18,7 @@ import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 
 @SuppressWarnings("serial")
 public abstract class AbstractListExecutionAction extends SpecificationAction {
+
     protected LinkedList<Page> executableList;
     protected List<SystemUnderTest> forcedSystemUnderTests;
     private String forcedSuts;
@@ -25,6 +27,11 @@ public abstract class AbstractListExecutionAction extends SpecificationAction {
     private Boolean openInSameWindow = Boolean.TRUE;
 
     private boolean showList;
+
+    public AbstractListExecutionAction(){}
+    public AbstractListExecutionAction(LivingDocConfluenceManager livingDocConfluenceManager) {
+        super(livingDocConfluenceManager);
+    }
 
     public LinkedList<Page> getExecutableList() {
         if (executableList != null)
@@ -42,10 +49,10 @@ public abstract class AbstractListExecutionAction extends SpecificationAction {
             if (forcedSystemUnderTests != null)
                 return forcedSystemUnderTests;
             if (StringUtils.isEmpty(forcedSuts))
-                return confluenceLivingDoc.getSystemsUnderTests(spaceKey);
+                return getLivingDocConfluenceManager().getSystemsUnderTests(spaceKey);
 
             List<SystemUnderTest> forcedSystemUnderTests = new ArrayList<SystemUnderTest>();
-            List<SystemUnderTest> projectSuts = confluenceLivingDoc.getSystemsUnderTests(spaceKey);
+            List<SystemUnderTest> projectSuts = getLivingDocConfluenceManager().getSystemsUnderTests(spaceKey);
             for (String sutName : forcedSuts.split(",")) {
                 sutName = sutName.trim();
                 for (SystemUnderTest sut : projectSuts) {

@@ -35,7 +35,7 @@ public class LivingDocLabels extends AbstractLivingDocMacro {
 
             if (spaceKey != null && labels != null) {
                 view = "/templates/livingdoc/confluence/macros/livingDocList.vm";
-                LabelExecutionAction action = new LabelExecutionAction();
+                LabelExecutionAction action = new LabelExecutionAction(ldUtil);
                 action.setBulkUID(getBulkUID(parameters));
                 action.setExecutionUID("LABEL_" + MacroCounter.instance().getNextCount());
                 action.setForcedSuts(( String ) parameters.get("suts"));

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Execution;
@@ -20,10 +21,14 @@ import info.novatec.testit.livingdoc.util.ExceptionUtils;
 import info.novatec.testit.livingdoc.util.HtmlUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @SuppressWarnings("serial")
 public class SpecificationAction extends AbstractLivingDocAction {
+    private static Logger log = LoggerFactory.getLogger(SpecificationAction.class);
+
     protected Specification specification;
 
     private List<Reference> references;
@@ -43,10 +48,19 @@ public class SpecificationAction extends AbstractLivingDocAction {
     private boolean isSutEditable;
     protected boolean implemented;
 
+    public SpecificationAction(){}
+    public SpecificationAction(LivingDocConfluenceManager confluenceLivingDoc) {
+        super(confluenceLivingDoc);
+    }
+
     public String loadSpecification() {
         try {
-            specification = confluenceLivingDoc.getSpecification(spaceKey, getPage().getTitle());
+            log.debug("retrieving specification ...");
+            specification = getLivingDocConfluenceManager().getSpecification(spaceKey, getPage().getTitle());
+            log.debug("Specification found : " + (specification == null ? "NONE" : specification.getName()) );
+
         } catch (LivingDocServerException e) {
+            log.error("Error loading specification" , e);
             if ( ! e.getId().equals(LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND))
                 addActionError(e);
         }
@@ -55,14 +69,14 @@ public class SpecificationAction extends AbstractLivingDocAction {
     }
 
     public String updateSelectedSystemUndertTest() {
-        confluenceLivingDoc.saveSelectedSystemUnderTestInfo(page, selectedSystemUnderTestInfo);
+        getLivingDocConfluenceManager().saveSelectedSystemUnderTestInfo(page, selectedSystemUnderTestInfo);
         return SUCCESS;
     }
 
     public String getSystemUndertTestSelection() {
         try {
-            specification = confluenceLivingDoc.getSpecification(spaceKey, getPage().getTitle());
-            projectSystemUnderTests = confluenceLivingDoc.getSystemsUnderTests(spaceKey);
+            specification = getLivingDocConfluenceManager().getSpecification(spaceKey, getPage().getTitle());
+            projectSystemUnderTests = getLivingDocConfluenceManager().getSystemsUnderTests(spaceKey);
         } catch (LivingDocServerException e) {
             projectSystemUnderTests = new ArrayList<SystemUnderTest>();
             addActionError(e);
@@ -78,9 +92,9 @@ public class SpecificationAction extends AbstractLivingDocAction {
             sut.setRunner(Runner.newInstance(""));
 
             Specification specification = Specification.newInstance(getPage().getTitle());
-            specification.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+            specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
 
-            confluenceLivingDoc.getLDServerService().addSpecificationSystemUnderTest(sut, specification);
+            getLivingDocConfluenceManager().getPersistenceService().addSpecificationSystemUnderTest(sut, specification);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -95,9 +109,9 @@ public class SpecificationAction extends AbstractLivingDocAction {
             sut.setRunner(Runner.newInstance(""));
 
             Specification specification = Specification.newInstance(getPage().getTitle());
-            specification.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+            specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
 
-            confluenceLivingDoc.getLDServerService().removeSpecificationSystemUnderTest(sut, specification);
+            getLivingDocConfluenceManager().getPersistenceService().removeSpecificationSystemUnderTest(sut, specification);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -115,9 +129,9 @@ public class SpecificationAction extends AbstractLivingDocAction {
         Specification spec = Specification.newInstance(getPage().getTitle());
 
         try {
-            spec.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+            spec.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
 
-            execution = confluenceLivingDoc.getLDServerService().runSpecification(sut, spec, implemented, locale);
+            execution = getLivingDocConfluenceManager().getPersistenceService().runSpecification(sut, spec, implemented, locale);
         } catch (LivingDocServerException e) {
             execution = Execution.error(spec, sut, null, e.getId());
         } catch (Exception e) {
@@ -129,13 +143,21 @@ public class SpecificationAction extends AbstractLivingDocAction {
 
     public String retrieveReferenceList() {
         try {
-            references = confluenceLivingDoc.getReferences(spaceKey, getPage().getTitle());
+            log.debug("retrieving references ...");
+            references = getLivingDocConfluenceManager().getReferences(spaceKey, getPage().getTitle());
+            log.debug("References found : "+ (references == null ? "NONE": references.size()));
+
             if (isEditMode) {
-                repositories = confluenceLivingDoc.getRepositories(spaceKey);
+                log.debug("Retrieving repositories ...");
+                repositories = getLivingDocConfluenceManager().getRepositories(spaceKey);
+                log.debug("Repositories found : "+ (repositories == null ? "NONE": repositories.size()));
+
                 if (repositories.isEmpty())
                     throw new LivingDocServerException("livingdoc.server.repositoriesnotfound", "");
 
-                projectSystemUnderTests = confluenceLivingDoc.getSystemsUnderTests(spaceKey);
+                log.debug("Retrieving SUTs ...");
+                projectSystemUnderTests = getLivingDocConfluenceManager().getSystemsUnderTests(spaceKey);
+                log.debug("SUTs found : "+ (projectSystemUnderTests == null ? "NONE": projectSystemUnderTests.size()));
                 if (projectSystemUnderTests.isEmpty())
                     throw new LivingDocServerException("livingdoc.server.sutsnotfound", "");
             }
@@ -149,7 +171,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
 
     public String addReference() {
         try {
-            confluenceLivingDoc.getLDServerService().createReference(instanceOfReference());
+            getLivingDocConfluenceManager().getPersistenceService().createReference(instanceOfReference());
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -161,7 +183,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
         isEditMode = true;
 
         try {
-            confluenceLivingDoc.getLDServerService().removeReference(instanceOfReference());
+            getLivingDocConfluenceManager().getPersistenceService().removeReference(instanceOfReference());
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -238,7 +260,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
     }
 
     public SystemUnderTest getSelectedSystemUnderTest() {
-        return confluenceLivingDoc.getSelectedSystemUnderTest(page);
+        return getLivingDocConfluenceManager().getSelectedSystemUnderTest(page);
     }
 
     public boolean getIsExecutable() {
@@ -253,7 +275,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
         if (selectedSystemUnderTestInfo != null) {
             return selectedSystemUnderTestInfo;
         }
-        selectedSystemUnderTestInfo = confluenceLivingDoc.getSelectedSystemUnderTestInfo(page);
+        selectedSystemUnderTestInfo = getLivingDocConfluenceManager().getSelectedSystemUnderTestInfo(page);
         return selectedSystemUnderTestInfo;
     }
 
@@ -288,7 +310,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
     }
 
     public boolean isInSpecificationSelection(SystemUnderTest systemUnderTest) {
-        return confluenceLivingDoc.isInSutList(systemUnderTest, specification.getTargetedSystemUnderTests());
+        return getLivingDocConfluenceManager().isInSutList(systemUnderTest, specification.getTargetedSystemUnderTests());
     }
 
     /********************* Utils *********************/
@@ -298,7 +320,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
         sut.setProject(Project.newInstance(sutProjectName));
 
         Specification specification = Specification.newInstance(getPage().getTitle());
-        specification.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+        specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
 
         Requirement requirement = Requirement.newInstance(requirementName);
         requirement.setRepository(Repository.newInstance(repositoryUid));

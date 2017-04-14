@@ -23,6 +23,7 @@ import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
 import info.novatec.testit.livingdoc.confluence.actions.AbstractLivingDocAction;
 import info.novatec.testit.livingdoc.confluence.macros.historic.HistoricParameters;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Specification;
 
@@ -38,6 +39,11 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
     private String sut;
     private boolean showIgnored;
     private int maxResult;
+
+    public ChildrenExecutionResultAction(){}
+    public ChildrenExecutionResultAction(LivingDocConfluenceManager confluenceLivingDoc) {
+        super(confluenceLivingDoc);
+    }
 
     public Long getId() {
         return id;
@@ -80,7 +86,7 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
 
     public String show() {
         try {
-            specification = confluenceLivingDoc.getLDServerService().getSpecificationById(getId());
+            specification = getLivingDocConfluenceManager().getPersistenceService().getSpecificationById(getId());
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
         }
@@ -90,9 +96,9 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getRenderedContent() {
-        Page page = confluenceLivingDoc.getPageManager().getPage(spaceKey, getPageTitle());
+        Page page = getLivingDocConfluenceManager().getPageManager().getPage(spaceKey, getPageTitle());
         if (page == null)
-            return confluenceLivingDoc.getText("livingdoc.children.pagenotfound");
+            return getLivingDocConfluenceManager().getText("livingdoc.children.pagenotfound");
 
         StringBuilder content = new StringBuilder("{livingdoc-historic:");
 
@@ -106,8 +112,8 @@ public class ChildrenExecutionResultAction extends AbstractLivingDocAction {
         content.append("}");
 
         // return
-        // confluenceLivingDoc.getWikiStyleRenderer().convertWikiToXHtml(page.toPageContext(),
+        // getLivingDocConfluenceManager().getWikiStyleRenderer().convertWikiToXHtml(page.toPageContext(),
         // content.toString());
-        return confluenceLivingDoc.getViewRenderer().render(page);
+        return getLivingDocConfluenceManager().getViewRenderer().render(page);
     }
 }

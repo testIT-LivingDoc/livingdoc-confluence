@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.ClasspathSet;
 import info.novatec.testit.livingdoc.server.domain.Project;
@@ -18,6 +18,8 @@ import info.novatec.testit.livingdoc.server.domain.RepositoryType;
 import info.novatec.testit.livingdoc.server.domain.Runner;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -27,6 +29,7 @@ import info.novatec.testit.livingdoc.server.domain.component.ContentType;
  */
 @SuppressWarnings("serial")
 public class RegistrationAction extends LivingDocServerAction {
+    private static final Logger log = LoggerFactory.getLogger(RegistrationAction.class);
     private Boolean readonly = Boolean.FALSE;
 
     private List<Runner> runners;
@@ -59,47 +62,55 @@ public class RegistrationAction extends LivingDocServerAction {
     private boolean editClasspathsMode;
     private boolean editFixturesMode;
 
+    public RegistrationAction(LivingDocConfluenceManager confluenceLivingDoc) {
+        super(confluenceLivingDoc);
+    }
+    public RegistrationAction(){
+        super(null);
+    }
     public String doGetRegistration() {
-
+        log.debug("Getting registration status");
         if ( ! isServerReady()) {
-            addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
+            log.error("registration failed because server is not ready");
+            addActionError(LivingDocConfluenceManager.SERVER_NOCONFIGURATION);
             readonly = true;
             editMode = false;
             addMode = false;
             return SUCCESS;
+        }else {
+            try {
+                if (StringUtils.isEmpty(projectName))
+                    projectName = getRegisteredRepository().getProject().getName();
+                if (StringUtils.isEmpty(repositoryName))
+                    repositoryName = getRegisteredRepository().getName();
+                if (StringUtils.isEmpty(username))
+                    username = getRegisteredRepository().getUsername();
+                if (StringUtils.isEmpty(pwd))
+                    pwd = getRegisteredRepository().getPassword();
+
+                checkRepositoryBaseUrl();
+                doGetSystemUnderTests();
+                log.debug("Getting registration status succeeded");
+            } catch (LivingDocServerException e) {
+                if (editMode && StringUtils.isEmpty(projectName) && !isWithNewProject())
+                    projectName = getProjects().getLast().getName();
+                readonly = true;
+                log.error("Getting registration status failed");
+
+            }
+            return SUCCESS;
         }
-
-        try {
-
-            if (StringUtils.isEmpty(projectName))
-                projectName = getRegisteredRepository().getProject().getName();
-            if (StringUtils.isEmpty(repositoryName))
-                repositoryName = getRegisteredRepository().getName();
-            if (StringUtils.isEmpty(username))
-                username = getRegisteredRepository().getUsername();
-            if (StringUtils.isEmpty(pwd))
-                pwd = getRegisteredRepository().getPassword();
-
-            checkRepositoryBaseUrl();
-
-            return doGetSystemUnderTests();
-        } catch (LivingDocServerException e) {
-            if (editMode && StringUtils.isEmpty(projectName) && ! isWithNewProject())
-                projectName = getProjects().getLast().getName();
-
-            readonly = true;
-        }
-
-        return editMode ? doGetSystemUnderTests() : SUCCESS;
     }
 
     public String doRegister() {
         try {
+            log.debug("Starting registratioin");
+
             if (getUsername() != null) {
-                confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
+                getLivingDocConfluenceManager().verifyCredentials(getUsername(), getPwd());
             }
 
-            String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
+            String uid = getLivingDocConfluenceManager().getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
             registeredRepository = Repository.newInstance(uid);
             registeredRepository.setProject(getProjectForRegistration());
             registeredRepository.setType(RepositoryType.newInstance("CONFLUENCE"));
@@ -111,12 +122,15 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
             
-            getService().registerRepository(registeredRepository);
+            getPersistenceService().registerRepository(registeredRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
+            log.debug("Registration successfull");
+
         } catch (LivingDocServerException e) {
             addActionError(e);
             editMode = true;
             readonly = true;
+            log.error("Registration failed",e);
         }
 
         return doGetRegistration();
@@ -124,11 +138,13 @@ public class RegistrationAction extends LivingDocServerAction {
 
     public String doUpdateRegistration() {
         try {
+            log.debug("Starting registration update");
+
             if (getUsername() != null) {
-                confluenceLivingDoc.verifyCredentials(getUsername(), getPwd());
+                getLivingDocConfluenceManager().verifyCredentials(getUsername(), getPwd());
             }
 
-            String uid = confluenceLivingDoc.getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
+            String uid = getLivingDocConfluenceManager().getSettingsManager().getGlobalSettings().getSiteTitle() + "-" + getSpaceKey();
             Repository newRepository = Repository.newInstance(uid);
             newRepository.setProject(getProjectForRegistration());
             newRepository.setType(RepositoryType.newInstance("CONFLUENCE"));
@@ -140,12 +156,14 @@ public class RegistrationAction extends LivingDocServerAction {
             newRepository.setUsername(getUsername());
             newRepository.setPassword(getPwd());
 
-            getService().updateRepositoryRegistration(newRepository);
+            getPersistenceService().updateRepositoryRegistration(newRepository);
             projectName = isWithNewProject() ? newProjectName : projectName;
+            log.debug("Registration updated successfully");
         } catch (LivingDocServerException e) {
             addActionError(e);
             editMode = true;
             readonly = true;
+            log.error("Registration update failed",e);
         }
 
         return doGetRegistration();
@@ -153,11 +171,12 @@ public class RegistrationAction extends LivingDocServerAction {
 
     public String doGetSystemUnderTests() {
         try {
-            runners = getService().getAllRunners();
+            log.debug("Getting system under tests");
+            runners = getPersistenceService().getAllRunners();
             if (runners.isEmpty())
                 throw new LivingDocServerException("livingdoc.suts.norunners", "No runners.");
 
-            systemUnderTests = getService().getSystemUnderTestsOfProject(projectName);
+            systemUnderTests = getPersistenceService().getSystemUnderTestsOfProject(projectName);
             if (selectedSut == null) {
                 for (SystemUnderTest sut : systemUnderTests) {
                     if (sut.getName().equals(selectedSutName)) {
@@ -172,9 +191,11 @@ public class RegistrationAction extends LivingDocServerAction {
                 if (selectedSut != null)
                     selectedSutName = selectedSut.getName();
             }
+            log.debug("Successfully updated SUT´s");
         } catch (LivingDocServerException e) {
             addActionError(e);
             addMode = false;
+            log.error("Error getting SUT´s",e);
         }
 
         return SUCCESS;
@@ -192,7 +213,7 @@ public class RegistrationAction extends LivingDocServerAction {
             selectedSut.setProjectDependencyDescriptor(newProjectDependencyDescriptor);
             selectedSut.setSutClasspaths(ClasspathSet.parse(sutClasspath));
 
-            getService().createSystemUnderTest(selectedSut, getHomeRepository());
+            getPersistenceService().createSystemUnderTest(selectedSut, getHomeRepository());
             successfullAction();
         } catch (LivingDocServerException e) {
             addActionError(e);
@@ -206,7 +227,7 @@ public class RegistrationAction extends LivingDocServerAction {
 
             SystemUnderTest newSut = SystemUnderTest.newInstance(selectedSutName);
             newSut.setProject(Project.newInstance(projectName));
-            newSut = getService().getSystemUnderTest(newSut, getHomeRepository());
+            newSut = getPersistenceService().getSystemUnderTest(newSut, getHomeRepository());
 
             newSut.setName(newSutName);
             newSut.setFixtureFactory(newFixtureFactory);
@@ -215,16 +236,16 @@ public class RegistrationAction extends LivingDocServerAction {
             newSut.setProjectDependencyDescriptor(newProjectDependencyDescriptor);
             newSut.setSutClasspaths(ClasspathSet.parse(sutClasspath));
 
-            getService().updateSystemUnderTest(selectedSutName, newSut, getHomeRepository());
+            getPersistenceService().updateSystemUnderTest(selectedSutName, newSut, getHomeRepository());
             successfullAction();
             return doGetSystemUnderTests();
         } catch (LivingDocServerException e) {
             try {
-                runners = getService().getAllRunners();
+                runners = getPersistenceService().getAllRunners();
                 if (runners.isEmpty())
                     throw new LivingDocServerException("livingdoc.suts.norunners", "No runners.");
 
-                systemUnderTests = getService().getSystemUnderTestsOfProject(projectName);
+                systemUnderTests = getPersistenceService().getSystemUnderTestsOfProject(projectName);
                 selectedSut = SystemUnderTest.newInstance(selectedSutName);
                 selectedSut.setProject(Project.newInstance(projectName));
                 selectedSut.setFixtureFactory(newFixtureFactory);
@@ -245,7 +266,7 @@ public class RegistrationAction extends LivingDocServerAction {
         try {
             selectedSut = SystemUnderTest.newInstance(selectedSutName);
             selectedSut.setProject(Project.newInstance(projectName));
-            getService().removeSystemUnderTest(selectedSut, getHomeRepository());
+            getPersistenceService().removeSystemUnderTest(selectedSut, getHomeRepository());
             selectedSutName = null;
         } catch (LivingDocServerException e) {
             addActionError(e);
@@ -259,9 +280,9 @@ public class RegistrationAction extends LivingDocServerAction {
         try {
             SystemUnderTest selectedSut = SystemUnderTest.newInstance(selectedSutName);
             selectedSut.setProject(Project.newInstance(projectName));
-            selectedSut = getService().getSystemUnderTest(selectedSut, getHomeRepository());
+            selectedSut = getPersistenceService().getSystemUnderTest(selectedSut, getHomeRepository());
             selectedSut.setSutClasspaths(ClasspathSet.parse(sutClasspath));
-            getService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
+            getPersistenceService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -297,9 +318,9 @@ public class RegistrationAction extends LivingDocServerAction {
         try {
             SystemUnderTest selectedSut = SystemUnderTest.newInstance(selectedSutName);
             selectedSut.setProject(Project.newInstance(projectName));
-            selectedSut = getService().getSystemUnderTest(selectedSut, getHomeRepository());
+            selectedSut = getPersistenceService().getSystemUnderTest(selectedSut, getHomeRepository());
             selectedSut.setFixtureClasspaths(ClasspathSet.parse(fixtureClasspath));
-            getService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
+            getPersistenceService().updateSystemUnderTest(selectedSutName, selectedSut, getHomeRepository());
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -311,7 +332,7 @@ public class RegistrationAction extends LivingDocServerAction {
         try {
             SystemUnderTest sut = SystemUnderTest.newInstance(selectedSutName);
             sut.setProject(Project.newInstance(projectName));
-            getService().setSystemUnderTestAsDefault(sut, getHomeRepository());
+            getPersistenceService().setSystemUnderTestAsDefault(sut, getHomeRepository());
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -324,7 +345,7 @@ public class RegistrationAction extends LivingDocServerAction {
         if (projects != null)
             return projects;
         try {
-            projects = new LinkedList<Project>(getService().getAllProjects());
+            projects = new LinkedList<Project>(getPersistenceService().getAllProjects());
             projects.addLast(Project.newInstance(projectCreateOption()));
             projectName = projectName == null ? projects.iterator().next().getName() : projectName;
 
@@ -546,7 +567,7 @@ public class RegistrationAction extends LivingDocServerAction {
     private String getBaseUrl() {
         if (baseUrl != null)
             return baseUrl;
-        baseUrl = confluenceLivingDoc.getBaseUrl();
+        baseUrl = getLivingDocConfluenceManager().getBaseUrl();
         return baseUrl;
     }
 
@@ -567,7 +588,7 @@ public class RegistrationAction extends LivingDocServerAction {
     private void checkRepositoryBaseUrl() throws LivingDocServerException {
 
         if ( ! editMode && ! addMode && ! getRegisteredRepository().getBaseUrl().equals(getBaseUrl())) {
-            addActionError(getText(ConfluenceLivingDoc.REPOSITORY_BASEURL_OUTOFSYNC, new String[] { getRegisteredRepository()
+            addActionError(getText(LivingDocConfluenceManager.REPOSITORY_BASEURL_OUTOFSYNC, new String[] { getRegisteredRepository()
                 .getBaseUrl(), getBaseUrl() }));
         }
     }

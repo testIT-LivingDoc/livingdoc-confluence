@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atlassian.confluence.spaces.actions.AbstractSpaceAction;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.ServerPropertiesManager;
 import info.novatec.testit.livingdoc.server.domain.Project;
 import info.novatec.testit.livingdoc.server.domain.Repository;
@@ -27,42 +27,49 @@ import info.novatec.testit.livingdoc.util.I18nUtil;
 public class LivingDocServerAction extends AbstractSpaceAction {
     private static final Logger log = LoggerFactory.getLogger(LivingDocServerAction.class);
 
+    protected String projectName;
+    protected Repository registeredRepository;
+    protected Repository homeRepository;
+    protected LinkedList<Project> projects;
+
+    private String spaceKey;
+    private String url;
+    private String handler = RpcServerService.SERVICE_HANDLER;
+    private Boolean isRegistered;
     private static final String RESOURCE_BUNDLE = ConfigurationAction.class.getName();
     private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
     private ResourceBundle resourceBundle;
 
-    protected ConfluenceLivingDoc confluenceLivingDoc;
+    private LivingDocConfluenceManager livingDocConfluenceManager;
     private List<SystemUnderTest> systemUnderTests;
 
-    protected String projectName;
-    protected Repository registeredRepository;
-    protected Repository homeRepository;
-    private String spaceKey;
-
-    private String url;
-    private String handler = RpcServerService.SERVICE_HANDLER;
-    private Boolean isRegistered;
-    protected LinkedList<Project> projects;
-
+    public LivingDocServerAction(LivingDocConfluenceManager confluenceLivingDoc) {
+        this.livingDocConfluenceManager = confluenceLivingDoc;
+    }
+    public LivingDocServerAction(){}
     /**
      * Setter for IoC
      * 
-     * @param confluenceLivingDoc
+     * @param livingDocConfluenceManager
      */
-    public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
-        this.confluenceLivingDoc = confluenceLivingDoc;
+    public void setLivingDocConfluenceManager(LivingDocConfluenceManager livingDocConfluenceManager) {
+        this.livingDocConfluenceManager = livingDocConfluenceManager;
     }
 
-    protected LivingDocServerService getService() {
-        return confluenceLivingDoc.getLDServerService();
+    protected LivingDocConfluenceManager getLivingDocConfluenceManager() {
+        return livingDocConfluenceManager;
+    }
+
+    protected LivingDocPersistenceService getPersistenceService() {
+        return livingDocConfluenceManager.getPersistenceService();
     }
 
     public boolean isServerSetupComplete() {
-        return confluenceLivingDoc.isServerSetupComplete();
+        return livingDocConfluenceManager.isServerSetupComplete();
     }
 
     public boolean isServerReady() {
-        return confluenceLivingDoc.isServerReady();
+        return livingDocConfluenceManager.isServerReady();
     }
 
     public boolean getIsServerReady() {
@@ -105,7 +112,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         if (registeredRepository != null) {
             return registeredRepository;
         }
-        registeredRepository = getService().getRegisteredRepository(getHomeRepository());
+        registeredRepository = getPersistenceService().getRegisteredRepository(getHomeRepository());
         return registeredRepository;
     }
 
@@ -120,7 +127,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         if (key == null) {
             homeRepository = Repository.newInstance("UNKNOWN_UID");
         } else {
-            homeRepository = confluenceLivingDoc.getHomeRepository(key);
+            homeRepository = livingDocConfluenceManager.getHomeRepository(key);
         }
 
         return homeRepository;
@@ -137,7 +144,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
                     return systemUnderTests;
                 }
             }
-            systemUnderTests = confluenceLivingDoc.getLDServerService().getSystemUnderTestsOfProject(projectName);
+            systemUnderTests = livingDocConfluenceManager.getPersistenceService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -184,7 +191,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     private String getNotNullProperty(String propertyKey) {
-        String value = confluenceLivingDoc.getPageProperty(propertyKey, getIdentifier());
+        String value = livingDocConfluenceManager.getPageProperty(propertyKey, getIdentifier());
         return value == null ? "" : value;
     }
 
@@ -251,7 +258,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
             return projects;
         }
         try {
-            projects = new LinkedList<Project>(getService().getAllProjects());
+            projects = new LinkedList<Project>(getPersistenceService().getAllProjects());
             projectName = projectName == null ? projects.iterator().next().getName() : projectName;
 
             return projects;

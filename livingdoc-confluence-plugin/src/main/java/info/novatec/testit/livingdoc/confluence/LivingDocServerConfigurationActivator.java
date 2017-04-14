@@ -19,6 +19,7 @@ package info.novatec.testit.livingdoc.confluence;
 import java.io.File;
 import java.util.Properties;
 
+import info.novatec.testit.livingdoc.server.*;
 import org.hibernate.dialect.HSQLDialect;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -40,11 +41,6 @@ import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
 import com.google.gson.Gson;
 
-import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
-import info.novatec.testit.livingdoc.server.LivingDocServer;
-import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl;
 import info.novatec.testit.livingdoc.server.configuration.DefaultServerProperties;
 import info.novatec.testit.livingdoc.server.database.SessionService;
 import info.novatec.testit.livingdoc.server.database.hibernate.BootstrapData;
@@ -88,21 +84,19 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     private final BandanaManager bandanaManager;
     private final BootstrapManager bootstrapManager;
-    private final LivingDocServerServiceImpl service;
+    private final LivingDocPersistenceService livingDocPersistenceService;
     private final LivingDocXmlRpcServer xmlRpcServer;
     private final EventPublisher eventPublisher;
-    private final BundleFileLocatorHelper bundleFileLocatorHelper;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-        LivingDocServerServiceImpl service, LivingDocXmlRpcServer xmlRpcServer, 
-        EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
+                                                 LivingDocPersistenceService livingDocPersistenceService, LivingDocXmlRpcServer xmlRpcServer,
+                                                 EventPublisher eventPublisher) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
-        this.service = service;
+        this.livingDocPersistenceService = livingDocPersistenceService;
         this.xmlRpcServer = xmlRpcServer;
         this.eventPublisher = eventPublisher;
-        this.bundleFileLocatorHelper = bundleFileLocatorHelper;
     }
 
     @Override
@@ -165,14 +159,8 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     }
 
     private void initializeBootstrapData(SessionService customSessionService, Properties properties) throws Exception {
-        // Since we're in a OSGI context, our plugin isn't stored in the
-        // WEB-INF folder any more. Therefore we had to implement a
-        // new way to detect the livingdoc jar (which is needed as
-        // classpath element for the demo runner).
-        String currentBundleFilePath = getLivingDocBundleFilePath();
 
         log.debug("Boostrapping datas");
-        properties.setProperty("livingdoc.path", currentBundleFilePath);
         new BootstrapData(customSessionService, properties).execute();
     }
 
@@ -182,29 +170,20 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         SystemUnderTestDao sutDao = new HibernateSystemUnderTestDao(customSessionService);
         DocumentDao documentDao = new HibernateDocumentDao(customSessionService);
 
-        service.setDocumentDao(documentDao);
-        service.setProjectDao(projectDao);
-        service.setRepositoryDao(repositoryDao);
-        service.setSessionService(customSessionService);
-        service.setSutDao(sutDao);
-        service.setSessionService(customSessionService);
+        livingDocPersistenceService.setDocumentDao(documentDao);
+        livingDocPersistenceService.setProjectDao(projectDao);
+        livingDocPersistenceService.setRepositoryDao(repositoryDao);
+        livingDocPersistenceService.setSessionService(customSessionService);
+        livingDocPersistenceService.setSystemUnderTestDao(sutDao);
+        livingDocPersistenceService.setSessionService(customSessionService);
 
-        xmlRpcServer.setService(service);
-    }
-
-    private String getLivingDocBundleFilePath() throws Exception {
-        Bundle bundle = FrameworkUtil.getBundle(getClass());
-        BundleFileLocatorHelper helper = bundleFileLocatorHelper;
-        File location = helper.getBundleInstallLocation(bundle);
-        String pathToBundle = location.getAbsolutePath();
-        return pathToBundle;
+        xmlRpcServer.setService(livingDocPersistenceService);
     }
 
     private void closeSession() {
         if (hibernateSessionService != null) {
             hibernateSessionService.close();
         }
-
         hibernateSessionService = null;
         isDatabaseInitialized = false;
     }

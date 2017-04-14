@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +37,17 @@ public class InstallationAction extends LivingDocServerAction {
 
     private boolean editMode;
 
+    public InstallationAction(LivingDocConfluenceManager livingDocConfluenceManager) {
+        super(livingDocConfluenceManager);
+    }
+
+    public InstallationAction(){}
+
     @Override
     public String getActionName(String fullClassName) {
         return getText("livingdoc.install.title");
     }
 
-    public InstallationAction() {
-    }
 
     public String config() {
         return SUCCESS;
@@ -99,7 +104,7 @@ public class InstallationAction extends LivingDocServerAction {
 
     /**
      * Custom I18n. Based on WebWork i18n.
-     * 
+     *
      * @param key Key
      * @return the i18nzed message. If none found key is returned.
      */
@@ -131,32 +136,44 @@ public class InstallationAction extends LivingDocServerAction {
     }
 
     public boolean isSetupComplete() {
-        return confluenceLivingDoc.isServerSetupComplete();
+        return getLivingDocConfluenceManager() == null ? false : getLivingDocConfluenceManager().isServerSetupComplete();
     }
 
     @Override
     public boolean isServerReady() {
-        return confluenceLivingDoc.isServerReady();
+        return getLivingDocConfluenceManager() == null ? false : getLivingDocConfluenceManager().isServerReady();
     }
 
     public String editDbmsConfiguration() {
-        try {
-            if (isCustomSetup()) {
-                if (hibernateDialect != null && jndiUrl != null) {
-                    if (canConnectToDbms()) {
-                        getConfigurationActivator().initCustomInstallConfiguration(hibernateDialect, jndiUrl);
-                    } else {
-                        addActionError("livingdoc.install.dbms.test.failure");
-                        setEditMode(true);
-                    }
-                }
-            } else {
-                getConfigurationActivator().initQuickInstallConfiguration();
-            }
-        } catch (LivingDocServerException ex) {
+        if(getLivingDocConfluenceManager() == null){
+            log.error("Setup  aborted due to missing injected bean...");
             addActionError("livingdoc.install.dbms.init.failure");
-        }
+        }else {
+            try {
+                if (isCustomSetup()) {
+                    log.debug("Starting custom setup ...");
+                    if (hibernateDialect != null && jndiUrl != null) {
+                        if (canConnectToDbms()) {
+                            getConfigurationActivator().initCustomInstallConfiguration(hibernateDialect, jndiUrl);
+                            log.debug("Custom setup successfull");
 
+                        } else {
+                            addActionError("livingdoc.install.dbms.test.failure");
+                            setEditMode(true);
+                        }
+                    } else {
+                        log.warn("Custom setup skipped due to missing hibernate dialect and/or jndiUrl...");
+                        addActionError("livingdoc.install.dbms.init.failure");
+                    }
+                } else {
+                    log.debug("Starting quick setup ...");
+                    getConfigurationActivator().initQuickInstallConfiguration();
+                    log.debug("Quick setup successfull");
+                }
+            } catch (LivingDocServerException ex) {
+                addActionError("livingdoc.install.dbms.init.failure");
+            }
+        }
         return SUCCESS;
     }
 
@@ -170,6 +187,8 @@ public class InstallationAction extends LivingDocServerAction {
 
     private boolean canConnectToDbms() {
         try {
+            log.debug("Checking DBMS connection ...");
+
             InitialContext context = new InitialContext();
 
             DataSource ds = ( DataSource ) context.lookup(jndiUrl);
@@ -186,6 +205,6 @@ public class InstallationAction extends LivingDocServerAction {
     }
 
     private LivingDocServerConfigurationActivator getConfigurationActivator() {
-        return confluenceLivingDoc.getLDServerConfigurationActivator();
+        return getLivingDocConfluenceManager().getLDServerConfigurationActivator();
     }
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 
 import com.atlassian.confluence.core.ListBuilder;
@@ -12,7 +13,6 @@ import com.atlassian.confluence.spaces.SpaceType;
 import com.atlassian.confluence.spaces.SpacesQuery;
 
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.ClasspathSet;
 import info.novatec.testit.livingdoc.server.domain.Runner;
@@ -48,10 +48,15 @@ public class ConfigurationAction extends LivingDocServerAction {
     private boolean editPropertiesMode;
     private boolean editClasspathsMode;
 
+    public ConfigurationAction(LivingDocConfluenceManager confluenceLivingDoc) {
+        super(confluenceLivingDoc);
+    }
+    public ConfigurationAction(){}
+
     public List<Space> getSpaces() {
         // NT - Fix for getting all Spaces
         ListBuilder<Space> lbGlobalSpace =
-            confluenceLivingDoc.getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(SpaceType.GLOBAL).build());
+            getLivingDocConfluenceManager().getSpaceManager().getSpaces(SpacesQuery.newQuery().withSpaceType(SpaceType.GLOBAL).build());
         return lbGlobalSpace.getRange(0, lbGlobalSpace.getAvailableSize() - 1);
     }
 
@@ -75,7 +80,7 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String verifyServerReady() {
         if ( ! isServerReady()) {
-            addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
+            addActionError(LivingDocConfluenceManager.SERVER_NOCONFIGURATION);
         }
 
         return SUCCESS;
@@ -83,12 +88,12 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String doGetRunners() {
         if ( ! isServerReady()) {
-            addActionError(ConfluenceLivingDoc.SERVER_NOCONFIGURATION);
+            addActionError(LivingDocConfluenceManager.SERVER_NOCONFIGURATION);
             return SUCCESS;
         }
 
         try {
-            runners = getService().getAllRunners();
+            runners = getPersistenceService().getAllRunners();
             if ( ! StringUtils.isEmpty(selectedRunnerName)) {
                 for (Runner runner : runners) {
                     if (runner.getName().equals(selectedRunnerName)) {
@@ -116,7 +121,7 @@ public class ConfigurationAction extends LivingDocServerAction {
             selectedRunner.setSecured(secured);
             selectedRunner.setClasspaths(ClasspathSet.parse(classpath));
 
-            getService().createRunner(selectedRunner);
+            getPersistenceService().createRunner(selectedRunner);
             successfullAction();
         } catch (LivingDocServerException e) {
             addActionError(e);
@@ -127,20 +132,20 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String doUpdateRunner() {
         try {
-            selectedRunner = getService().getRunner(selectedRunnerName);
+            selectedRunner = getPersistenceService().getRunner(selectedRunnerName);
             selectedRunner.setName(newRunnerName);
             selectedRunner.setServerName(newServerName);
             selectedRunner.setServerPort(newServerPort);
             selectedRunner.setSecured(secured);
             selectedRunner.setClasspaths(ClasspathSet.parse(classpath));
 
-            getService().updateRunner(selectedRunnerName, selectedRunner);
+            getPersistenceService().updateRunner(selectedRunnerName, selectedRunner);
             successfullAction();
 
             return doGetRunners();
         } catch (LivingDocServerException e) {
             try {
-                runners = getService().getAllRunners();
+                runners = getPersistenceService().getAllRunners();
                 selectedRunner.setName(selectedRunnerName);
             } catch (LivingDocServerException e1) {
                 addActionError(e1);
@@ -154,7 +159,7 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String doRemoveRunner() {
         try {
-            getService().removeRunner(selectedRunnerName);
+            getPersistenceService().removeRunner(selectedRunnerName);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -164,9 +169,9 @@ public class ConfigurationAction extends LivingDocServerAction {
 
     public String doEditClasspath() {
         try {
-            selectedRunner = getService().getRunner(selectedRunnerName);
+            selectedRunner = getPersistenceService().getRunner(selectedRunnerName);
             selectedRunner.setClasspaths(ClasspathSet.parse(classpath));
-            getService().updateRunner(selectedRunnerName, selectedRunner);
+            getPersistenceService().updateRunner(selectedRunnerName, selectedRunner);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -285,13 +290,13 @@ public class ConfigurationAction extends LivingDocServerAction {
     }
 
     public String getExecutionTimeout() {
-        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
+        return getLivingDocConfluenceManager().getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty("executionTimeout");
     }
 
     public void setExecutionTimeout(String executionTimeout) {
-        LivingDocServerConfiguration conf = confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration();
+        LivingDocServerConfiguration conf = getLivingDocConfluenceManager().getLDServerConfigurationActivator().getConfiguration();
         conf.getProperties().setProperty("executionTimeout", executionTimeout);
-        confluenceLivingDoc.getLDServerConfigurationActivator().storeConfiguration(conf);
+        getLivingDocConfluenceManager().getLDServerConfigurationActivator().storeConfiguration(conf);
     }
 
     public boolean isEditMode() {

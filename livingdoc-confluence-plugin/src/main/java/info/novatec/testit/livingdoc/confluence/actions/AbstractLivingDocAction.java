@@ -2,6 +2,7 @@ package info.novatec.testit.livingdoc.confluence.actions;
 
 import java.util.List;
 
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,6 @@ import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 
 
@@ -17,7 +17,6 @@ import info.novatec.testit.livingdoc.server.LivingDocServerException;
 public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractLivingDocAction.class);
-    protected ConfluenceLivingDoc confluenceLivingDoc;
 
     protected String bulkUID = "PAGE";
     protected String executionUID;
@@ -30,11 +29,26 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     protected boolean refreshAll;
     protected boolean isEditMode;
 
-    public void setConfluenceLivingDoc(ConfluenceLivingDoc confluenceLivingDoc) {
-        this.confluenceLivingDoc = confluenceLivingDoc;
+    private String pageConent;
+    private LivingDocConfluenceManager livingDocConfluenceManager;
+
+    public AbstractLivingDocAction(){
+        livingDocConfluenceManager = null;
+    }
+    public AbstractLivingDocAction(LivingDocConfluenceManager livingDocConfluenceManager) {
+        this.livingDocConfluenceManager = livingDocConfluenceManager;
     }
 
-    private String pageConent;
+    public void setLivingDocConfluenceManager(LivingDocConfluenceManager livingDocConfluenceManager) {
+        this.livingDocConfluenceManager = livingDocConfluenceManager;
+    }
+
+    protected LivingDocConfluenceManager getLivingDocConfluenceManager() {
+        if(livingDocConfluenceManager == null){
+            log.error("Bean injection of livingDocConfluenceManager failed");
+        }
+        return livingDocConfluenceManager;
+    }
 
     public String getBulkUID() {
         return bulkUID;
@@ -81,7 +95,7 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
     }
 
     public void setPageId(Long pageId) {
-        page = confluenceLivingDoc.getPageManager().getPage(pageId);
+        page = livingDocConfluenceManager.getPageManager().getPage(pageId);
         this.pageId = pageId;
     }
 
@@ -105,25 +119,25 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         if (pageConent != null) {
             return pageConent;
         }
-        pageConent = confluenceLivingDoc.getPageContent(page);
+        pageConent = livingDocConfluenceManager.getPageContent(page);
         return pageConent;
     }
 
     public List<Page> getPermittedChildren(Page parentPage) {
-        return confluenceLivingDoc.getContentPermissionManager().getPermittedChildren(parentPage, getAuthenticatedUser());
+        return livingDocConfluenceManager.getContentPermissionManager().getPermittedChildren(parentPage, getAuthenticatedUser());
     }
 
     @Override
     @HtmlSafe
     public String getText(String key) {
-        return confluenceLivingDoc.getText(key);
+        return livingDocConfluenceManager.getText(key);
     }
 
     public boolean getCanEdit() {
         if (canEdit != null) {
             return canEdit;
         }
-        canEdit = confluenceLivingDoc.canEdit(page);
+        canEdit = livingDocConfluenceManager.canEdit(page);
         return canEdit;
     }
 
@@ -131,7 +145,7 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
         this.canEdit = canEdit;
     }
     public String getExecutionTimeout() {
-        return confluenceLivingDoc.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty(
+        return livingDocConfluenceManager.getLDServerConfigurationActivator().getConfiguration().getProperties().getProperty(
             "executionTimeout");
     }
     
@@ -144,6 +158,7 @@ public abstract class AbstractLivingDocAction extends ConfluenceActionSupport {
 
     public void addActionError(LivingDocServerException ldse) {
         super.addActionError(ldse.getId());
+        log.error("Error executing action " + getClass().getName(),ldse);
         if (ldse.getCause() != null) {
             log.error("Error in action", ldse.getCause());
         }

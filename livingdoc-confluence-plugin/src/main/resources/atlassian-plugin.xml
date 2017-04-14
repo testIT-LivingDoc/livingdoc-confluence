@@ -64,7 +64,7 @@
 
 	<velocity-context-item key="livingdoc.velocity"
 		name="LivingDoc velocity" context-key="livingDoc"
-		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
+		class="info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager" />
 
 	<web-resource name="testIt - LivingDoc CSS Resources" key="livingdoc-css-resources">
 		<resource type="download" name="conf-livingdoc.css"
@@ -104,6 +104,73 @@
 
 	<resource type="i18n" name="macros-i18n"
 		location="info/novatec/testit/livingdoc/confluence/macros/macros" />
+
+	<!-- LivingDoc Confluence PlugIn as GPS -->
+	<component key="livingdoc.listener" name="LivingDoc Listener"
+			   class="info.novatec.testit.livingdoc.confluence.listeners.LivingDocPageListener" />
+
+	<!-- LivingDoc Confluence PlugIn as GPS -->
+	<component key="livingDocServerConfigurationActivator"
+			   name="LivingDoc Server Configuration Activator"
+			   class="info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator">
+	</component>
+
+	<component key="styleSheetExtractor" name="Style Sheet Extractor"
+			   class="info.novatec.testit.livingdoc.confluence.utils.stylesheet.DefaultStyleSheetExtractorImpl">
+		<interface>info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor</interface>
+	</component>
+
+	<component key="livingDocPersistenceService" name="LivingDoc Server Service"
+			   class="info.novatec.testit.livingdoc.server.LivingDocPersistenceService" />
+
+	<component key="livingDocXmlRpcServer" name="LivingDoc XML-RPC Server"
+			   class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer" />
+
+
+	<component key="livingDocConfluenceManager"
+			   class="info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager" />
+
+	<component key = "sessionService" class="info.novatec.testit.livingdoc.server.database.hibernate.HibernateSessionService" >
+			<interface>info.novatec.testit.livingdoc.server.database.SessionService</interface>
+	</component>
+
+	<component key = "projectDao" class="info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateProjectDao" >
+			<interface>info.novatec.testit.livingdoc.server.domain.dao.ProjectDao</interface>
+	</component>
+
+	<component key = "repositoryDao" class="info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateRepositoryDao" >
+		<interface>info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao</interface>
+	</component>
+
+	<component key = "systemUnderTestDao" class="info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateSystemUnderTestDao" >
+		<interface>info.novatec.testit.livingdoc.server.domain.dao.SystemUnderTestDao</interface>
+	</component>
+	<component key = "documentDao" class="info.novatec.testit.livingdoc.server.domain.dao.hibernate.HibernateDocumentDao" >
+		<interface>info.novatec.testit.livingdoc.server.domain.dao.DocumentDao</interface>
+	</component>
+
+
+	<component key="confluenceUserManager"
+			   class="com.atlassian.confluence.user.ConfluenceUserManager" />
+
+	<!-- import from the product container -->
+	<component-import key="applicationProperties"
+					  interface="com.atlassian.sal.api.ApplicationProperties" />
+
+	<component-import name="SAL Transaction Template" key="transactionTemplate">
+		<interface>com.atlassian.sal.api.transaction.TransactionTemplate
+		</interface>
+	</component-import>
+
+	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService"
+				name="LivingDoc XML-RPC Service Delegator"
+				class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
+		<description />
+		<service-path>livingdoc1</service-path>
+		<published-interface>info.novatec.testit.livingdoc.confluence.rpc.RpcClientService
+		</published-interface>
+		<authenticate>false</authenticate>
+	</rpc-xmlrpc>
 
 
 
@@ -676,56 +743,6 @@
 		</package>
 	</xwork>
 	
-	<component key="livingdoc.listener" name="LivingDoc Listener"
-		class="info.novatec.testit.livingdoc.confluence.listeners.LivingDocPageListener" />
 
-	<!-- LivingDoc Confluence PlugIn as GPS -->
-	<component key="livingDocServerConfigurationActivator"
-		name="LivingDoc Server Configuration Activator"
-		class="info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator">
-		<description>The LivingDoc Server Configuration Activator.
-		</description>
-	</component>
-
-	<component key="styleSheetExtractor" name="Style Sheet Extractor"
-		class="info.novatec.testit.livingdoc.confluence.utils.stylesheet.DefaultStyleSheetExtractorImpl">
-		<interface>info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor
-		</interface>
-	</component>
-
-	<component key="livingDocServerService" name="LivingDoc Server Service"
-		class="info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl" />
-	<component key="livingDocXmlRpcServer" name="LivingDoc XML-RPC Server"
-		class="info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer" />
-
-	<rpc-xmlrpc key="livingdoc.xmlrpcService" alias="livingDocService"
-		name="LivingDoc XML-RPC Service Delegator"
-		class="info.novatec.testit.livingdoc.confluence.rpc.xmlrpc.LivingDocXmlRpcServerDelegator">
-		<description />
-		<service-path>livingdoc1</service-path>
-		<published-interface>info.novatec.testit.livingdoc.confluence.rpc.RpcClientService
-		</published-interface>
-		<authenticate>false</authenticate>
-	</rpc-xmlrpc>
-
-	<component key="confluenceLivingDoc"
-		class="info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc" />
-	<component key="bundleFileLocatorHelper"
-		class="info.novatec.testit.livingdoc.confluence.utils.osgi.DefaultFileLocatorHelper">
-		<interface>info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper
-		</interface>
-	</component>
-
-	<component key="confluenceUserManager"
-		class="com.atlassian.confluence.user.ConfluenceUserManager" />
-
-	<!-- import from the product container -->
-	<component-import key="applicationProperties"
-		interface="com.atlassian.sal.api.ApplicationProperties" />
-
-	<component-import name="SAL Transaction Template" key="transactionTemplate">
-		<interface>com.atlassian.sal.api.transaction.TransactionTemplate
-		</interface>
-	</component-import>
 
 </atlassian-plugin>
