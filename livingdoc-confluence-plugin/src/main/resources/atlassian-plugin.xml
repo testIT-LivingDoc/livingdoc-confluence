@@ -149,6 +149,11 @@
 		<interface>info.novatec.testit.livingdoc.server.domain.dao.DocumentDao</interface>
 	</component>
 
+	<component key="bundleFileLocatorHelper"
+			   class="info.novatec.testit.livingdoc.confluence.utils.osgi.DefaultFileLocatorHelper">
+		<interface>info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper
+		</interface>
+	</component>
 
 	<component key="confluenceUserManager"
 			   class="com.atlassian.confluence.user.ConfluenceUserManager" />

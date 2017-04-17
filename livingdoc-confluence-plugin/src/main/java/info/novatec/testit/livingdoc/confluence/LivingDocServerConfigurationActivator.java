@@ -19,6 +19,7 @@ package info.novatec.testit.livingdoc.confluence;
 import java.io.File;
 import java.util.Properties;
 
+import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
 import info.novatec.testit.livingdoc.server.*;
 import org.hibernate.dialect.HSQLDialect;
 import org.osgi.framework.Bundle;
@@ -87,16 +88,18 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final LivingDocPersistenceService livingDocPersistenceService;
     private final LivingDocXmlRpcServer xmlRpcServer;
     private final EventPublisher eventPublisher;
+    private final BundleFileLocatorHelper bundleFileLocatorHelper;
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
                                                  LivingDocPersistenceService livingDocPersistenceService, LivingDocXmlRpcServer xmlRpcServer,
-                                                 EventPublisher eventPublisher) {
+                                                 EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.livingDocPersistenceService = livingDocPersistenceService;
         this.xmlRpcServer = xmlRpcServer;
         this.eventPublisher = eventPublisher;
+        this.bundleFileLocatorHelper = bundleFileLocatorHelper;
     }
 
     @Override
@@ -159,8 +162,14 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     }
 
     private void initializeBootstrapData(SessionService customSessionService, Properties properties) throws Exception {
+        // Since we're in a OSGI context, our plugin isn't stored in the
+        // WEB-INF folder any more. Therefore we had to implement a
+        // new way to detect the livingdoc jar (which is needed as
+        // classpath element for the demo runner).
+        String currentBundleFilePath = getLivingDocBundleFilePath();
 
         log.debug("Boostrapping datas");
+        properties.setProperty("livingdoc.path", currentBundleFilePath);
         new BootstrapData(customSessionService, properties).execute();
     }
 
@@ -178,6 +187,12 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         livingDocPersistenceService.setSessionService(customSessionService);
 
         xmlRpcServer.setService(livingDocPersistenceService);
+    }
+
+    private String getLivingDocBundleFilePath() throws Exception {
+        Bundle bundle = FrameworkUtil.getBundle(getClass());
+        File location = bundleFileLocatorHelper.getBundleInstallLocation(bundle);
+        return location.getAbsolutePath();
     }
 
     private void closeSession() {
