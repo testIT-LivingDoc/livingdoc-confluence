@@ -21,7 +21,7 @@ public class LivingDocPage extends AbstractLivingDocMacro {
     @Override
     public String execute(Map parameters, String body, RenderContext renderContext) {
         try {
-           log.info("Executing page macro ...");
+            log.info("Executing page macro ...");
             if(!(renderContext instanceof PageContext)) {
                 throw new MacroExecutionException("This macro can only be used in a page");
             }
@@ -36,9 +36,6 @@ public class LivingDocPage extends AbstractLivingDocMacro {
             action.setExecutionUID("LD_PAGE_" + MacroCounter.instance().getNextCount());
             action.setSpaceKey(spaceKey);
             action.setPage(getPage(parameters, renderContext, spaceKey));
-            action.setEnableLivingDoc(true);
-            action.enableLivingDoc();
-            action.loadHeader();
 
             contextMap.put("action", action);
 

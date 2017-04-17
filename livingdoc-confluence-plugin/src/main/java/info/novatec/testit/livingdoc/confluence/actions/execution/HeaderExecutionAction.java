@@ -19,7 +19,6 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     private static Logger log = LoggerFactory.getLogger(HeaderExecutionAction.class);
     private Boolean hasChildren;
     private Boolean doExecuteChildren;
-    private boolean enableLivingDoc;
     private boolean retrieveBody;
 
     public HeaderExecutionAction(){}
@@ -54,49 +53,27 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         return loadHeader();
     }
 
-    public String enableLivingDoc() {
-        if (enableLivingDoc) {
-            log.debug("Making Specification executable....");
-            try {
-                String pageTitle = getPage().getTitle();
-                log.debug("Making Specification executable, title: "+pageTitle);
+    @Override
+    public void setPage(Page page) {
+        super.setPage(page);
 
-                specification = getLivingDocConfluenceManager().getSpecification(getPage());
-                if(specification == null) {
-                    specification = Specification.newInstance(pageTitle);
-                    specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
+        log.debug("Making Specification executable....");
+        try {
+            String pageTitle = getPage().getTitle();
+            log.debug("Making Specification executable, title: " + pageTitle);
 
-                    specification = getLivingDocConfluenceManager().getPersistenceService().createSpecification(specification);
-                }
+            specification = getLivingDocConfluenceManager().getSpecification(spaceKey, pageTitle);
+            if (specification == null) {
+                specification = Specification.newInstance(pageTitle);
+                specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
+
+                specification = getLivingDocConfluenceManager().getPersistenceService().createSpecification(specification);
                 log.debug("Specification made executable and successfully saved " + specification.getName());
-
-                return loadHeader();
-            } catch (LivingDocServerException e) {
-                log.error("Error making specification executable", e);
-                addActionError(e);
             }
-        } else {
-            try {
-                log.debug("Making Specification NOT executable....");
-                Specification spec = Specification.newInstance(getPage().getTitle());
-                spec.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
-
-                // Clean spec
-                getLivingDocConfluenceManager().getPersistenceService().removeSpecification(spec);
-                getLivingDocConfluenceManager().saveExecuteChildren(page, false);
-                getLivingDocConfluenceManager().saveImplementedVersion(getPage(), null);
-                getLivingDocConfluenceManager().savePreviousImplementedVersion(getPage(), null);
-                specification = null;
-                log.debug("Specification NO MORE executable and successfully saved ");
-
-            } catch (LivingDocServerException e) {
-                log.error("Error making specification NOT executable", e);
-                addActionError(e);
-                return loadHeader();
-            }
+        } catch (LivingDocServerException e) {
+            log.error("Error making specification executable", e);
+            addActionError(e);
         }
-
-        return SUCCESS;
     }
 
     public String updateExecuteChildren() {
@@ -181,14 +158,6 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
 
     public boolean getIsSelfIncluded() {
         return true;
-    }
-
-    public boolean isEnableLivingDoc() {
-        return enableLivingDoc;
-    }
-
-    public void setEnableLivingDoc(boolean enableLivingDoc) {
-        this.enableLivingDoc = enableLivingDoc;
     }
 
     public boolean getRetrieveBody() {
