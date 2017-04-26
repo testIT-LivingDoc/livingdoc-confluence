@@ -6,67 +6,82 @@ import java.util.List;
 import com.atlassian.confluence.content.render.xhtml.DefaultConversionContext;
 import com.atlassian.confluence.pages.Page;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Specification;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @SuppressWarnings("serial")
 public class HeaderExecutionAction extends ChildrenExecutionAction {
+    private static Logger log = LoggerFactory.getLogger(HeaderExecutionAction.class);
     private Boolean hasChildren;
     private Boolean doExecuteChildren;
-    private boolean enableLivingDoc;
     private boolean retrieveBody;
 
+    public HeaderExecutionAction() {
+    }
+
+    public HeaderExecutionAction(LivingDocConfluenceManager confluenceLivingDoc,
+                                 LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
+    }
+
     public String loadHeader() {
-        retrieveReferenceList();
-        loadSpecification();
+       try {
+           log.debug("Loading header ...");
+           retrieveReferenceList();
+           loadSpecification();
+           log.debug("Header data loaded successfully!");
+       }catch (Exception e){
+           log.error("Error loading header ",e);
+       }
         return SUCCESS;
     }
 
     public String setAsImplemented() {
-        confluenceLivingDoc.saveImplementedVersion(getPage(), getPage().getVersion());
+        log.debug("Setting Specification implemented....");
+        getLivingDocConfluenceManager().saveImplementedVersion(getPage(), getPage().getVersion());
+        log.debug("Specification set implemented successfully....");
         return loadHeader();
     }
 
     public String revert() {
-        confluenceLivingDoc.revertImplementation(getPage());
+        log.debug("Reverting Specification....");
+        getLivingDocConfluenceManager().revertImplementation(getPage());
+        log.debug("reverting Specification successfull....");
+
         return loadHeader();
     }
 
-    public String enableLivingDoc() {
-        if (enableLivingDoc) {
-            try {
-                Specification spec = Specification.newInstance(getPage().getTitle());
-                spec.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+    @Override
+    public void setPage(Page page) {
+        super.setPage(page);
 
-                specification = confluenceLivingDoc.getLDServerService().createSpecification(spec);
-                return loadHeader();
-            } catch (LivingDocServerException e) {
-                addActionError(e.getId());
-            }
-        } else {
-            try {
-                Specification spec = Specification.newInstance(getPage().getTitle());
-                spec.setRepository(confluenceLivingDoc.getHomeRepository(spaceKey));
+        log.debug("Making Specification executable....");
+        try {
+            String pageTitle = getPage().getTitle();
+            log.debug("Making Specification executable, title: " + pageTitle);
 
-                // Clean spec
-                confluenceLivingDoc.getLDServerService().removeSpecification(spec);
-                confluenceLivingDoc.saveExecuteChildren(page, false);
-                confluenceLivingDoc.saveImplementedVersion(getPage(), null);
-                confluenceLivingDoc.savePreviousImplementedVersion(getPage(), null);
-                specification = null;
-            } catch (LivingDocServerException e) {
-                addActionError(e.getId());
-                return loadHeader();
+            specification = getLivingDocConfluenceManager().getSpecification(spaceKey, pageTitle);
+            if (specification == null) {
+                specification = Specification.newInstance(pageTitle);
+                specification.setRepository(getLivingDocConfluenceManager().getHomeRepository(spaceKey));
+
+                specification = getLivingDocConfluenceManager().getPersistenceService().createSpecification(specification);
+                log.debug("Specification made executable and successfully saved " + specification.getName());
             }
+        } catch (LivingDocServerException e) {
+            log.error("Error making specification executable", e);
+            addActionError(e);
         }
-
-        return SUCCESS;
     }
 
     public String updateExecuteChildren() {
-        confluenceLivingDoc.saveExecuteChildren(page, doExecuteChildren);
+        getLivingDocConfluenceManager().saveExecuteChildren(page, doExecuteChildren);
         return SUCCESS;
     }
 
@@ -76,7 +91,7 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public boolean getCanBeImplemented() {
-        return confluenceLivingDoc.canBeImplemented(getPage());
+        return getLivingDocConfluenceManager().canBeImplemented(getPage());
     }
 
     public boolean getCanBeReverted() {
@@ -84,23 +99,22 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public Integer getImplementedVersion() {
-        return confluenceLivingDoc.getImplementedVersion(getPage());
+        return getLivingDocConfluenceManager().getImplementedVersion(getPage());
     }
 
     public Integer getPreviousImplementedVersion() {
-        return confluenceLivingDoc.getPreviousImplementedVersion(getPage());
+        return getLivingDocConfluenceManager().getPreviousImplementedVersion(getPage());
     }
 
     public String getRenderedContent() {
         String content;
-
         try {
-            content = confluenceLivingDoc.getPageContent(getPage(), implemented);
+            content = getLivingDocConfluenceManager().getPageContent(getPage(), implemented);
         } catch (LivingDocServerException e) {
             content = "";
         }
 
-        return confluenceLivingDoc.getViewRenderer().render(content, new DefaultConversionContext(getPage().toPageContext()));
+        return getLivingDocConfluenceManager().getViewRenderer().render(content, new DefaultConversionContext(getPage().toPageContext()));
     }
 
     @Override
@@ -123,7 +137,7 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         if (doExecuteChildren != null)
             return doExecuteChildren;
 
-        doExecuteChildren = getHasChildren() && confluenceLivingDoc.getExecuteChildren(page);
+        doExecuteChildren = getHasChildren() && getLivingDocConfluenceManager().getExecuteChildren(page);
         return doExecuteChildren;
     }
 
@@ -150,14 +164,6 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
         return true;
     }
 
-    public boolean isEnableLivingDoc() {
-        return enableLivingDoc;
-    }
-
-    public void setEnableLivingDoc(boolean enableLivingDoc) {
-        this.enableLivingDoc = enableLivingDoc;
-    }
-
     public boolean getRetrieveBody() {
         return retrieveBody;
     }
@@ -167,6 +173,6 @@ public class HeaderExecutionAction extends ChildrenExecutionAction {
     }
 
     public boolean isImplementationDue() {
-        return confluenceLivingDoc.isImplementationDue(getPage());
+        return getLivingDocConfluenceManager().isImplementationDue(getPage());
     }
 }

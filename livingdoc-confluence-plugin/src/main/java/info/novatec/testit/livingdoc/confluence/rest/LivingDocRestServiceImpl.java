@@ -1,9 +1,10 @@
 package info.novatec.testit.livingdoc.confluence.rest;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.server.ConfluenceLivingDocServiceImpl;
+import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import info.novatec.testit.livingdoc.server.rest.requests.*;
@@ -36,25 +37,25 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LivingDocRestServiceImpl.class);
 
     private LivingDocRestHelper livingDocRestHelper;
-    private LivingDocServerService livingDocServerService;
+    private LivingDocPersistenceService livingDocServerService;
     private ObjectMapper objectMapper;
     private String username;
     private String password;
 
 
-    /**
-     * Constructor for IoC
-     */
-    public LivingDocRestServiceImpl() {
+    public LivingDocRestServiceImpl(LivingDocPersistenceService livingDocPersistenceService,
+                                    LivingDocConfluenceManager livingDocConfluenceManager,
+                                    StyleSheetExtractor styleSheetExtractor) {
 
-        this.livingDocRestHelper = new ConfluenceLivingDocServiceImpl(StaticAccessor.getConfluenceLivingDoc(), StaticAccessor.getStyleSheetExtractor());
+        this.livingDocServerService = livingDocPersistenceService;
+        this.livingDocRestHelper = new ConfluenceLivingDocServiceImpl(livingDocConfluenceManager, styleSheetExtractor);
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
         this.objectMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
-    public void setService(LivingDocServerService livingDocServerService) {
+    public void setService(LivingDocPersistenceService livingDocServerService) {
         this.livingDocServerService = livingDocServerService;
     }
 

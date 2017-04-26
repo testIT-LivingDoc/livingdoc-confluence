@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import info.novatec.testit.livingdoc.server.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +53,7 @@ import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.actions.SpecificationAction;
 import info.novatec.testit.livingdoc.report.XmlReport;
-import info.novatec.testit.livingdoc.server.LivingDocServer;
-import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerService;
-import info.novatec.testit.livingdoc.server.ServerPropertiesManager;
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import info.novatec.testit.livingdoc.server.domain.Project;
 import info.novatec.testit.livingdoc.server.domain.Reference;
 import info.novatec.testit.livingdoc.server.domain.Repository;
@@ -66,7 +63,7 @@ import info.novatec.testit.livingdoc.util.I18nUtil;
 import info.novatec.testit.livingdoc.util.Period;
 
 
-public class ConfluenceLivingDoc {
+public class LivingDocConfluenceManager {
     public static final String EXECUTION_KEY = "livingdoc.executionKey";
     public static final String EXECUTE_CHILDREN = "livingdoc.executeChildren";
     public static final String IMPLEMENTED_VERSION = "livingdoc.implementedversion";
@@ -77,13 +74,11 @@ public class ConfluenceLivingDoc {
     public static final String USER_NOTMEMBEROF_LIVINGDOCUSERS_GROUP = "livingdoc.notmemberof.livingdocusers.group";
     public static final String REPOSITORY_BASEURL_OUTOFSYNC = "livingdoc.server.repourloutofsync";
 
-    private static Logger log = LoggerFactory.getLogger(ConfluenceLivingDoc.class);
+    private static Logger log = LoggerFactory.getLogger(LivingDocConfluenceManager.class);
     private static final String RESOURCE_BUNDLE = SpecificationAction.class.getName();
     private static final int CRITICAL_PERIOD = 29;
 
-    private final LivingDocServerService service;
-    private final LivingDocServerConfigurationActivator configurationActivator;
-
+    private final LivingDocPersistenceService livingDocPersistenceService;
     private final LoginManager loginManager;
     private final ConfluenceUserManager confluenceUserManager;
     private final TransactionTemplate transactionTemplate;
@@ -110,16 +105,15 @@ public class ConfluenceLivingDoc {
      * Note: The qualifier for {@link PageManager} is needed because
      * there are multiple implementations.
      */
-    public ConfluenceLivingDoc(LivingDocServerService service, LivingDocServerConfigurationActivator configurationActivator,
-        LoginManager loginManager, ConfluenceUserManager confluenceUserManager, TransactionTemplate transactionTemplate,
-        SettingsManager settingsManager, AtlassianBootstrapManager bootstrapManager,
-        ContentPropertyManager contentPropertyManager, ContentPermissionManager contentPermissionManager,
-         WikiStyleRenderer wikiStyleRenderer, PageManager pageManager,
-        SpaceManager spaceManager, SpacePermissionManager spacePermissionManager, LabelManager labelManager,
-        UserAccessor userAccessor, FormatSettingsManager formatSettingsManager, LocaleManager localeManager,
-         Renderer viewRenderer) {
-        this.service = service;
-        this.configurationActivator = configurationActivator;
+    public LivingDocConfluenceManager(LivingDocPersistenceService livingDocServerService, LoginManager loginManager,
+                                      ConfluenceUserManager confluenceUserManager, TransactionTemplate transactionTemplate,
+                                      SettingsManager settingsManager, AtlassianBootstrapManager bootstrapManager,
+                                      ContentPropertyManager contentPropertyManager, ContentPermissionManager contentPermissionManager,
+                                      WikiStyleRenderer wikiStyleRenderer, PageManager pageManager,
+                                      SpaceManager spaceManager, SpacePermissionManager spacePermissionManager, LabelManager labelManager,
+                                      UserAccessor userAccessor, FormatSettingsManager formatSettingsManager, LocaleManager localeManager,
+                                      Renderer viewRenderer) {
+        this.livingDocPersistenceService = livingDocServerService;
         this.loginManager = loginManager;
         this.confluenceUserManager = confluenceUserManager;
         this.transactionTemplate = transactionTemplate;
@@ -142,8 +136,6 @@ public class ConfluenceLivingDoc {
         return LivingDocServer.VERSION;
     }
 
-   
-    
     /**
      * Custom I18n. Based on WebWork i18n.
      * 
@@ -198,12 +190,8 @@ public class ConfluenceLivingDoc {
      */
     public String enable(String spaceKey) throws LivingDocServerException {
         try {
-            if ( ! isServerReady()) {
-                return getText(SERVER_NOCONFIGURATION);
-            }
-
             Repository repository = getHomeRepository(spaceKey);
-            getLDServerService().getRegisteredRepository(repository);
+            getPersistenceService().getRegisteredRepository(repository);
             return null;
         } catch (LivingDocServerException e) {
             log.info(e.getMessage());
@@ -235,7 +223,7 @@ public class ConfluenceLivingDoc {
     public Specification getSpecification(String spaceKey, String pageTitle) throws LivingDocServerException {
         Specification specification = Specification.newInstance(pageTitle);
         specification.setRepository(getHomeRepository(spaceKey));
-        return getLDServerService().getSpecification(specification);
+        return getPersistenceService().getSpecification(specification);
     }
 
     /**
@@ -264,7 +252,7 @@ public class ConfluenceLivingDoc {
      */
     public List<Repository> getRepositories(String spaceKey) throws LivingDocServerException {
         Repository repository = getHomeRepository(spaceKey);
-        List<Repository> repositories = getLDServerService().getRequirementRepositoriesOfAssociatedProject(repository
+        List<Repository> repositories = getPersistenceService().getRequirementRepositoriesOfAssociatedProject(repository
             .getUid());
         return repositories;
     }
@@ -279,7 +267,7 @@ public class ConfluenceLivingDoc {
      */
     public List<SystemUnderTest> getSystemsUnderTests(String spaceKey) throws LivingDocServerException {
         Repository repository = getHomeRepository(spaceKey);
-        return getLDServerService().getSystemUnderTestsOfAssociatedProject(repository.getUid());
+        return getPersistenceService().getSystemUnderTestsOfAssociatedProject(repository.getUid());
     }
 
     /**
@@ -306,7 +294,7 @@ public class ConfluenceLivingDoc {
     public Set<SystemUnderTest> getPageSystemsUnderTests(String spaceKey, String pageTitle) throws LivingDocServerException {
         Specification specification = Specification.newInstance(pageTitle);
         specification.setRepository(getHomeRepository(spaceKey));
-        return getLDServerService().getSpecification(specification).getTargetedSystemUnderTests();
+        return getPersistenceService().getSpecification(specification).getTargetedSystemUnderTests();
     }
 
     /**
@@ -333,7 +321,7 @@ public class ConfluenceLivingDoc {
     public List<Reference> getReferences(String spaceKey, String pageTitle) throws LivingDocServerException {
         Specification specification = Specification.newInstance(pageTitle);
         specification.setRepository(getHomeRepository(spaceKey));
-        List<Reference> references = getLDServerService().getSpecificationReferences(specification);
+        List<Reference> references = getPersistenceService().getSpecificationReferences(specification);
         return getUniqueReferences(references);
     }
 
@@ -552,7 +540,7 @@ public class ConfluenceLivingDoc {
 
     public void saveExecuteChildren(Page page, Boolean doExecuteChildren) {
         ContentEntityObject entityObject = getPageManager().getById(page.getId());
-        getContentPropertyManager().setStringProperty(entityObject, ConfluenceLivingDoc.EXECUTE_CHILDREN,
+        getContentPropertyManager().setStringProperty(entityObject, LivingDocConfluenceManager.EXECUTE_CHILDREN,
             doExecuteChildren != null ? String.valueOf(doExecuteChildren) : null);
     }
 
@@ -659,22 +647,6 @@ public class ConfluenceLivingDoc {
         getContentPropertyManager().setStringProperty(entityObject, ServerPropertiesManager.SEQUENCE + key, value);
     }
 
-    public LivingDocServerConfiguration getLDServerConfiguration() {
-        return getLDServerConfigurationActivator().getConfiguration();
-    }
-
-    public void storeLDServerConfiguration(LivingDocServerConfiguration configuration) {
-        getLDServerConfigurationActivator().storeConfiguration(configuration);
-    }
-
-    public boolean isServerSetupComplete() {
-        return getLDServerConfiguration().isSetupComplete();
-    }
-
-    public boolean isServerReady() {
-        return getLDServerConfigurationActivator().isReady();
-    }
-
     public void verifyCredentials(String username, String password) throws LivingDocServerException {
         if (username != null && ! isCredentialsValid(username, password)) {
             throw new LivingDocServerException("livingdoc.confluence.badcredentials",
@@ -703,8 +675,8 @@ public class ConfluenceLivingDoc {
      *************************************/
     /*************************************************************************************************/
 
-    public LivingDocServerService getLDServerService() {
-        return service;
+    public LivingDocPersistenceService getPersistenceService() {
+        return livingDocPersistenceService;
     }
 
     public SettingsManager getSettingsManager() {
@@ -769,11 +741,6 @@ public class ConfluenceLivingDoc {
         return userAccessor;
     }
 
-    public LivingDocServerConfigurationActivator getLDServerConfigurationActivator() {
-        return configurationActivator;
-    }
-
-
     public FormatSettingsManager getFormatSettingsManager() {
         return formatSettingsManager;
     }
@@ -837,7 +804,7 @@ public class ConfluenceLivingDoc {
             throw new LivingDocServerException(LivingDocServerErrorKey.SUT_NOT_FOUND, sut);
         }
 
-        getLDServerService().createExecution(systemUnderTest, specification, xmlReport);
+        getPersistenceService().createExecution(systemUnderTest, specification, xmlReport);
     }
 
 }

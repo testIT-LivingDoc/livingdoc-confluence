@@ -37,11 +37,11 @@ import org.osgi.framework.Bundle;
 
 /**
  * DefaultFileLocatorHelper
- * 
- * 
+ *
+ *
  * From a bundle to its location on the filesystem. Assumes the bundle is not a
  * jar.
- * 
+ *
  * @author hmalphettes
  */
 public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
@@ -87,7 +87,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
      * Works with equinox, felix, nuxeo and probably more. Not exactly in the
      * spirit of OSGi but quite necessary to support self-contained webapps and
      * other situations.
-     * 
+     *
      * @param bundle The bundle
      * @return Its installation location as a file.
      * @throws Exception
@@ -138,7 +138,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
                 con.setDefaultUseCaches(Resource.getDefaultUseCaches());
 
                 if (BUNDLE_ENTRY_FIELD == null) {// this one will be a
-                                                 // DirZipBundleEntry
+                    // DirZipBundleEntry
                     BUNDLE_ENTRY_FIELD = con.getClass().getDeclaredField("bundleEntry");
                     BUNDLE_ENTRY_FIELD.setAccessible(true);
                 }
@@ -196,7 +196,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
 
     /**
      * Locate a file inside a bundle.
-     * 
+     *
      * @param bundle
      * @param path
      * @return file object
@@ -211,7 +211,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
         File webapp = path != null && path.length() != 0 ? new File(bundleInstall, path) : bundleInstall;
         if ( ! webapp.exists()) {
             throw new IllegalArgumentException("Unable to locate " + path + " inside " + bundle.getSymbolicName() + " ("
-                + ( bundleInstall != null ? bundleInstall.getAbsolutePath() : " no_bundle_location " ) + ")");
+                    + ( bundleInstall != null ? bundleInstall.getAbsolutePath() : " no_bundle_location " ) + ")");
         }
         return webapp;
     }
@@ -220,7 +220,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
      * Helper method equivalent to Bundle#getEntry(String entryPath) except that
      * it searches for entries in the fragments by using the Bundle#findEntries
      * method.
-     * 
+     *
      * @param bundle
      * @param entryPath
      * @return null or all the entries found for that path.
@@ -246,7 +246,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
      * development purpose where the bundle was imported in pde and the classes
      * kept in a jar.
      * </p>
-     * 
+     *
      * @param bundle
      * @return The jar(s) file that is either the bundle itself, either the jars
      * embedded inside it.
@@ -289,7 +289,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
      * Get a URL to the bundle entry that uses a common protocol (i.e. file:
      * jar: or http: etc.).
      * </p>
-     * 
+     *
      * @return a URL to the bundle entry that uses a common protocol
      */
     @Override
@@ -299,7 +299,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
             URLConnection conn = url.openConnection();
             conn.setDefaultUseCaches(Resource.getDefaultUseCaches());
             if (BUNDLE_URL_CONNECTION_getLocalURL == null && match(conn.getClass().getName(),
-                BUNDLE_URL_CONNECTION_CLASSES)) {
+                    BUNDLE_URL_CONNECTION_CLASSES)) {
                 BUNDLE_URL_CONNECTION_getLocalURL = conn.getClass().getMethod("getLocalURL", null);
                 BUNDLE_URL_CONNECTION_getLocalURL.setAccessible(true);
             }
@@ -317,7 +317,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
      * Get a URL to the content of the bundle entry that uses the file:
      * protocol. The content of the bundle entry may be downloaded or extracted
      * to the local file system in order to create a file: URL.
-     * 
+     *
      * @return a URL to the content of the bundle entry that uses the file:
      * protocol
      * </p>
@@ -332,7 +332,7 @@ public class DefaultFileLocatorHelper implements BundleFileLocatorHelper {
             URLConnection conn = url.openConnection();
             conn.setDefaultUseCaches(Resource.getDefaultUseCaches());
             if (BUNDLE_URL_CONNECTION_getFileURL == null && match(conn.getClass().getName(),
-                BUNDLE_URL_CONNECTION_CLASSES)) {
+                    BUNDLE_URL_CONNECTION_CLASSES)) {
                 BUNDLE_URL_CONNECTION_getFileURL = conn.getClass().getMethod("getFileURL", null);
                 BUNDLE_URL_CONNECTION_getFileURL.setAccessible(true);
             }

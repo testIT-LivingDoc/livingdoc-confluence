@@ -26,10 +26,10 @@ import com.atlassian.event.api.EventPublisher;
 import com.google.gson.Gson;
 import info.novatec.testit.livingdoc.confluence.rest.LivingDocRestServiceImpl;
 import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import info.novatec.testit.livingdoc.server.LivingDocServer;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerServiceImpl;
 import info.novatec.testit.livingdoc.server.configuration.DefaultServerProperties;
 import info.novatec.testit.livingdoc.server.database.SessionService;
 import info.novatec.testit.livingdoc.server.database.hibernate.BootstrapData;
@@ -69,9 +69,10 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private final BandanaContext bandanaContext = new ConfluenceBandanaContext("_LIVINGDOC");
     private final BandanaManager bandanaManager;
     private final BootstrapManager bootstrapManager;
-    private final LivingDocServerServiceImpl service;
+    private final LivingDocPersistenceService livingDocPersistenceService;
     private final LivingDocRestServiceImpl restService;
     private final EventPublisher eventPublisher;
+    private final BundleFileLocatorHelper bundleFileLocatorHelper;
     private LivingDocServerConfiguration configuration;
     private HibernateSessionService hibernateSessionService;
     private boolean isPluginEnabled = false;
@@ -84,13 +85,14 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-                                                 LivingDocServerServiceImpl service, LivingDocRestServiceImpl restService,
-                                                 EventPublisher eventPublisher) {
+        LivingDocPersistenceService livingDocPersistenceService, LivingDocRestServiceImpl restService,
+        EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
-        this.service = service;
+        this.livingDocPersistenceService = livingDocPersistenceService;
         this.restService = restService;
         this.eventPublisher = eventPublisher;
+        this.bundleFileLocatorHelper = bundleFileLocatorHelper;
     }
 
     @Override
@@ -170,21 +172,20 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         SystemUnderTestDao sutDao = new HibernateSystemUnderTestDao(customSessionService);
         DocumentDao documentDao = new HibernateDocumentDao(customSessionService);
 
-        service.setDocumentDao(documentDao);
-        service.setProjectDao(projectDao);
-        service.setRepositoryDao(repositoryDao);
-        service.setSessionService(customSessionService);
-        service.setSutDao(sutDao);
+        livingDocPersistenceService.setDocumentDao(documentDao);
+        livingDocPersistenceService.setProjectDao(projectDao);
+        livingDocPersistenceService.setRepositoryDao(repositoryDao);
+        livingDocPersistenceService.setSessionService(customSessionService);
+        livingDocPersistenceService.setSystemUnderTestDao(sutDao);
+        livingDocPersistenceService.setSessionService(customSessionService);
 
-        restService.setService(service);
+        restService.setService(livingDocPersistenceService);
     }
 
     private String getLivingDocBundleFilePath() throws Exception {
         Bundle bundle = FrameworkUtil.getBundle(getClass());
-        BundleFileLocatorHelper helper = StaticAccessor.getBundleFileLocatorHelper();
-        File location = helper.getBundleInstallLocation(bundle);
-        String pathToBundle = location.getAbsolutePath();
-        return pathToBundle;
+        File location = bundleFileLocatorHelper.getBundleInstallLocation(bundle);
+        return location.getAbsolutePath();
     }
 
     private void closeSession() {
@@ -350,6 +351,10 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     @Override
     public void destroy() throws Exception {
         eventPublisher.unregister(this);
+    }
+
+    public boolean isServerSetupComplete() {
+        return getConfiguration().isSetupComplete();
     }
 
 }

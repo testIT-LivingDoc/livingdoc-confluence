@@ -28,11 +28,11 @@ import org.osgi.framework.Bundle;
 
 /**
  * BundleFileLocatorHelper
- * 
- * 
+ *
+ *
  * From a bundle to its location on the filesystem. Assumes the bundle is not a
  * jar.
- * 
+ *
  * @author hmalphettes
  */
 public interface BundleFileLocatorHelper {
@@ -52,7 +52,7 @@ public interface BundleFileLocatorHelper {
      * <p>
      * Currently only works with bundles that are not jar.
      * </p>
-     * 
+     *
      * @param bundle The bundle
      * @return Its installation location as a file.
      * @throws Exception
@@ -61,7 +61,7 @@ public interface BundleFileLocatorHelper {
 
     /**
      * Locate a file inside a bundle.
-     * 
+     *
      * @param bundle
      * @param path
      * @return file object
@@ -78,7 +78,7 @@ public interface BundleFileLocatorHelper {
      * development purpose where the bundle was imported in pde and the classes
      * kept in a jar.
      * </p>
-     * 
+     *
      * @param bundle
      * @return The jar(s) file that is either the bundle itself, either the jars
      * embedded inside it.
@@ -88,7 +88,7 @@ public interface BundleFileLocatorHelper {
     /**
      * Helper method equivalent to Bundle#getEntry(String entryPath) except that
      * it searches for entries in the fragments by using the findEntries method.
-     * 
+     *
      * @param bundle
      * @param entryPath
      * @return null or all the entries found for that path.
@@ -102,7 +102,7 @@ public interface BundleFileLocatorHelper {
      * Get a URL to the bundle entry that uses a common protocol (i.e. file:
      * jar: or http: etc.).
      * </p>
-     * 
+     *
      * @return a URL to the bundle entry that uses a common protocol
      */
     public URL getLocalURL(URL url) throws Exception;
@@ -114,7 +114,7 @@ public interface BundleFileLocatorHelper {
      * Get a URL to the content of the bundle entry that uses the file:
      * protocol. The content of the bundle entry may be downloaded or extracted
      * to the local file system in order to create a file: URL.
-     * 
+     *
      * @return a URL to the content of the bundle entry that uses the file:
      * protocol
      * </p>

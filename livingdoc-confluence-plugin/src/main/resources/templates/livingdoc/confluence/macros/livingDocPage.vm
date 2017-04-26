@@ -1,15 +1,10 @@
 <script language="JavaScript" type="text/javascript">
-	AJS.toInit(function() {
-	    if(AJS.$("#livingdoc_header_display").length) {
-	        AJS.$("#livingDocPage, .ldContentResultPage").hide();
-	    }
-	    else {
-            AJS.$("#livingDocPage, .ldContentResultPage").insertBefore("#main-content");
-            AJS.$("#livingDocPage").append('<div id="livingdoc_header_display"></div>');
+    AJS.toInit(function() {
+        if(!AJS.$("#livingdoc_header_display").length) {
+            AJS.$('<div id="livingdoc_header_display" class="conf_pageMacro"></div> \
+                <div id="conf_results_${action.bulkUID}_${action.executionUID}_0"></div>').insertBefore("#main-content");
 
             conf_livingDoc.loadHeader('$req.contextPath', '$action.spaceKey', '$action.page.id');
         }
-	});
+    });
 </script>
-<div class="conf_pageMacro" id="livingDocPage"></div>
-<div id="conf_results_${action.bulkUID}_${action.executionUID}_0" class="ldContentResultPage"></div>
