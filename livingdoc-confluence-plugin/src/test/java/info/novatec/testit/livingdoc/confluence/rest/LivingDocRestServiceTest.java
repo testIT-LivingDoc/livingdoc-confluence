@@ -1,7 +1,7 @@
 package info.novatec.testit.livingdoc.confluence.rest;
 
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.LivingDocServerService;
 import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.server.rest.LivingDocRestHelper;
 import org.apache.commons.lang3.CharEncoding;
@@ -55,7 +55,7 @@ public class LivingDocRestServiceTest {
     @Mock
     private static LivingDocRestHelper clientHelperService;
     @Mock
-    private static LivingDocServerService clientService;
+    private static LivingDocPersistenceService clientService;
     @InjectMocks
     private static LivingDocRestServiceImpl ldRestService;
 

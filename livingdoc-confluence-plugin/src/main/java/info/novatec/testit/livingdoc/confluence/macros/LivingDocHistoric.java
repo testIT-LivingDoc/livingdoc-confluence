@@ -54,17 +54,17 @@ public class LivingDocHistoric extends AbstractLivingDocMacro {
 
             String executionUID = "LD_HISTORIC_" + MacroCounter.instance().getNextCount();
 
-            HistoricParameters settings = new HistoricParameters(parameters, spaceKey, page, executionUID);
+            HistoricParameters settings = new HistoricParameters(parameters, spaceKey, page, executionUID, ldUtil);
 
             AbstractChartBuilder chartBuilder;
 
             if (settings.getLabels() == null && settings.isNoChildren()) {
                 Specification specification = ldUtil.getSpecification(page.getSpaceKey(), page.getTitle().trim());
 
-                List<Execution> executions = ldUtil.getLDServerService().getSpecificationExecutions(specification, settings
+                List<Execution> executions = ldUtil.getPersistenceService().getSpecificationExecutions(specification, settings
                     .getTargetedSystemUnderTest(), settings.getMaxResult());
 
-                chartBuilder = LinearExecutionChartBuilder.newInstance(settings, executions);
+                chartBuilder = LinearExecutionChartBuilder.newInstance(settings, executions, ldUtil);
             } else {
                 List<Specification> specifications = new ArrayList<Specification>();
 
@@ -77,7 +77,7 @@ public class LivingDocHistoric extends AbstractLivingDocMacro {
                 List<Execution> executions = aggregateExecutions(specifications, settings.getTargetedSystemUnderTest(),
                     settings.getMaxResult());
 
-                chartBuilder = AggregationExecutionChartBuilder.newInstance(settings, executions);
+                chartBuilder = AggregationExecutionChartBuilder.newInstance(settings, executions, ldUtil);
             }
 
             String chartMapId = executionUID + "_map";
@@ -168,7 +168,7 @@ public class LivingDocHistoric extends AbstractLivingDocMacro {
         List<Execution> executions = new ArrayList<Execution>();
 
         for (Specification specification : specifications) {
-            List<Execution> execs = ldUtil.getLDServerService().getSpecificationExecutions(specification,
+            List<Execution> execs = ldUtil.getPersistenceService().getSpecificationExecutions(specification,
                 targetedSystemUnderTest, maxResult);
 
             int failureCount = 0;

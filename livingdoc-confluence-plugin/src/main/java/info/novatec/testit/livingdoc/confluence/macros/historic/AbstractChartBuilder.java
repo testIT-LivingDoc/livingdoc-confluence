@@ -41,8 +41,6 @@ import org.jfree.ui.HorizontalAlignment;
 
 import com.atlassian.confluence.servlet.download.ExportDownload;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 
 
@@ -59,7 +57,6 @@ public abstract class AbstractChartBuilder {
 
     private ChartRenderingInfo chartRenderingInfo = new ChartRenderingInfo();
 
-    protected ConfluenceLivingDoc ldUtil = StaticAccessor.getConfluenceLivingDoc();
     protected HistoricParameters settings;
 
     protected AbstractChartBuilder(HistoricParameters settings) {

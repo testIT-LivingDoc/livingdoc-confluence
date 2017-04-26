@@ -10,7 +10,7 @@ import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.macro.MacroException;
 
 import info.novatec.testit.livingdoc.confluence.utils.MacroParametersUtils;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 
 
 public class LivingDocImport extends AbstractLivingDocMacro {
@@ -47,7 +47,7 @@ public class LivingDocImport extends AbstractLivingDocMacro {
         String[] values = MacroParametersUtils.extractParameterMultiple(IMPORTS_PARAM, parameters);
         for (String value : values) {
             if (value != null) {
-                imports.add(ConfluenceLivingDoc.clean(value));
+                imports.add(LivingDocConfluenceManager.clean(value));
             }
         }
 

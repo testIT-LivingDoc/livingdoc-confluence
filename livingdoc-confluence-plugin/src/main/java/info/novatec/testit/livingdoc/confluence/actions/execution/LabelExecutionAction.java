@@ -9,6 +9,8 @@ import com.atlassian.confluence.core.PartialList;
 import com.atlassian.confluence.labels.Label;
 import com.atlassian.confluence.labels.LabelManager;
 import com.atlassian.confluence.pages.Page;
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 
 
 @SuppressWarnings("serial")
@@ -16,12 +18,17 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
     private String labels;
     private boolean searchQuery;
 
+    public LabelExecutionAction(){}
+    public LabelExecutionAction(LivingDocConfluenceManager confluenceLivingDoc, LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
+    }
+
     @Override
     public void buildExecutableList() {
         for (String labelExp : labels.split(",")) {
             List<Page> pages = getExpLabeledPages(labelExp);
             for (Page page : pages) {
-                if (page.getSpaceKey().equals(spaceKey) && ! executableList.contains(page) && confluenceLivingDoc.isExecutable(page)) {
+                if (page.getSpaceKey().equals(spaceKey) && ! executableList.contains(page) && getLivingDocConfluenceManager().isExecutable(page)) {
                     executableList.add(page);
                 }
             }
@@ -60,10 +67,10 @@ public class LabelExecutionAction extends AbstractListExecutionAction {
     }
 
     private List<Page> getLabeledPages(String label) {
-        Label labelObject = confluenceLivingDoc.getLabelManager().getLabel(label.trim());
+        Label labelObject = getLivingDocConfluenceManager().getLabelManager().getLabel(label.trim());
         List<Page> pageList =  new ArrayList<Page>();
         if (labelObject != null) {
-            PartialList<ContentEntityObject> partialList = confluenceLivingDoc.getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
+            PartialList<ContentEntityObject> partialList = getLivingDocConfluenceManager().getLabelManager().getContentForLabel(LabelManager.NO_OFFSET,
                 LabelManager.NO_MAX_RESULTS, labelObject);
             for (ContentEntityObject ceo : partialList.getList()){
                 if(ceo instanceof Page){

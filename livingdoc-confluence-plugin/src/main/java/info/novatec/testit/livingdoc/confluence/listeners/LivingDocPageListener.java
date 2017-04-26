@@ -9,7 +9,7 @@ import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
-import info.novatec.testit.livingdoc.confluence.velocity.ConfluenceLivingDoc;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Specification;
 import org.apache.commons.lang3.StringUtils;
@@ -17,11 +17,11 @@ import org.springframework.beans.factory.DisposableBean;
 
 
 public class LivingDocPageListener implements DisposableBean {
-    private final ConfluenceLivingDoc ld;
+    private final LivingDocConfluenceManager ld;
 
     protected EventPublisher eventPublisher;
 
-    public LivingDocPageListener(EventPublisher eventPublisher, ConfluenceLivingDoc ld) {
+    public LivingDocPageListener(EventPublisher eventPublisher, LivingDocConfluenceManager ld) {
         this.eventPublisher = eventPublisher;
         this.ld = ld;
         eventPublisher.register(this);
@@ -53,7 +53,7 @@ public class LivingDocPageListener implements DisposableBean {
         Specification specification = Specification.newInstance(page.getTitle());
         specification.setRepository(ld.getHomeRepository(page.getSpaceKey()));
 
-        ld.getLDServerService().removeSpecification(specification);
+        ld.getPersistenceService().removeSpecification(specification);
 
         ld.saveExecuteChildren(page, null);
         ld.saveImplementedVersion(page, null);
@@ -61,7 +61,7 @@ public class LivingDocPageListener implements DisposableBean {
     }
 
     private void removeRepository(SpaceRemoveEvent spaceEvt) throws LivingDocServerException {
-        ld.getLDServerService().removeRepository(ld.getHomeRepository(spaceEvt.getSpace().getKey()).getUid());
+        ld.getPersistenceService().removeRepository(ld.getHomeRepository(spaceEvt.getSpace().getKey()).getUid());
     }
 
     private void updateSpecification(PageUpdateEvent pageEvt) throws LivingDocServerException {
@@ -79,12 +79,12 @@ public class LivingDocPageListener implements DisposableBean {
                if(!newPageIsExecutable){
                    removeSpecification(pageEvt);
                }else if(!oldPageIsExecutable) {
-                   ld.getLDServerService().createSpecification(newSpecification);
+                   ld.getPersistenceService().createSpecification(newSpecification);
                }else{
-                   ld.getLDServerService().updateSpecification(oldSpecification, newSpecification);
+                   ld.getPersistenceService().updateSpecification(oldSpecification, newSpecification);
                }
             } catch (LivingDocServerException e) {
-                ld.getLDServerService().removeSpecification(oldSpecification);
+                ld.getPersistenceService().removeSpecification(oldSpecification);
             }
         }
     }

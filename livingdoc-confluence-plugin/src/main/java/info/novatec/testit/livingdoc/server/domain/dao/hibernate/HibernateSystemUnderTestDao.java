@@ -37,6 +37,16 @@ public class HibernateSystemUnderTestDao implements SystemUnderTestDao {
         this(sessionService, new HibernateProjectDao(sessionService));
     }
 
+    public HibernateSystemUnderTestDao() {
+    }
+    public void setProjectDao(ProjectDao projectDao) {
+        this.projectDao = projectDao;
+    }
+
+    public void setSessionService(SessionService sessionService) {
+
+        this.sessionService = sessionService;
+    }
     @Override
     public Runner getRunnerByName(String name) {
         final Criteria crit = sessionService.getSession().createCriteria(Runner.class);

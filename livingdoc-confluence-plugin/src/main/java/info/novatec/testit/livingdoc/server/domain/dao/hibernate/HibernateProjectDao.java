@@ -20,6 +20,13 @@ public class HibernateProjectDao implements ProjectDao {
         this.sessionService = sessionService;
     }
 
+    public HibernateProjectDao() {
+    }
+
+    public void setSessionService(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
+
     @Override
     public Project getByName(String name) {
         final Criteria crit = sessionService.getSession().createCriteria(Project.class);

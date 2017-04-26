@@ -18,12 +18,13 @@
  */
 package info.novatec.testit.livingdoc.confluence.actions.execution;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 
-import info.novatec.testit.livingdoc.confluence.StaticAccessor;
 import info.novatec.testit.livingdoc.confluence.actions.AbstractLivingDocAction;
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
@@ -32,10 +33,20 @@ import info.novatec.testit.livingdoc.server.domain.Execution;
 
 @SuppressWarnings("serial")
 public class ShowExecutionResultAction extends AbstractLivingDocAction {
-    private final StyleSheetExtractor styleSheetExtractor = StaticAccessor.getStyleSheetExtractor();
+    private StyleSheetExtractor styleSheetExtractor;
 
     private Long id;
     private Execution execution;
+
+    public ShowExecutionResultAction(){}
+    public ShowExecutionResultAction(LivingDocConfluenceManager confluenceLivingDoc,
+                                     LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
+    }
+
+    public void setStyleSheetExtractor(StyleSheetExtractor styleSheetExtractor) {
+        this.styleSheetExtractor = styleSheetExtractor;
+    }
 
     public Long getId() {
         return id;
@@ -69,9 +80,9 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
         StringBuilder title = new StringBuilder();
 
-        title.append(useAnchor ? getTitleAnchor() : execution.getSpecification().getName()).append(' ').append(confluenceLivingDoc
-            .getText("livingdoc.execution.for")).append(' ').append(confluenceLivingDoc.getText("livingdoc.execution.openbraket")).append(
-                execution.getSystemUnderTest().getName()).append(' ').append(confluenceLivingDoc.getText(
+        title.append(useAnchor ? getTitleAnchor() : execution.getSpecification().getName()).append(' ').append(getLivingDocConfluenceManager()
+            .getText("livingdoc.execution.for")).append(' ').append(getLivingDocConfluenceManager().getText("livingdoc.execution.openbraket")).append(
+                execution.getSystemUnderTest().getName()).append(' ').append(getLivingDocConfluenceManager().getText(
                     "livingdoc.execution.closebraket")).append(" - ").append(getDateFormatter().formatDateTime(execution
                         .getExecutionDate()));
 
@@ -89,9 +100,9 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getStylesheetHtml() {
-        Space space = confluenceLivingDoc.getSpaceManager().getSpace(getSpaceKey());
+        Space space = getLivingDocConfluenceManager().getSpaceManager().getSpace(getSpaceKey());
         return String.format("<style>\n%s\n</style>\n<base href=\"%s\"/>\n", styleSheetExtractor.renderStyleSheet(space),
-            confluenceLivingDoc.getBaseUrl());
+            getLivingDocConfluenceManager().getBaseUrl());
     }
 
     public boolean getHasException() {
@@ -120,12 +131,12 @@ public class ShowExecutionResultAction extends AbstractLivingDocAction {
 
     @HtmlSafe
     public String getSectionsHtml() {
-        return String.format("%s : %s", confluenceLivingDoc.getText("livingdoc.page.sections"), execution.getSections());
+        return String.format("%s : %s", getLivingDocConfluenceManager().getText("livingdoc.page.sections"), execution.getSections());
     }
 
     public String show() {
         try {
-            execution = confluenceLivingDoc.getLDServerService().getSpecificationExecution(getId());
+            execution = getLivingDocConfluenceManager().getPersistenceService().getSpecificationExecution(getId());
         } catch (LivingDocServerException e) {
             addActionError(e.getId());
         }

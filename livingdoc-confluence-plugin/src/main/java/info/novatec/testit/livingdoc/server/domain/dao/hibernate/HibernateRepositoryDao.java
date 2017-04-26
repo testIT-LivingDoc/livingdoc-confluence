@@ -32,6 +32,18 @@ public class HibernateRepositoryDao implements RepositoryDao {
         this(sessionService, new HibernateProjectDao(sessionService));
     }
 
+    public HibernateRepositoryDao() {
+    }
+
+    public void setProjectDao(ProjectDao projectDao) {
+        this.projectDao = projectDao;
+    }
+
+    public void setSessionService(SessionService sessionService) {
+
+        this.sessionService = sessionService;
+    }
+
     @Override
     @SuppressWarnings(SUPPRESS_UNCHECKED)
     public List<Repository> getAll() {
