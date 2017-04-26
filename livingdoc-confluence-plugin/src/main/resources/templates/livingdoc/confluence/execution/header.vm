@@ -1,45 +1,42 @@
 <div class="conf_pageLDHeaderItem">
 	<table width="100%" cellpadding="0" cellspacing="0">
 		<tr>
-			<td width="50%" cellpadding="0" cellspacing="0">
-			    #if($action.isExecutable)
-				    <span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle"> enabled</span>
-				#else
-                	<span class="conf_livingTitle">LivingDoc</span><span class="conf_docTitle disabled"> disabled</span>
-                #end
+			<td colspan="2" cellpadding="0" cellspacing="0">
+				<span class="conf_livingTitle">LivingDoc Page</span>
 
 				<span id="conf_spaceKey_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.spaceKey</span>
 				<span id="conf_pageId_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.id</span>
 				<span id="conf_pageTitle_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.page.title</span>
 				<span id="conf_implemented_display_${action.bulkUID}_${action.executionUID}" style="display:none">$action.implemented</span>
-			</td>
-			<td width="50%" align="right" cellpadding="0" cellspacing="0">
-				#if($action.canEdit && $action.isExecutable)
-					#if($action.implemented)
-						<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
-						<span id="header_implementedVersion" class="ldSmallText">v.${action.implementedVersion}</span>&nbsp;&nbsp;
-						<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
-						<span id="header_workingVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(false);">v.${action.page.version}</span>&nbsp;&nbsp;
-						#if($action.canBeReverted)
-							<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(true);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
-						#end
-					#else
-						#if($action.canBeImplemented)
-							#if($action.implementedVersion)
-								<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
-								<span id="header_implementedVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(true);">v.${action.implementedVersion}</span>&nbsp;&nbsp;
-								<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
-								<span id="header_workingVersion" class="ldSmallText">v.${action.page.version}&nbsp;&nbsp;-&nbsp;</span>
-							#end
-							<span id="header_setasimplemented" class=#if($action.implementationDue)"conf_RedImplementedButton"#else"conf_ImplementedButton"#end onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').setAsImplemented()">$action.getText('livingdoc.page.implement').toUpperCase()</span>
-						#else
-							<span id="header_implementedLabel" class="ldSmallText">$action.getText('livingdoc.page.isimplementedversion')</span>&nbsp;&nbsp;
+
+				<div class="pull-right">
+					#if($action.canEdit && $action.isExecutable)
+						#if($action.implemented)
+							<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
+							<span id="header_implementedVersion" class="ldSmallText">v.${action.implementedVersion}</span>&nbsp;&nbsp;
+							<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
+							<span id="header_workingVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(false);">v.${action.page.version}</span>&nbsp;&nbsp;
 							#if($action.canBeReverted)
-								<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(false);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
+								<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(true);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
+							#end
+						#else
+							#if($action.canBeImplemented)
+								#if($action.implementedVersion)
+									<span class="ldSmallText">$action.getText('livingdoc.page.implementedversion')</span>
+									<span id="header_implementedVersion" class="conf_smallLinks" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').retrieveHeader(true);">v.${action.implementedVersion}</span>&nbsp;&nbsp;
+									<span class="ldSmallText">$action.getText('livingdoc.page.workingversion')</span>
+									<span id="header_workingVersion" class="ldSmallText">v.${action.page.version}&nbsp;&nbsp;-&nbsp;</span>
+								#end
+								<span id="header_setasimplemented" class=#if($action.implementationDue)"conf_RedImplementedButton"#else"conf_ImplementedButton"#end onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').setAsImplemented()">$action.getText('livingdoc.page.implement').toUpperCase()</span>
+							#else
+								<span id="header_implementedLabel" class="ldSmallText">$action.getText('livingdoc.page.isimplementedversion')</span>&nbsp;&nbsp;
+								#if($action.canBeReverted)
+									<span id="header_revertImplementation" class="conf_button" onclick="conf_livingDoc.getSpecification('$action.bulkUID', '$action.executionUID', '$action.fieldId').revert(false);"><img style="vertical-align:bottom;" src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.webactions/images/revert.gif" alt="" title="$action.getText('livingdoc.page.revertto') v.$action.previousImplementedVersion" border="0"></span>
+								#end
 							#end
 						#end
 					#end
-				#end
+                </div>
 			</td>
 		</tr>
 	</table>
