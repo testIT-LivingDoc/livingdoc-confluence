@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
@@ -302,7 +303,7 @@ public class SpecificationAction extends AbstractLivingDocAction {
             results = results.replaceAll("livingdoc-children-not-rendered", "livingdoc-children");
             results = results.replaceAll("livingdoc-labels-not-rendered", "livingdoc-labels");
             results = results.replaceAll("livingdoc-group-not-rendered", "livingdoc-group");
-            results = results.replaceAll("livingdoc-page-not-rendered", "livingdoc-page");
+            results = results.replaceAll("livingdoc-page-not-rendered", LivingDocPage.MACRO_KEY);
             results = results.replaceAll("Unknown macro:", "");
             results = removeUnknownMacroElements(results);
             return HtmlUtil.cleanUpResults(results);

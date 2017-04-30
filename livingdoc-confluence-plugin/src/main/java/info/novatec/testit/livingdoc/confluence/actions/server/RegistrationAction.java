@@ -1,6 +1,8 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
+import com.atlassian.confluence.pages.Page;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.*;
@@ -10,9 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static info.novatec.testit.livingdoc.confluence.utils.HtmlUtils.stringSetToTextArea;
 
@@ -56,6 +60,9 @@ public class RegistrationAction extends LivingDocServerAction {
     private boolean editPropertiesMode;
     private boolean editClasspathsMode;
     private boolean editFixturesMode;
+
+    private List<Page> pagesToMigrate;
+    private List<Page> migratedPages;
 
     public RegistrationAction(LivingDocConfluenceManager confluenceLivingDoc, LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
         super(confluenceLivingDoc, livingDocServerConfigurationActivator);
@@ -334,6 +341,43 @@ public class RegistrationAction extends LivingDocServerAction {
         }
 
         return doGetSystemUnderTests();
+    }
+
+    public String getVersion() {
+        return getLivingDocConfluenceManager().getVersion();
+    }
+
+    public String doMigrateRegistration() {
+        pagesToMigrate = getLivingDocConfluenceManager().getPageManager().getPages(getSpace(), false).stream().sequential()
+                .filter(page ->
+                        !page.getBodyAsString().contains(LivingDocPage.MACRO_KEY)
+                        && getLivingDocConfluenceManager().isExecutable(page)
+                ).collect(Collectors.toList());
+
+        return SUCCESS;
+    }
+
+    public String doMigrateRegistrationLaunchProcess() {
+        migratedPages = new ArrayList<>();
+
+        getLivingDocConfluenceManager().getPageManager().getPages(getSpace(), false).stream().sequential()
+            .filter(page ->
+                    !page.getBodyAsString().contains(LivingDocPage.MACRO_KEY)
+                    && getLivingDocConfluenceManager().isExecutable(page))
+            .forEach(page -> {
+                StringBuilder newPageBody = new StringBuilder(LivingDocPage.MACRO_HTML_CONTENT);
+                page.setBodyAsString(newPageBody.append(page.getBodyAsString()).toString());
+                migratedPages.add(page);
+        });
+        return SUCCESS;
+    }
+
+    public List<Page> getPagesToMigrate() {
+        return pagesToMigrate;
+    }
+
+    public List<Page> getMigratedPages() {
+        return migratedPages;
     }
 
     @Override
