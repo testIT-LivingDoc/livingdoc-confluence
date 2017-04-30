@@ -60,6 +60,12 @@ LDProperties.prototype =
 		this.action.getRegistration(this.createParams({id:id})); 
 	},	
 	editRegistration:function(id){this.action.editRegistration(this.createParams({id:id, projectName:($('#projectName')? $F('projectName') : ''), repositoryName:($('#repositoryName')? $F('repositoryName') : ''), readonly:true, editMode:true})); },
+	migrateRegistration:function(id){
+		this.action.migrateRegistration(this.createParams({id:id}));
+	},
+	migrateRegistrationLaunchProcess:function(id){
+		this.action.migrateRegistrationLaunchProcess(this.createParams({id:id}));
+	},
 	register:function(id){ 
 		if($F('repositoryName') === ''){ return; }
 		var newProjectName = $('#newProjectName') ? $F('newProjectName') : 'NA'; 
