@@ -521,6 +521,15 @@
     padding: 0px 5px 0px 0px;
 }
 
+.css-serial {
+  counter-reset: serial-number;
+}
+
+.css-serial td:first-child:before {
+  counter-increment: serial-number;
+  content: counter(serial-number);
+}
+
 /**** BulkExternPane ****/
 .jira_bulkExtern {
     width: 100%;

@@ -1,0 +1,37 @@
+<h2>Migration process for LivingDoc $action.version</h2>
+#if($action.pagesToMigrate.isEmpty())
+    <p>
+        No page required to update.
+    </p>
+    <p>
+        <button class="aui-button" onclick="ldProperties.getRegistration('$action.spaceKey')">Return to space configuration</button>
+    </p>
+#else
+    <p>
+        The following $action.pagesToMigrate.size() page(s) will be updated.
+        <table class="aui aui-table-sortable css-serial">
+            <thead>
+                <tr>
+                    <th id="number">#</th>
+                    <th id="name">Name</th>
+                    <th id="lastModificationUpdate">Last modification</th>
+                </th>
+            </thead>
+            <tbody>
+                #foreach($page in $action.pagesToMigrate)
+                <tr>
+                    <td headers="number"></td>
+                    <td headers="name">$page.title</td>
+                    <td headers="lastModificationUpdate">$dateFormatter.format($page.lastModificationDate)</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+    </p>
+    <p>
+        <button class="aui-button aui-button-primary" onclick="this.disabled=true;ldProperties.migrateRegistrationLaunchProcess('$action.spaceKey')">
+            <span class="aui-icon aui-icon-small aui-iconfont-devtools-browse-up">Launch migration process</span> Launch
+        </button>
+        <button class="aui-button" onclick="ldProperties.getRegistration('$action.spaceKey')">Cancel</button>
+    </p>
+#end

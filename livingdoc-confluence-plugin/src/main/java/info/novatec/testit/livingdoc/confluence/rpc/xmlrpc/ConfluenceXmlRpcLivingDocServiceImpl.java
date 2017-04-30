@@ -1,5 +1,6 @@
 package info.novatec.testit.livingdoc.confluence.rpc.xmlrpc;
 
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.utils.stylesheet.StyleSheetExtractor;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.report.XmlReport;
@@ -249,7 +250,7 @@ public class ConfluenceXmlRpcLivingDocServiceImpl implements LivingDocRpcHelper 
             content = content.replaceAll("livingdoc-labels", "livingdoc-labels-not-rendered");
             content = content.replaceAll("livingdoc-group", "livingdoc-group-not-rendered");
             content = content.replaceAll("livingdoc-historic", "livingdoc-historic-not-rendered");
-            content = content.replaceAll("livingdoc-page", "livingdoc-page-not-rendered");
+            content = content.replaceAll(LivingDocPage.MACRO_KEY, "livingdoc-page-not-rendered");
             content = StringUtils.replacePattern(content, "<ac:structured-macro ac:macro-id=\"(.{5,50}?)\" ac:name=\"jira\"(.*?)</ac:structured-macro>","<span>Jira macro removed</span>");
 
                     // This macro breaks the labels/children macro with Javascript error

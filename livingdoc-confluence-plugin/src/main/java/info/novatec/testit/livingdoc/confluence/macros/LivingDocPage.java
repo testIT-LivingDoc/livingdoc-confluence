@@ -18,6 +18,10 @@ public class LivingDocPage extends AbstractLivingDocMacro {
     private static Logger log = LoggerFactory.getLogger(HeaderExecutionAction.class);
     public static final String TITLE_PARAM = "title";
 
+    public static final String MACRO_KEY = "livingdoc-page";
+
+    public static final String MACRO_HTML_CONTENT = "<p><ac:structured-macro ac:name=\"livingdoc-page\"/></p>";
+
     @Override
     public String execute(Map parameters, String body, RenderContext renderContext) {
         try {

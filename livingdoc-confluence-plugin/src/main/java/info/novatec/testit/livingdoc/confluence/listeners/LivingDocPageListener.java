@@ -8,6 +8,7 @@ import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Repository;
@@ -91,7 +92,7 @@ public class LivingDocPageListener implements DisposableBean {
 
     private boolean containsPageMacro(AbstractPage page){
         String content = page.getBodyAsString();
-        return StringUtils.contains(content, "livingdoc-page");
+        return StringUtils.contains(content, LivingDocPage.MACRO_KEY);
     }
     private void removeSpecificationSafe(Page page){
         try {

@@ -3,6 +3,7 @@
 		#if($action.isServerReady)
 			#if(!$action.editMode && !$action.registered)<span id="registrationPane_register"><button type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.editRegistration('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-add">Register</span> $action.getText('livingdoc.registration.register')</button></span>#end
 			#if($action.registered && !$action.editMode)<span id="registrationPane_edit"><button type="button" class="aui-button sp_configButtonRight" onclick="ldProperties.editRegistration('$action.spaceKey');"><span class="aui-icon aui-icon-small aui-iconfont-edit">Edit</span> $action.getText('livingdoc.registration.edit')</button></span>#end
+			#if($action.registered && !$action.editMode)<span id="registrationPane_migrate"><button type="button" class="aui-button sp_configButtonRight aui-button-primary migrate-button" onclick="this.disabled=true;ldProperties.migrateRegistration('$action.spaceKey'); "><span class="aui-icon aui-icon-small aui-iconfont-devtools-browse-up">Migrate space</span> $action.getText('livingdoc.registration.migrate')</button></span>#end
 		#end
 	</h3>
 	</div>
