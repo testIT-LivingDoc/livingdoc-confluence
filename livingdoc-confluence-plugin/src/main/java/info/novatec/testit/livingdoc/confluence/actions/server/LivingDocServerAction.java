@@ -81,11 +81,19 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public boolean isServerSetupComplete() {
-        return livingDocServerConfigurationActivator.isServerSetupComplete();
+        if (getLivingDocServerConfigurationActivator() == null) {
+            return false;
+        }
+
+        return getLivingDocServerConfigurationActivator().isServerSetupComplete();
     }
 
     public boolean isServerReady() {
-        return livingDocServerConfigurationActivator.isReady();
+        if (getLivingDocServerConfigurationActivator() == null) {
+            return false;
+        }
+
+        return getLivingDocServerConfigurationActivator().isReady();
     }
 
     public boolean getIsServerReady() {
@@ -152,7 +160,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
                     return systemUnderTests;
                 }
             }
-            systemUnderTests = livingDocConfluenceManager.getPersistenceService().getSystemUnderTestsOfProject(projectName);
+            systemUnderTests = getPersistenceService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
