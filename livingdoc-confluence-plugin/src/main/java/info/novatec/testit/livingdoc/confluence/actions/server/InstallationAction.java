@@ -37,9 +37,11 @@ public class InstallationAction extends LivingDocServerAction {
 
     private boolean editMode;
 
-    public InstallationAction(LivingDocConfluenceManager livingDocConfluenceManager) {
-        super(livingDocConfluenceManager);
+    public InstallationAction(LivingDocConfluenceManager livingDocConfluenceManager,
+                              LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(livingDocConfluenceManager, livingDocServerConfigurationActivator);
     }
+
 
     public InstallationAction(){}
 

@@ -359,4 +359,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         eventPublisher.unregister(this);
     }
 
+    public boolean isServerSetupComplete() {
+        return getConfiguration().isSetupComplete();
+    }
 }

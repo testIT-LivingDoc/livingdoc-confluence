@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 
@@ -67,9 +68,10 @@ public class DemoSpaceAction extends LivingDocServerAction {
     private String username;
     private String pwd;
 
-    public DemoSpaceAction(LivingDocConfluenceManager confluenceLivingDoc) {
-        super(confluenceLivingDoc);
+    public DemoSpaceAction(LivingDocConfluenceManager confluenceLivingDoc, LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
     }
+
     public DemoSpaceAction(){}
 
     public String getPwd() {

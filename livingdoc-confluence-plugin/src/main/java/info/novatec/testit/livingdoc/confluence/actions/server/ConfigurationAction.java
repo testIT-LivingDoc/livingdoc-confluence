@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,9 +49,10 @@ public class ConfigurationAction extends LivingDocServerAction {
     private boolean editPropertiesMode;
     private boolean editClasspathsMode;
 
-    public ConfigurationAction(LivingDocConfluenceManager confluenceLivingDoc) {
-        super(confluenceLivingDoc);
+    public ConfigurationAction(LivingDocConfluenceManager confluenceLivingDoc, LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
     }
+
     public ConfigurationAction(){}
 
     public List<Space> getSpaces() {

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.atlassian.confluence.pages.Page;
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -69,11 +70,12 @@ public class RegistrationAction extends LivingDocServerAction {
     private List<Page> pagesToMigrate;
     private List<Page> migratedPages;
 
-    public RegistrationAction(LivingDocConfluenceManager confluenceLivingDoc) {
-        super(confluenceLivingDoc);
+    public RegistrationAction(LivingDocConfluenceManager confluenceLivingDoc, LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        super(confluenceLivingDoc, livingDocServerConfigurationActivator);
     }
+
     public RegistrationAction(){
-        super(null);
+        super(null, null);
     }
     public String doGetRegistration() {
         log.debug("Getting registration status");

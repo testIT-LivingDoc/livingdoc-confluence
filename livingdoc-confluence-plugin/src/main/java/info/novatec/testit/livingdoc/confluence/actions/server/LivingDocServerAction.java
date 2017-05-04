@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
+import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +22,6 @@ import info.novatec.testit.livingdoc.server.ServerPropertiesManager;
 import info.novatec.testit.livingdoc.server.domain.Project;
 import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
-import info.novatec.testit.livingdoc.server.rpc.RpcServerService;
 import info.novatec.testit.livingdoc.util.I18nUtil;
 
 
@@ -27,33 +29,41 @@ import info.novatec.testit.livingdoc.util.I18nUtil;
 public class LivingDocServerAction extends AbstractSpaceAction {
     private static final Logger log = LoggerFactory.getLogger(LivingDocServerAction.class);
 
+    private static final String RESOURCE_BUNDLE = ConfigurationAction.class.getName();
+    private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
+    private LivingDocConfluenceManager livingDocConfluenceManager;
+    private LivingDocServerConfigurationActivator livingDocServerConfigurationActivator;
     protected String projectName;
     protected Repository registeredRepository;
     protected Repository homeRepository;
     protected LinkedList<Project> projects;
-
+    private ResourceBundle resourceBundle;
+    private List<SystemUnderTest> systemUnderTests;
     private String spaceKey;
     private String url;
     private String handler = RpcServerService.SERVICE_HANDLER;
     private Boolean isRegistered;
-    private static final String RESOURCE_BUNDLE = ConfigurationAction.class.getName();
-    private final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>();
-    private ResourceBundle resourceBundle;
 
-    private LivingDocConfluenceManager livingDocConfluenceManager;
-    private List<SystemUnderTest> systemUnderTests;
-
-    public LivingDocServerAction(LivingDocConfluenceManager confluenceLivingDoc) {
+    public LivingDocServerAction(LivingDocConfluenceManager confluenceLivingDoc,
+                                 LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
         this.livingDocConfluenceManager = confluenceLivingDoc;
+        this.livingDocServerConfigurationActivator = livingDocServerConfigurationActivator;
     }
-    public LivingDocServerAction(){}
+
+    public LivingDocServerAction() {
+    }
+
     /**
      * Setter for IoC
-     * 
+     *
      * @param livingDocConfluenceManager
      */
     public void setLivingDocConfluenceManager(LivingDocConfluenceManager livingDocConfluenceManager) {
         this.livingDocConfluenceManager = livingDocConfluenceManager;
+    }
+
+    public void setLivingDocServerConfigurationActivator(LivingDocServerConfigurationActivator livingDocServerConfigurationActivator) {
+        this.livingDocServerConfigurationActivator = livingDocServerConfigurationActivator;
     }
 
     protected LivingDocConfluenceManager getLivingDocConfluenceManager() {
@@ -64,12 +74,28 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         return livingDocConfluenceManager.getPersistenceService();
     }
 
+    protected LivingDocServerConfigurationActivator getLivingDocServerConfigurationActivator() {
+        return livingDocServerConfigurationActivator;
+    }
+
+    public LivingDocServerConfiguration getLDServerConfiguration() {
+        return getLivingDocServerConfigurationActivator().getConfiguration();
+    }
+
     public boolean isServerSetupComplete() {
-        return livingDocConfluenceManager.isServerSetupComplete();
+        if (getLivingDocServerConfigurationActivator() == null) {
+            return false;
+        }
+
+        return getLivingDocServerConfigurationActivator().isServerSetupComplete();
     }
 
     public boolean isServerReady() {
-        return livingDocConfluenceManager.isServerReady();
+        if (getLivingDocServerConfigurationActivator() == null) {
+            return false;
+        }
+
+        return getLivingDocServerConfigurationActivator().isReady();
     }
 
     public boolean getIsServerReady() {
@@ -134,7 +160,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
     }
 
     public List<SystemUnderTest> getSystemUnderTests() {
-        if ( ! isServerSetupComplete()) {
+        if (!isServerSetupComplete()) {
             return new ArrayList<SystemUnderTest>();
         }
 
@@ -144,7 +170,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
                     return systemUnderTests;
                 }
             }
-            systemUnderTests = livingDocConfluenceManager.getPersistenceService().getSystemUnderTestsOfProject(projectName);
+            systemUnderTests = getPersistenceService().getSystemUnderTestsOfProject(projectName);
         } catch (LivingDocServerException e) {
             addActionError(e);
         }
@@ -156,7 +182,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
         if (isRegistered != null) {
             return isRegistered;
         }
-        if ( ! isServerReady()) {
+        if (!isServerReady()) {
             return false;
         }
 
@@ -210,7 +236,7 @@ public class LivingDocServerAction extends AbstractSpaceAction {
 
     /**
      * Custom I18n. Based on WebWork i18n.
-     * 
+     *
      * @param propertyKey Key
      * @return the i18nzed message. If none found key is returned.
      */
@@ -275,6 +301,6 @@ public class LivingDocServerAction extends AbstractSpaceAction {
             log.error("Error in action", ldse.getCause());
         }
     }
-    
-    
+
+
 }
