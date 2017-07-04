@@ -31,7 +31,7 @@
 							<span id="systemError_display" class="ldSmallErrMsg" style="display:none;">$action.getText('livingdoc.properties.systemerror')</span>
 						</td>
 						<td class="sp_powered">
-							<span class="sp_powered">$action.getText('livingdoc.properties.poweredby')</span>&nbsp;<a href="http://aqe.novatec-gmbh.de" target="_blank"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/nt_logo_16.gif" class="centeredImage" alt="" border="0"></a>
+							<span class="sp_powered">$action.getText('livingdoc.properties.poweredby')</span>&nbsp;<a href="http://www.novatec-gmbh.de/en/services/agile-quality-engineering/" target="_blank"><img src="$req.contextPath/download/resources/info.novatec.testit.livingdoc.confluence.plugin:livingdoc.configuration/images/nt_logo_16.gif" class="centeredImage" alt="" border="0"></a>
 						</td>
 					</tr>
 				</table>
