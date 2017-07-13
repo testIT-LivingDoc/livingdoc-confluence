@@ -130,10 +130,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
-			<scope>provided</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>5.2.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -290,8 +289,8 @@
 							<artifactId>servlet-api</artifactId>
 						</pluginDependency>
 						<pluginDependency>
-							<groupId>c3p0</groupId>
-							<artifactId>c3p0</artifactId>
+							<groupId>org.hibernate</groupId>
+							<artifactId>hibernate-c3p0</artifactId>
 						</pluginDependency>
 						<pluginDependency>
 							<groupId>org.hsqldb</groupId>
@@ -342,8 +341,8 @@
 							<artifactId>servlet-api</artifactId>
 						</bundledArtifact>
 						<bundledArtifact>
-							<groupId>c3p0</groupId>
-							<artifactId>c3p0</artifactId>
+							<groupId>org.hibernate</groupId>
+							<artifactId>hibernate-c3p0</artifactId>
 						</bundledArtifact>
 						<bundledArtifact>
 							<groupId>org.hsqldb</groupId>
