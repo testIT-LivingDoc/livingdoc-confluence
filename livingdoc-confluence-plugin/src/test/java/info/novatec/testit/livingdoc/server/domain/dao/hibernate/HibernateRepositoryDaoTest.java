@@ -109,35 +109,11 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
             assertEquals(LivingDocServerErrorKey.PROJECT_NOT_FOUND, e.getId());
         }
 
-        /* We Cant Create A New Repository If The Type Is Not Found */
-        try {
-            session.getTransaction().begin();
-            repo = Repository.newInstance("UID-CREATED");
-            repo.setProject(Project.newInstance("PROJECT-1"));
-            repo.setType(RepositoryType.newInstance("TYPE-NOT-FOUND"));
+    }
 
-            repo = repoDao.create(repo);
-            session.getTransaction().commit();
-            fail();
-        } catch (LivingDocServerException e) {
-            assertEquals(LivingDocServerErrorKey.REPOSITORY_TYPE_NOT_FOUND, e.getId());
-        }
 
-        /* We Can Create A New Repository Type */
-        RepositoryType type = RepositoryType.newInstance("TYPE-CREATED");
-        type.setClassName("REPO-CLASS");
-        type.setDocumentUrlFormat("DOC-FORMAT");
-        type.setTestUrlFormat("TEST-FORMAT");
-
-        session.getTransaction().begin();
-        type = repoDao.create(type);
-        session.getTransaction().commit();
-
-        assertNotNull(getById(RepositoryType.class, type.getId()));
-        assertEquals("TYPE-CREATED", type.getName());
-        assertEquals("REPO-CLASS", type.getClassName());
-        assertEquals("DOC-FORMAT", type.getDocumentUrlFormat());
-        assertEquals("TEST-FORMAT", type.getTestUrlFormat());
+    @Test
+    public void testUpdateRepository() throws LivingDocServerException {
 
         /* We Can Update A Repository */
         Repository repository = Repository.newInstance("UID-TO-UPDATE-2");
@@ -154,7 +130,7 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
         repoDao.update(repository);
         session.getTransaction().commit();
 
-        Repository loadedRepo = getById(Repository.class, - 20l);
+        Repository loadedRepo = getById(Repository.class, -20l);
         assertNotNull(loadedRepo);
         assertEquals("REPO-UPDATED", loadedRepo.getName());
         assertEquals("BASE-REPO-URL-2", loadedRepo.getBaseRepositoryUrl());
@@ -165,6 +141,73 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
         assertEquals(ContentType.TEST, loadedRepo.getContentType());
         assertEquals("PROJECT-2", loadedRepo.getProject().getName());
 
+    }
+
+    @Test
+    public void testCreateNewRepositoryTypeNotFound() throws LivingDocServerException {
+            /* We Can Create A New Repository */
+        Repository repo = Repository.newInstance("UID-CREATED");
+        repo.setProject(Project.newInstance("PROJECT-1"));
+        repo.setBaseRepositoryUrl("BASE-REPO-URL");
+        repo.setBaseTestUrl("TEST-URL");
+        repo.setBaseUrl("BASE-URL");
+        repo.setType(RepositoryType.newInstance("TYPE-1"));
+        repo.setContentType(ContentType.TEST);
+        repo.setName("REPO-CREATED");
+
+        session.getTransaction().begin();
+        repo = repoDao.create(repo);
+        session.getTransaction().commit();
+
+        assertNotNull(getById(Repository.class, repo.getId()));
+        assertEquals("REPO-CREATED", repo.getName());
+        assertEquals("UID-CREATED", repo.getUid());
+        assertEquals("BASE-REPO-URL", repo.getBaseRepositoryUrl());
+        assertEquals("TEST-URL", repo.getBaseTestUrl());
+        assertEquals("BASE-URL", repo.getBaseUrl());
+        assertEquals(ContentType.TEST, repo.getContentType());
+        assertEquals(RepositoryType.newInstance("TYPE-1"), repo.getType());
+        /* We Cant Create A New Repository If The Type Is Not Found */
+        try {
+            session.getTransaction().begin();
+            repo = Repository.newInstance("UID-CREATED");
+            repo.setProject(Project.newInstance("PROJECT-1"));
+            repo.setType(RepositoryType.newInstance("TYPE-NOT-FOUND"));
+
+            repo = repoDao.create(repo);
+            session.getTransaction().commit();
+            fail();
+        } catch (LivingDocServerException e) {
+            assertEquals(LivingDocServerErrorKey.REPOSITORY_TYPE_NOT_FOUND, e.getId());
+        }
+
+    }
+
+
+    @Test
+    public void testWeCanCreateANewRepositoryType() throws LivingDocServerException {
+
+         /* We Can Create A New Repository Type */
+        RepositoryType type = RepositoryType.newInstance("TYPE-CREATED");
+        type.setClassName("REPO-CLASS");
+        type.setDocumentUrlFormat("DOC-FORMAT");
+        type.setTestUrlFormat("TEST-FORMAT");
+
+        session.getTransaction().begin();
+        type = repoDao.create(type);
+        session.getTransaction().commit();
+
+        assertNotNull(getById(RepositoryType.class, type.getId()));
+        assertEquals("TYPE-CREATED", type.getName());
+        assertEquals("REPO-CLASS", type.getClassName());
+        assertEquals("DOC-FORMAT", type.getDocumentUrlFormat());
+        assertEquals("TEST-FORMAT", type.getTestUrlFormat());
+
+    }
+
+    @Test
+    public void testUpdateANoneExistingRepository() throws LivingDocServerException {
+
         /* We Cant Update A None Existing Repository */
         try {
             session.getTransaction().begin();
@@ -174,28 +217,15 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.REPOSITORY_NOT_FOUND, e.getId());
         }
+    }
 
-        /* We Cant Update A None Existing Project */
-        repository = Repository.newInstance("UID-2");
-        repository.setProject(Project.newInstance("PROJECT-NOT-FOUND"));
-        repository.setBaseRepositoryUrl("BASE-REPO-URL-2");
-        repository.setBaseTestUrl("TEST-URL-2");
-        repository.setBaseUrl("BASE-URL-2");
-        repository.setContentType(ContentType.TEST);
-        repository.setName("REPO-UPDATED");
 
-        try {
-            session.getTransaction().begin();
-            repoDao.update(repository);
-            session.getTransaction().commit();
-            fail();
-        } catch (LivingDocServerException e) {
-            assertEquals(LivingDocServerErrorKey.PROJECT_NOT_FOUND, e.getId());
-        }
+    @Test
+    public void testUpdateAnAssociatedRepositoryWithRequirementsOrSpecificationsToAnotherProject() throws LivingDocServerException {
 
         /* We Cant Update An Associated Repository With Requirements Or
          * Specifications To Another Project */
-        repository = Repository.newInstance("UID-1");
+        Repository repository = Repository.newInstance("UID-1");
         repository.setProject(Project.newInstance("PROJECT-2"));
         repository.setBaseRepositoryUrl("BASE-REPO-URL-2");
         repository.setBaseTestUrl("TEST-URL-2");
@@ -212,7 +242,32 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
             assertEquals(LivingDocServerErrorKey.REPOSITORY_DOC_ASSOCIATED, e.getId());
         }
 
-        /* We Cant Remove A Repository If Docs Are Associated */
+    }
+
+    @Test
+    public void testUpdateANoneExistingProject(){
+        /* We Cant Update A None Existing Project */
+        Repository repository = Repository.newInstance("UID-2");
+        repository.setProject(Project.newInstance("PROJECT-NOT-FOUND"));
+        repository.setBaseRepositoryUrl("BASE-REPO-URL-2");
+        repository.setBaseTestUrl("TEST-URL-2");
+        repository.setBaseUrl("BASE-URL-2");
+        repository.setContentType(ContentType.TEST);
+        repository.setName("REPO-UPDATED");
+
+        try {
+            session.getTransaction().begin();
+            repoDao.update(repository);
+            session.getTransaction().commit();
+            fail();
+        } catch (LivingDocServerException e) {
+            assertEquals(LivingDocServerErrorKey.PROJECT_NOT_FOUND, e.getId());
+        }
+    }
+
+    @Test
+    public void testRemoveRepositoryWithAsociatedTransaction(){
+         /* We Cant Remove A Repository If Docs Are Associated */
         try {
             session.getTransaction().begin();
             repoDao.remove("UID-1");
@@ -241,7 +296,7 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
     }
 
     @Test
-    public void testWeCanRemoveAnEmptyRepositor() throws LivingDocServerException {
+    public void testWeCanRemoveAnEmptyRepository() throws LivingDocServerException {
         session.getTransaction().begin();
         repoDao.remove("UID-TO-REMOVE");
         session.getTransaction().commit();
