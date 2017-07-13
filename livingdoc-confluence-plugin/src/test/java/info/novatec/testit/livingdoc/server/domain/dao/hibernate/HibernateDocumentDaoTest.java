@@ -60,16 +60,6 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         assertEquals("REQUIREMENT-CREATED", loadedReq.getName());
         assertEquals("UID-1", loadedReq.getRepository().getUid());
 
-        /* Creating NEW Requirement requires an Existing Repository */
-        try {
-            session.getTransaction().begin();
-            documentDao.createRequirement("REPOSITORY-NOT-FOUND", "REQUIREMENT-CREATED");
-            session.getTransaction().commit();
-            fail();
-        } catch (LivingDocServerException e) {
-            assertEquals(LivingDocServerErrorKey.REPOSITORY_NOT_FOUND, e.getId());
-        }
-
         /* We Can Force The Creation Of The Requirement If Not Found */
         session.getTransaction().begin();
         Requirement requirementToCreate = documentDao.getOrCreateRequirement("UID-1", "REQUIREMENT-NOT-FOUND");
@@ -88,6 +78,16 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeRequirement(requirement);
         session.getTransaction().commit();
         assertNull(getById(Requirement.class, -2));
+
+        /* Creating NEW Requirement requires an Existing Repository */
+        try {
+            session.getTransaction().begin();
+            documentDao.createRequirement("REPOSITORY-NOT-FOUND", "REQUIREMENT-CREATED");
+            session.getTransaction().commit();
+            fail();
+        } catch (LivingDocServerException e) {
+            assertEquals(LivingDocServerErrorKey.REPOSITORY_NOT_FOUND, e.getId());
+        }
     }
 
     @Test
@@ -115,17 +115,24 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
             assertEquals(LivingDocServerErrorKey.REPOSITORY_NOT_FOUND, e.getId());
         }
 
-        /* We Can Force The Creation Of The Specification If Not Found */
+    }
+
+    @Test
+    public void testWeCanForceTheCreationOfTheSpecificationIfNotFound() throws LivingDocServerException {
+         /* We Can Force The Creation Of The Specification If Not Found */
         session.getTransaction().begin();
-        Specification specificationToCreate = documentDao.getOrCreateSpecification("SUT-1", "UID-1",
-            "SPECIFICATION-NOT-FOUND");
+        Specification specificationToCreate =
+            documentDao.getOrCreateSpecification("SUT-1", "UID-1", "SPECIFICATION-NOT-FOUND");
         session.getTransaction().commit();
+
+        Specification loadedSpec = getById(Specification.class, specificationToCreate.getId());
+        assertNotNull(loadedSpec);
 
         loadedSpec = getById(Specification.class, specificationToCreate.getId());
         assertEquals("SPECIFICATION-NOT-FOUND", loadedSpec.getName());
         assertEquals("UID-1", loadedSpec.getRepository().getUid());
 
-        specification = documentDao.getOrCreateSpecification("SUT-1", "UID-1", "SPECIFICATION-NOT-FOUND");
+        Specification specification = documentDao.getOrCreateSpecification("SUT-1", "UID-1", "SPECIFICATION-NOT-FOUND");
         assertEquals(specificationToCreate, specification);
 
         /* Creating A Specification Without Specifying A Sut Will Associate The
@@ -147,11 +154,14 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.PROJECT_DEFAULT_SUT_NOT_FOUND, e.getId());
         }
+    }
 
-        /* We Can Associate A Given Sut For A New Specification */
+    @Test
+    public void testWeCanAssociateAGivenSutForANewSpecification() throws LivingDocServerException {
+         /* We Can Associate A Given Sut For A New Specification */
         session.getTransaction().begin();
-        spec = documentDao.createSpecification("SUT-1", "UID-1", "SPECIFICATION-NEW-2");
-        sut = spec.getTargetedSystemUnderTests().iterator().next();
+        Specification spec = documentDao.createSpecification("SUT-1", "UID-1", "SPECIFICATION-NEW-2");
+        SystemUnderTest sut = spec.getTargetedSystemUnderTests().iterator().next();
         session.getTransaction().commit();
         assertEquals("SUT-1", sut.getName());
 
@@ -166,6 +176,23 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
             assertEquals(LivingDocServerErrorKey.SUT_NOT_FOUND, e.getId());
         }
 
+    }
+
+    @Test
+    public void testWeCanRetrieveTheSortedSpecificationListForAGivenSutAndRepository() {
+        Project project = Project.newInstance("PROJECT-1");
+        SystemUnderTest sut = SystemUnderTest.newInstance("SUT-1");
+        sut.setProject(project);
+        Repository repository = Repository.newInstance("UID-1");
+
+        List<Specification> specifications = documentDao.getSpecifications(sut, repository);
+
+        assertEquals(3, specifications.size());
+        assertTrue(isAlphabeticallyOrdered(specifications));
+    }
+
+    @Test
+    public void testWeCanUpdateASpecification() throws LivingDocServerException {
         /* We Can Update A Specification */
         Specification oldSpec = Specification.newInstance("SPECIFICATION-TO-UPDATE");
         oldSpec.setRepository(Repository.newInstance("UID-1"));
@@ -176,7 +203,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.updateSpecification(oldSpec, updatedSpec);
         session.getTransaction().commit();
 
-        loadedSpec = getById(Specification.class, - 10l);
+        Specification loadedSpec = getById(Specification.class, -10L);
         assertEquals("SPECIFICATION-UPDATED", loadedSpec.getName());
         assertEquals("UID-1", loadedSpec.getRepository().getUid());
 
@@ -194,19 +221,6 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND, e.getId());
         }
-    }
-
-    @Test
-    public void testWeCanRetrieveTheSortedSpecificationListForAGivenSutAndRepository() {
-        Project project = Project.newInstance("PROJECT-1");
-        SystemUnderTest sut = SystemUnderTest.newInstance("SUT-1");
-        sut.setProject(project);
-        Repository repository = Repository.newInstance("UID-1");
-
-        List<Specification> specifications = documentDao.getSpecifications(sut, repository);
-
-        assertEquals(3, specifications.size());
-        assertTrue(isAlphabeticallyOrdered(specifications));
     }
 
     @Test
@@ -245,7 +259,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.addSystemUnderTest(systemUnderTest, spec);
         session.getTransaction().commit();
 
-        Specification loadedSpec = getById(Specification.class, -5l);
+        Specification loadedSpec = getById(Specification.class, -5L);
         assertTrue(containsSut(loadedSpec.getTargetedSystemUnderTests(), systemUnderTest.getName()));
 
         /* An Error Occures If We Try To Associate A Sut To A None Existing
@@ -263,12 +277,15 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND, e.getId());
         }
+    }
 
-        /* An Error Occures If We Try To Associate A None Existing Sut To A
+    @Test
+    public void testTryToAssociateANoneExistingSutToASpecification() {
+         /* An Error Occures If We Try To Associate A None Existing Sut To A
          * Specification */
-        systemUnderTest = SystemUnderTest.newInstance("SUT-NOT-FOUND");
+        SystemUnderTest systemUnderTest = SystemUnderTest.newInstance("SUT-NOT-FOUND");
         systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
-        spec = Specification.newInstance("SPECIFICATION-1");
+        Specification spec = Specification.newInstance("SPECIFICATION-1");
         spec.setRepository(Repository.newInstance("UID-1"));
 
         try {
@@ -279,23 +296,26 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.SUT_NOT_FOUND, e.getId());
         }
+    }
 
+    @Test
+    public void testWeCanDeassociateASutToASpecification() throws LivingDocServerException {
         /* We Can Deassociate A Sut To A Specification */
-        systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
+        SystemUnderTest systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
         systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
-        spec = Specification.newInstance("SPECIFICATION-TO-DEASSOCIATE");
+        Specification spec = Specification.newInstance("SPECIFICATION-TO-DEASSOCIATE");
         spec.setRepository(Repository.newInstance("UID-1"));
 
         session.getTransaction().begin();
         documentDao.removeSystemUnderTest(systemUnderTest, spec);
         session.getTransaction().commit();
 
-        loadedSpec = getById(Specification.class, -6l);
+        Specification loadedSpec = getById(Specification.class, -6L);
         loadedSpec.getTargetedSystemUnderTests().contains(systemUnderTest);
         assertFalse(containsSut(loadedSpec.getTargetedSystemUnderTests(), systemUnderTest.getName()));
 
-        /* An Error Occures If We Try To Deassociate A Sut To A None Existing
-         * Specification */
+            /* An Error Occures If We Try To Deassociate A Sut To A None Existing
+             * Specification */
         systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
         systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
         spec = Specification.newInstance("SPECIFICATION-NOT-FOUND");
@@ -309,12 +329,15 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.SPECIFICATION_NOT_FOUND, e.getId());
         }
+    }
 
-        /* An Error Occures If We Try To Deassociate A None Existing Sut To A
+    @Test
+    public void testTryToDeassociateANoneExistingSutToASpecification() {
+         /* An Error Occures If We Try To Deassociate A None Existing Sut To A
          * Specification */
-        systemUnderTest = SystemUnderTest.newInstance("SUT-NOT-FOUND");
+        SystemUnderTest systemUnderTest = SystemUnderTest.newInstance("SUT-NOT-FOUND");
         systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
-        spec = Specification.newInstance("SPECIFICATION-1");
+        Specification spec = Specification.newInstance("SPECIFICATION-1");
         spec.setRepository(Repository.newInstance("UID-1"));
 
         try {
@@ -325,12 +348,15 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.SUT_NOT_FOUND, e.getId());
         }
+    }
 
+    @Test
+    public void testDeassociateASutFromASpecification() {
         /* An Error Occures If We Try To Deassociate A Sut From A Specification
          * If Both Are In The Same Reference */
-        systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
+        SystemUnderTest systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
         systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
-        spec = Specification.newInstance("SPECIFICATION-REFERENCED");
+        Specification spec = Specification.newInstance("SPECIFICATION-REFERENCED");
         spec.setRepository(Repository.newInstance("UID-1"));
 
         try {
@@ -396,7 +422,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeReference(reference);
         session.getTransaction().commit();
 
-        loadedRef = getById(Reference.class, -1l);
+        loadedRef = getById(Reference.class, -1L);
         assertNull(loadedRef);
 
         /* Updating A Reference Will Delete The Current One And Create A New One */
@@ -416,9 +442,9 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.updateReference(oldReference, newReference);
         session.getTransaction().commit();
 
-        assertNull(getById(Reference.class, -1l));
+        assertNull(getById(Reference.class, -1L));
         assertNotNull(documentDao.get(newReference));
-        assertNotNull(getById(Requirement.class, -1l));
+        assertNotNull(getById(Requirement.class, -1L));
 
         /* Removing The Only Reference Of A Requirement Will Remove The
          * Requirement Also */
@@ -435,7 +461,7 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         documentDao.removeReference(reference);
         session.getTransaction().commit();
 
-        assertNull(getById(Requirement.class, - 10l));
+        assertNull(getById(Requirement.class, -10L));
     }
 
     @Test
@@ -461,6 +487,20 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         } catch (LivingDocServerException e) {
             assertEquals(LivingDocServerErrorKey.REFERENCE_CREATE_ALREADYEXIST, e.getId());
         }
+
+    }
+
+    @Test
+    public void testSectionCreation() throws LivingDocServerException {
+
+        SystemUnderTest systemUnderTest = SystemUnderTest.newInstance("SUT-REFERENCED");
+        systemUnderTest.setProject(Project.newInstance("PROJECT-1"));
+        Specification spec = Specification.newInstance("SPECIFICATION-REFERENCED");
+        spec.setRepository(Repository.newInstance("UID-1"));
+        Requirement requirement = Requirement.newInstance("REQUIREMENT-REFERENCED");
+        requirement.setRepository(Repository.newInstance("UID-1"));
+        Reference reference = Reference.newInstance(requirement, spec, systemUnderTest);
+        reference.setSections("SECTION-1");
 
         /* If the section value not the same, creation should be ok */
         session.getTransaction().begin();
@@ -498,15 +538,15 @@ public class HibernateDocumentDaoTest extends AbstractDBUnitHibernateMemoryTest 
         assertNotNull(spec);
         assertEquals("SPECIFICATION-1", spec.getName());
 
-        spec = documentDao.getSpecificationById( - 999L);
+        spec = documentDao.getSpecificationById(-999L);
         assertNull(spec);
     }
 
     private boolean isAlphabeticallyOrdered(List<Specification> specifications) {
         Object[] specs = specifications.toArray();
-        for (int i = 0; i < specs.length; i ++ ) {
-            for (int j = i; j < specs.length; j ++ ) {
-                if ( ( ( Specification ) specs[j] ).getName().compareTo( ( ( Specification ) specs[i] ).getName()) < 0) {
+        for (int i = 0; i < specs.length; i++) {
+            for (int j = i; j < specs.length; j++) {
+                if ((( Specification ) specs[j]).getName().compareTo((( Specification ) specs[i]).getName()) < 0) {
                     return false;
                 }
             }
