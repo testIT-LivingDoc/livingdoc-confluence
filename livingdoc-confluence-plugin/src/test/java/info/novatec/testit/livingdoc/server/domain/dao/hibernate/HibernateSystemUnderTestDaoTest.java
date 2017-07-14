@@ -26,7 +26,6 @@ import info.novatec.testit.livingdoc.server.domain.dao.SystemUnderTestDao;
 public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemoryTest {
     private static final String DATAS = "/dbunit/datas/HibernateSystemUnderTestDaoTest.xml";
     private SystemUnderTestDao systemUnderTestDao;
-    private ClasspathSet sutPaths;
     private ClasspathSet fixturePaths;
     private ClasspathSet runnerClassPaths;
     private ClasspathSet updatedClassPaths;
@@ -37,9 +36,6 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         super.setUp();
         insertIntoDatabase(DATAS);
         systemUnderTestDao = new HibernateSystemUnderTestDao(this);
-        sutPaths = new ClasspathSet();
-        sutPaths.add("SUT-PATH-1");
-        sutPaths.add("SUT-PATH-2");
         fixturePaths = new ClasspathSet();
         fixturePaths.add("FIXTURE-PATH-1");
         fixturePaths.add("FIXTURE-PATH-2");
@@ -82,7 +78,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.update("RUNNER-TO-UPDATE", runner);
         session.getTransaction().commit();
 
-        Runner runnerDB = getById(Runner.class, - 10l);
+        Runner runnerDB = getById(Runner.class, -10L);
         assertEquals("SNAME_UPDATED", runnerDB.getServerName());
         assertEquals("SPORTUP", runnerDB.getServerPort());
         assertTrue(updatedClassPaths.containsAll(runnerDB.getClasspaths()));
@@ -150,7 +146,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.removeRunner("RUNNER-TO-REMOVE");
         session.getTransaction().commit();
 
-        assertNull(getById(Runner.class, - 20l));
+        assertNull(getById(Runner.class, -20L));
     }
 
     @Test
@@ -262,7 +258,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.update("SUT-TO-UPDATE", newSut);
         session.getTransaction().commit();
 
-        SystemUnderTest loadedSut = getById(SystemUnderTest.class, - 10l);
+        SystemUnderTest loadedSut = getById(SystemUnderTest.class, -10L);
         assertEquals("PROJECT-1", loadedSut.getProject().getName());
         assertEquals("RUNNER-2", loadedSut.getRunner().getName());
         assertEquals("SUT-UPDATED", loadedSut.getName());
@@ -307,7 +303,7 @@ public class HibernateSystemUnderTestDaoTest extends AbstractDBUnitHibernateMemo
         systemUnderTestDao.remove("PROJECT-1", "SUT-TO-REMOVE");
         session.getTransaction().commit();
 
-        assertNull(getById(SystemUnderTest.class, - 20l));
+        assertNull(getById(SystemUnderTest.class, -20L));
     }
 
     @Test
