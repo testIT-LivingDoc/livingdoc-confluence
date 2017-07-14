@@ -19,8 +19,6 @@ package info.novatec.testit.livingdoc.confluence;
 import java.io.File;
 import java.util.Properties;
 
-import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
-import info.novatec.testit.livingdoc.server.*;
 import org.hibernate.dialect.HSQLDialect;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -42,6 +40,11 @@ import com.atlassian.event.api.EventListener;
 import com.atlassian.event.api.EventPublisher;
 import com.google.gson.Gson;
 
+import info.novatec.testit.livingdoc.confluence.utils.osgi.BundleFileLocatorHelper;
+import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
+import info.novatec.testit.livingdoc.server.LivingDocServer;
+import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.configuration.DefaultServerProperties;
 import info.novatec.testit.livingdoc.server.database.SessionService;
 import info.novatec.testit.livingdoc.server.database.hibernate.BootstrapData;
@@ -60,7 +63,7 @@ import info.novatec.testit.livingdoc.server.rpc.xmlrpc.LivingDocXmlRpcServer;
 /**
  * This component is responsible to bootstrap the LivingDoc database
  * and manage it's state and configuration data.
- * 
+ * <p>
  * Note: The {@link BandanaManager} has some problems storing classes
  * (ClassCastException during a re installation), so you should store objects
  * only as string (e.g. using Gson).
@@ -92,8 +95,8 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     private Gson gson;
 
     public LivingDocServerConfigurationActivator(BootstrapManager bootstrapManager, BandanaManager bandanaManager,
-                                                 LivingDocPersistenceService livingDocPersistenceService, LivingDocXmlRpcServer xmlRpcServer,
-                                                 EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
+        LivingDocPersistenceService livingDocPersistenceService, LivingDocXmlRpcServer xmlRpcServer,
+        EventPublisher eventPublisher, BundleFileLocatorHelper bundleFileLocatorHelper) {
         this.bootstrapManager = bootstrapManager;
         this.bandanaManager = bandanaManager;
         this.livingDocPersistenceService = livingDocPersistenceService;
@@ -115,8 +118,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     /**
      * Note that you should check if the configuration setup was already
      * completed before using this method.
-     * 
-     * @throws LivingDocServerException
      */
     public void setupDatabaseFromStoredConfiguration() throws LivingDocServerException {
         LivingDocServerConfiguration storedConfiguration = getConfiguration();
@@ -125,8 +126,9 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     private void setupDatabaseFromConfiguration(LivingDocServerConfiguration customConfiguration)
         throws LivingDocServerException {
-        if ( ! isPluginEnabled)
+        if (!isPluginEnabled) {
             return;
+        }
 
         try {
             isDatabaseInitialized = false;
@@ -136,7 +138,7 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
             Properties properties = customConfiguration.getProperties();
 
             properties.setProperty("confluence.home", getConfluenceHome());
-            if(properties.getProperty("executionTimeout")==null){
+            if (properties.getProperty("executionTimeout") == null) {
                 properties.setProperty("executionTimeout", EXECUTION_TIMEOUT_DEFAULT);
             }
 
@@ -203,11 +205,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         isDatabaseInitialized = false;
     }
 
-    /**
-     * Returns the stored configuration or creates a new one if none exists.
-     * 
-     * @return
-     */
     public LivingDocServerConfiguration getConfiguration() {
         if (configuration == null) {
             configuration = getConfigurationFromBandana();
@@ -218,7 +215,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     public void storeConfiguration(LivingDocServerConfiguration configuration) {
         // @todo : sanity check over the previous configuration
-
         storeConfigurationToBandana(configuration);
     }
 
@@ -239,16 +235,15 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     private <T> T getValue(Class<T> classKey) {
         String storedJsonObject = ( String ) bandanaManager.getValue(bandanaContext, classKey.getName());
-        T castedObject = gson.fromJson(storedJsonObject, classKey);
-        return castedObject;
+        return gson.fromJson(storedJsonObject, classKey);
     }
 
-    private void setValue(Class< ? > classKey, Object value) {
+    private void setValue(Class<?> classKey, Object value) {
         String jsobObject = gson.toJson(value);
         bandanaManager.setValue(bandanaContext, classKey.getName(), jsobObject);
     }
 
-    private void removeValue(Class< ? > classKey) {
+    private void removeValue(Class<?> classKey) {
         bandanaManager.removeValue(bandanaContext, classKey.getName());
     }
 
@@ -265,15 +260,9 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
         Properties properties = new DefaultServerProperties();
 
-        properties.put("hibernate.c3p0.acquire_increment", "1");
-        properties.put("hibernate.c3p0.idle_test_period", "100");
-        properties.put("hibernate.c3p0.max_size", "15");
-        properties.put("hibernate.c3p0.max_statements", "0");
-        properties.put("hibernate.c3p0.min_size", "0");
-        properties.put("hibernate.c3p0.timeout", "30");
         properties.remove("hibernate.connection.datasource"); // direct jdbc
-        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + getConfluenceHome() + "/database/ldsdb");
+        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:file:" + getConfluenceHome() + "/database/ldsdb");
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
         properties.put("hibernate.dialect", HSQLDialect.class.getName());
@@ -292,9 +281,8 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
         properties.put("config$hibernate.connection.datasource", jndiUrl);
         properties.put("hibernate.dialect", hibernateDialect);
         properties.put("config$hibernate.dialect", hibernateDialect);
-        // properties.put("hibernate.show_sql", "true");
 
-        if (hibernateDialect.indexOf("Oracle") != - 1) {
+        if (hibernateDialect.contains("Oracle")) {
             // The Oracle JDBC driver doesn't like prepared statement caching
             // very much.
             properties.put("hibernate.statement_cache.size", "0");
@@ -310,7 +298,6 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
     }
 
     private String getConfluenceHome() {
-        // https://developer.atlassian.com/pages/viewpage.action?pageId=2031761#HowdoIensuremyadd-onworksproperlyinacluster?-ClusterHomeDirectoryHomeDirectory
         return bootstrapManager.getSharedHome().getAbsolutePath();
     }
 
@@ -345,8 +332,9 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
     private void enableLivingDocPlugin() throws LivingDocServerException {
         isPluginEnabled = true;
-        if (getConfiguration().isSetupComplete())
+        if (getConfiguration().isSetupComplete()) {
             setupDatabaseFromStoredConfiguration();
+        }
     }
 
     private void disableLivingDocPlugin() {
