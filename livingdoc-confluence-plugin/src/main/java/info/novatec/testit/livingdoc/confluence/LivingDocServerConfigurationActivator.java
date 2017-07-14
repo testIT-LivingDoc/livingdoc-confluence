@@ -265,17 +265,18 @@ public class LivingDocServerConfigurationActivator implements InitializingBean, 
 
         Properties properties = new DefaultServerProperties();
 
-        properties.put("hibernate.c3p0.acquire_increment", "1");
+        /*properties.put("hibernate.c3p0.acquire_increment", "1");
         properties.put("hibernate.c3p0.idle_test_period", "100");
         properties.put("hibernate.c3p0.max_size", "15");
         properties.put("hibernate.c3p0.max_statements", "0");
         properties.put("hibernate.c3p0.min_size", "0");
-        properties.put("hibernate.c3p0.timeout", "30");
+        properties.put("hibernate.c3p0.timeout", "30");*/
         properties.remove("hibernate.connection.datasource"); // direct jdbc
-        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + getConfluenceHome() + "/database/ldsdb");
+        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:file:" + getConfluenceHome() + "/database/ldsdb");
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
+        properties.put("hibernate.show_sql","true");
         properties.put("hibernate.dialect", HSQLDialect.class.getName());
 
         configuration.setProperties(properties);
