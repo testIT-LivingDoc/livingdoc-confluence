@@ -18,28 +18,19 @@
  */
 package info.novatec.testit.livingdoc.confluence.macros;
 
-import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.rest.RestMethodName;
-import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
-import info.novatec.testit.livingdoc.util.CollectionUtil;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Vector;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.xmlrpc.XmlRpcClient;
-import org.apache.xmlrpc.XmlRpcException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.macro.Macro;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.v2.macros.BaseHttpRetrievalMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
+import info.novatec.testit.livingdoc.server.domain.Repository;
+import info.novatec.testit.livingdoc.server.rest.LivingDocRestClient;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 
 public abstract class AbstractHttpRetrievalMacro extends BaseHttpRetrievalMacro implements Macro {
@@ -62,7 +53,7 @@ public abstract class AbstractHttpRetrievalMacro extends BaseHttpRetrievalMacro 
 
     @Override
     public String execute(Map<String, String> parameters, String body, ConversionContext context)
-        throws MacroExecutionException {
+            throws MacroExecutionException {
         try {
             return execute(parameters, body, context.getPageContext());
         } catch (MacroException e) {
@@ -74,31 +65,20 @@ public abstract class AbstractHttpRetrievalMacro extends BaseHttpRetrievalMacro 
 
     @SuppressWarnings("rawtypes")
     protected String getParameter(Map parameters, String name) {
-        String parameter = ( String ) parameters.get(name);
+        String parameter = (String) parameters.get(name);
         return StringUtils.isBlank(parameter) ? null : parameter.trim();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected Repository getRepository(String url, String handler, String jiraUid) throws LivingDocServerException {
-        Vector<Object> response;
+        Repository response;
 
-        try {
-            Repository repository = Repository.newInstance(jiraUid);
-            Vector params = CollectionUtil.toVector(repository.marshallize());
-            XmlRpcClient xmlrpc = new XmlRpcClient(url + "/rpc/xmlrpc");
-            String cmdLine =
-                new StringBuffer(handler).append(".").append(RestMethodName.getRegisteredRepository).toString();
-            response = ( Vector<Object> ) xmlrpc.execute(cmdLine, params);
-        } catch (XmlRpcException e) {
-            log.error(e.getMessage(), e);
-            throw new LivingDocServerException(LivingDocServerErrorKey.CALL_FAILED, e.getMessage());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            throw new LivingDocServerException(LivingDocServerErrorKey.CONFIGURATION_ERROR, e.getMessage());
-        }
+        Repository repository = Repository.newInstance(jiraUid);
+        LivingDocRestClient client = new LivingDocRestClient(url, repository.getUsername(), repository.getPassword());
 
-        XmlRpcDataMarshaller.checkForErrors(response);
+        response = client.getRegisteredRepository(repository, jiraUid); // TODO Identifier ???
 
-        return XmlRpcDataMarshaller.toRepository(response);
+        return response;
+
     }
 }
