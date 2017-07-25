@@ -142,7 +142,7 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
     private String runSpecification(final String body) throws IOException, LivingDocServerException {
         RunSpecificationRequest runSpecificationRequest = deserializeRequestBody(body, RunSpecificationRequest.class);
         Execution execution = livingDocServerService.runSpecification(runSpecificationRequest.systemUnderTest, runSpecificationRequest.specification, runSpecificationRequest.implementedVersion, runSpecificationRequest.locale);
-        return serializeResponseBody(new RunSpecificationResponse(execution));
+        return serializeResponseBody(new RunSpecificationResponse(execution.marshallizeRest()));
     }
 
     private void removeReference(final String body) throws IOException, LivingDocServerException {

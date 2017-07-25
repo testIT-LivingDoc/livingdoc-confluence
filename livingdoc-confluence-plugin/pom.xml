@@ -44,14 +44,6 @@
 					<artifactId>xml-apis</artifactId>
 				</exclusion>
 				<exclusion>
-					<artifactId>xmlrpc-client</artifactId>
-					<groupId>org.apache.xmlrpc</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>xmlrpc</artifactId>
-					<groupId>xmlrpc</groupId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.codehaus.jackson</groupId>
 					<artifactId>jackson-core-asl</artifactId>
 				</exclusion>
