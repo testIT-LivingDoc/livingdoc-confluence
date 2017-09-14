@@ -33,9 +33,9 @@
 	<properties>
 		<project.java.version>1.8</project.java.version>
 		<project.root>.</project.root>
-		<confluence.version>6.3.0</confluence.version>
-		<confluence.data.version>6.3.0</confluence.data.version>
-		<amps.version>6.2.6</amps.version>
+		<confluence.version>6.4.0</confluence.version>
+		<confluence.data.version>6.4.0</confluence.data.version>
+		<amps.version>6.3.3</amps.version>
 		<testit.livingdoc.core.version>${project.version}</testit.livingdoc.core.version>
 	</properties>
 
