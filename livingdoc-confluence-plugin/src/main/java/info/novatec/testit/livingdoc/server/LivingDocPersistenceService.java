@@ -19,7 +19,6 @@ package info.novatec.testit.livingdoc.server;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -1001,7 +1000,7 @@ public class LivingDocPersistenceService {
 
             log.debug("Retrieved specification Hierarchy: " + repo.getName());
             DocumentNode hierarchy =
-                XmlRpcDataMarshaller.toDocumentNode(new Vector<Object>(docRepo.listDocumentsInHierarchy()));
+                XmlRpcDataMarshaller.toDocumentNode(new ArrayList<>(docRepo.listDocumentsInHierarchy()));
             setExecutionEnable(hierarchy, repo.getUid(), systemUnderTestDb);
             return hierarchy;
         } catch (Exception ex) {
