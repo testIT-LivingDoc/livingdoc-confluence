@@ -132,7 +132,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.2.2.Final</version>
+			<version>5.2.8.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -382,6 +382,7 @@
 			<plugin>
 				<groupId>com.atlassian.lesscss</groupId>
 				<artifactId>lesscss-maven-plugin</artifactId>
+				<version>3.3.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jasig.maven</groupId>
