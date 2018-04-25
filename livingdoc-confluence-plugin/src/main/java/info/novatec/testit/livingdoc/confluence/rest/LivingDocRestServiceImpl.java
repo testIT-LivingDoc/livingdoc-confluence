@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 
 @Path("/command")
@@ -105,19 +105,19 @@ public class LivingDocRestServiceImpl implements LivingDocRestService {
 
     private String getRenderedSpecification(final String body) throws IOException {
         GetRenderedSpecificationRequest getRenderedSpecificationRequest = deserializeRequestBody(body, GetRenderedSpecificationRequest.class);
-        String specification = livingDocRestHelper.getRenderedSpecification(username, password, new Vector<>(getRenderedSpecificationRequest.arguments));
+        String specification = livingDocRestHelper.getRenderedSpecification(username, password, new ArrayList<>(getRenderedSpecificationRequest.arguments));
         return serializeResponseBody(new GetRenderedSpecificationResponse(specification));
     }
 
     private String listDocumentsInHierarchy(final String body) throws IOException {
         ListDocumentsInHierarchyRequest listDocumentsInHierarchyRequest = deserializeRequestBody(body, ListDocumentsInHierarchyRequest.class);
-        List<?> specifications = livingDocRestHelper.getSpecificationHierarchy(username, password, new Vector<>(listDocumentsInHierarchyRequest.arguments));
+        List<?> specifications = livingDocRestHelper.getSpecificationHierarchy(username, password, new ArrayList<>(listDocumentsInHierarchyRequest.arguments));
         return serializeResponseBody(new ListDocumentsInHierarchyResponse(specifications));
     }
 
     private String setSpecificationAsImplemented(final String body) throws IOException {
         SetSpecificationAsImplementedRequest setSpecificationAsImplementedRequest = deserializeRequestBody(body, SetSpecificationAsImplementedRequest.class);
-        String message = livingDocRestHelper.setSpecificationAsImplemented(username, password, new Vector<>(setSpecificationAsImplementedRequest.arguments));
+        String message = livingDocRestHelper.setSpecificationAsImplemented(username, password, new ArrayList<>(setSpecificationAsImplementedRequest.arguments));
         return serializeResponseBody(new SetSpecificationAsImplementedResponse(message));
     }
 

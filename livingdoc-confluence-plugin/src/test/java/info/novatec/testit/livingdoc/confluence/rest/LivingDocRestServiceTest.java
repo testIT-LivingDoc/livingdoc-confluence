@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Vector;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -121,7 +120,7 @@ public class LivingDocRestServiceTest {
     @Test
     public void listDocumentsInHierarchy() throws IOException, LivingDocServerException {
 
-        Vector specifications = new Vector<>();
+        List specifications = new ArrayList<>();
         specifications.add(specification);
         when(clientHelperService.getSpecificationHierarchy(anyString(), anyString(), anyVararg())).thenReturn(specifications);
 
