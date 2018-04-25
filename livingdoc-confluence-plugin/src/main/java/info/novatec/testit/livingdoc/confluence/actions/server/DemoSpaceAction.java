@@ -28,6 +28,7 @@ import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.demo.phonebook.PhoneBookSystemUnderDevelopment;
+import info.novatec.testit.livingdoc.confluence.utils.RepositoryUtils;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.*;
@@ -160,7 +161,8 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
         demoRepository.setBaseRepositoryUrl(getDemoSpaceUrl());
 
-        String baseTestUrl = String.format("%s?#%s", getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
+        String baseTestUrl = RepositoryUtils.baseTestUrl(getLivingDocConfluenceManager().getBaseUrl(),
+                demoSpace.getKey());
         demoRepository.setBaseTestUrl(baseTestUrl);
 
         return getPersistenceService().registerRepository(demoRepository);
@@ -327,7 +329,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     public String getDemoSpaceUrl() {
         Space demoSpace = getDemoSpace();
 
-        return String.format("%s/display/%s", getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
+        return RepositoryUtils.repositoryBaseUrl(getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
     }
 
     /**
