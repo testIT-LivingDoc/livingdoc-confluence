@@ -60,37 +60,37 @@
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-api</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-common</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-core</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-decoder-api</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-decoder-v2</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>
 		<groupId>com.atlassian.extras</groupId>
 		<artifactId>atlassian-extras-legacy</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 		<license>unknown license. Please check the license by yourself.</license>
 	</artifact>
 	<artifact>

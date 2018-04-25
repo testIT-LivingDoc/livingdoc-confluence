@@ -3,6 +3,7 @@ package info.novatec.testit.livingdoc.confluence.actions.server;
 import com.atlassian.confluence.pages.Page;
 import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
+import info.novatec.testit.livingdoc.confluence.utils.RepositoryUtils;
 import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.*;
@@ -120,8 +121,8 @@ public class RegistrationAction extends LivingDocServerAction {
             registeredRepository.setName(repositoryName);
             registeredRepository.setContentType(ContentType.TEST);
             registeredRepository.setBaseUrl(getBaseUrl());
-            registeredRepository.setBaseRepositoryUrl(repositoryBaseUrl());
-            registeredRepository.setBaseTestUrl(newTestUrl());
+            registeredRepository.setBaseRepositoryUrl(RepositoryUtils.repositoryBaseUrl(getBaseUrl(), getSpaceKey()));
+            registeredRepository.setBaseTestUrl(RepositoryUtils.baseTestUrl(getBaseUrl(), getSpaceKey()));
             registeredRepository.setUsername(getUsername());
             registeredRepository.setPassword(getPwd());
 
@@ -154,8 +155,8 @@ public class RegistrationAction extends LivingDocServerAction {
             newRepository.setName(repositoryName);
             newRepository.setContentType(ContentType.TEST);
             newRepository.setBaseUrl(getBaseUrl());
-            newRepository.setBaseRepositoryUrl(repositoryBaseUrl());
-            newRepository.setBaseTestUrl(newTestUrl());
+            newRepository.setBaseRepositoryUrl(RepositoryUtils.repositoryBaseUrl(getBaseUrl(), getSpaceKey()));
+            newRepository.setBaseTestUrl(RepositoryUtils.baseTestUrl(getBaseUrl(), getSpaceKey()));
             newRepository.setUsername(getUsername());
             newRepository.setPassword(getPwd());
 
@@ -609,19 +610,6 @@ public class RegistrationAction extends LivingDocServerAction {
             return baseUrl;
         baseUrl = getLivingDocConfluenceManager().getBaseUrl();
         return baseUrl;
-    }
-
-    private String repositoryBaseUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getBaseUrl()).append("/display/").append(getSpaceKey());
-        return sb.toString();
-    }
-
-    private String newTestUrl() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getBaseUrl());
-        sb.append("?#").append(getSpaceKey());
-        return sb.toString();
     }
 
     private void checkRepositoryBaseUrl() throws LivingDocServerException {

@@ -160,7 +160,8 @@ public class DemoSpaceAction extends LivingDocServerAction {
 
         demoRepository.setBaseRepositoryUrl(getDemoSpaceUrl());
 
-        String baseTestUrl = String.format("%s?#%s", getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
+        String baseTestUrl = RepositoryUtils.baseTestUrl(getLivingDocConfluenceManager().getBaseUrl(),
+                demoSpace.getKey());
         demoRepository.setBaseTestUrl(baseTestUrl);
 
         return getPersistenceService().registerRepository(demoRepository);
@@ -327,7 +328,7 @@ public class DemoSpaceAction extends LivingDocServerAction {
     public String getDemoSpaceUrl() {
         Space demoSpace = getDemoSpace();
 
-        return String.format("%s/display/%s", getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
+        return RepositoryUtils.repositoryBaseUrl(getLivingDocConfluenceManager().getBaseUrl(), demoSpace.getKey());
     }
 
     /**
