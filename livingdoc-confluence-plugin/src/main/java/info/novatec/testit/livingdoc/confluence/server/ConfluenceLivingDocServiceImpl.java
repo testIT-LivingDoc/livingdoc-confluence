@@ -28,7 +28,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 
 public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
@@ -50,7 +49,7 @@ public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
     }
 
     @Override
-    public String getRenderedSpecification(final String username, final String password, final Vector<?> args) {
+    public String getRenderedSpecification(final String username, final String password, final ArrayList<?> args) {
         if (args.size() < 3) {
             return error("Parameters Missing, expecting:[SpaceKey, PageTitle] !");
         }
@@ -87,7 +86,7 @@ public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
     }
 
     @Override
-    public Vector<?> getSpecificationHierarchy(final String username, final String password, final Vector<?> args) {
+    public List<?> getSpecificationHierarchy(final String username, final String password, final ArrayList<?> args) {
         if (args.isEmpty()) {
             return new DocumentNode("Parameters Missing, expecting:[SpaceKey] !").marshallize();
         }
@@ -115,7 +114,7 @@ public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
     }
 
     @Override
-    public String setSpecificationAsImplemented(final String username, final String password, final Vector<?> args) {
+    public String setSpecificationAsImplemented(final String username, final String password, final ArrayList<?> args) {
         if (args.size() < 3) {
             return error("Parameters Missing, expecting:[SpaceKey, PageTitle] !");
         }
@@ -143,7 +142,7 @@ public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
     }
 
     @Override
-    public String saveExecutionResult(final String username, final String password, final Vector<Object> args) {
+    public String saveExecutionResult(final String username, final String password, final ArrayList<Object> args) {
         if (args.size() < 4) {
             return error("Parameters Missing, expecting:[SpaceKey, PageTitle, SUT, Xml Report Data] !");
         }
@@ -258,7 +257,7 @@ public class ConfluenceLivingDocServiceImpl implements LivingDocRestHelper {
         }
     }
 
-    private Vector<?> getSpecificationHierarchy(Space space) {
+    private List<?> getSpecificationHierarchy(Space space) {
         DocumentNode hierarchy = new DocumentNode(space.getName());
         List<Page> pages = ldUtil.getPageManager().getPages(space, true);
         for (Page page : pages) {
