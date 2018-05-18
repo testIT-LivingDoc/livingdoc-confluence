@@ -31,13 +31,17 @@ testIT LivingDoc is licensed under [GNU General Public License, Version 3.0](htt
 - Daniel Bednorz
 - Daniel Ryan Degutis
 - Dorian Lichtner
+- Fabiola Saucedo
 - Florian Sauter
 - Heiko Bonhorst
 - Ina de Marco
 - Jaspreet Kaur
+- José Antonio Delgado
 - Johannes Schlaudraff
+- Laura Muñoz
 - Luca Haensch
 - Matthias Mueller
+- Miguel Ruiz
 - Moritz Platzer
 - Moritz Staebler
 - Pascal Moll
