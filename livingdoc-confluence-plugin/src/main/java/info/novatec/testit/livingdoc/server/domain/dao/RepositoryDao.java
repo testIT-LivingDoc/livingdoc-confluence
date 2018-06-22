@@ -1,11 +1,11 @@
 package info.novatec.testit.livingdoc.server.domain.dao;
 
-import java.util.List;
-
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.RepositoryType;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
+
+import java.util.List;
 
 
 public interface RepositoryDao {
@@ -14,7 +14,7 @@ public interface RepositoryDao {
      * thrown.
      * </p>
      * 
-     * @param repositoryUid
+     * @param repositoryUID
      * @return the Repository.
      */
     Repository getByUID(String repositoryUID);
@@ -122,7 +122,7 @@ public interface RepositoryDao {
      * Create a new Repository Type
      * </p>
      * 
-     * @param Repository type
+     * @param repositoryType type
      * @return the Requirement type created
      */
     RepositoryType create(RepositoryType repositoryType);
