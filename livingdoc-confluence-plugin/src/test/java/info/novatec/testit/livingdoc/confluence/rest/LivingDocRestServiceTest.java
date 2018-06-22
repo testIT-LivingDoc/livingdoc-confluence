@@ -561,8 +561,6 @@ public class LivingDocRestServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void dispatchCommandException() throws Exception {
-
         ldRestService.dispatchCommand(credentials, "getMethodNotHandled", null);
     }
-
 }

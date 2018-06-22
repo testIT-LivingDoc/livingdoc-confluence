@@ -14,7 +14,7 @@ public class RepositoryUtilsTest {
 
     @Test
     public void testBaseTestUrl() {
-        final String baseTestUrl = "/rpc/xmlrpc?handler=livingdoc1#LIVINGDOC";
+        final String baseTestUrl = "?#LIVINGDOC";
         assertEquals(baseTestUrl, RepositoryUtils.baseTestUrl("", "LIVINGDOC"));
     }
 }

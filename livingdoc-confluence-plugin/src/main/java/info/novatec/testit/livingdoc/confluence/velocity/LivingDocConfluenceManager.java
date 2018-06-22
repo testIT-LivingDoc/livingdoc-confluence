@@ -1,32 +1,9 @@
 package info.novatec.testit.livingdoc.confluence.velocity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.servlet.http.HttpServletRequest;
-
-import info.novatec.testit.livingdoc.server.*;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atlassian.config.bootstrap.AtlassianBootstrapManager;
 import com.atlassian.config.util.BootstrapUtils;
 import com.atlassian.confluence.content.render.xhtml.Renderer;
-import com.atlassian.confluence.core.ConfluenceActionSupport;
-import com.atlassian.confluence.core.ContentEntityObject;
-import com.atlassian.confluence.core.ContentPermissionManager;
-import com.atlassian.confluence.core.ContentPropertyManager;
-import com.atlassian.confluence.core.DateFormatter;
-import com.atlassian.confluence.core.FormatSettingsManager;
+import com.atlassian.confluence.core.*;
 import com.atlassian.confluence.labels.LabelManager;
 import com.atlassian.confluence.languages.LocaleManager;
 import com.atlassian.confluence.pages.AbstractPage;
@@ -48,19 +25,18 @@ import com.atlassian.renderer.WikiStyleRenderer;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.user.User;
 import com.opensymphony.webwork.ServletActionContext;
-
-import info.novatec.testit.livingdoc.confluence.LivingDocServerConfiguration;
-import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
 import info.novatec.testit.livingdoc.confluence.actions.SpecificationAction;
 import info.novatec.testit.livingdoc.report.XmlReport;
-import info.novatec.testit.livingdoc.server.LivingDocPersistenceService;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Reference;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.Specification;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
+import info.novatec.testit.livingdoc.server.*;
+import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.util.I18nUtil;
 import info.novatec.testit.livingdoc.util.Period;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 public class LivingDocConfluenceManager {
