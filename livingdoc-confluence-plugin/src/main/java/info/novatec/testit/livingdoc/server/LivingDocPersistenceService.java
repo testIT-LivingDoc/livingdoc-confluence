@@ -1286,7 +1286,7 @@ public class LivingDocPersistenceService {
         Repository repoDb = repositoryDao.getByUID(uid);
 
         if (repoDb == null) {
-            throw new LivingDocServerException(REPOSITORY_NOT_FOUND, "Repository not registered");
+            throw handleException(REPOSITORY_NOT_FOUND, new Exception("Repository not registered"));
         }
 
         return repoDb;
