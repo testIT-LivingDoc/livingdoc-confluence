@@ -37,6 +37,7 @@ testIT LivingDoc is licensed under [GNU General Public License, Version 3.0](htt
 - Ina de Marco
 - Jaspreet Kaur
 - José Antonio Delgado
+- Jose Ignacio Recuerda
 - Johannes Schlaudraff
 - Laura Muñoz
 - Luca Haensch
