@@ -1,6 +1,17 @@
 package info.novatec.testit.livingdoc.confluence.actions.server;
 
-import static info.novatec.testit.livingdoc.confluence.utils.HtmlUtils.stringSetToTextArea;
+import com.atlassian.confluence.pages.Page;
+import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
+import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
+import info.novatec.testit.livingdoc.confluence.utils.RepositoryUtils;
+import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
+import info.novatec.testit.livingdoc.server.LivingDocServerException;
+import info.novatec.testit.livingdoc.server.domain.*;
+import info.novatec.testit.livingdoc.server.domain.component.ContentType;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,24 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.atlassian.confluence.pages.Page;
-import info.novatec.testit.livingdoc.confluence.LivingDocServerConfigurationActivator;
-import info.novatec.testit.livingdoc.confluence.macros.LivingDocPage;
-import info.novatec.testit.livingdoc.confluence.utils.RepositoryUtils;
-import info.novatec.testit.livingdoc.confluence.velocity.LivingDocConfluenceManager;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import info.novatec.testit.livingdoc.server.LivingDocServerException;
-import info.novatec.testit.livingdoc.server.domain.ClasspathSet;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.RepositoryType;
-import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
-import info.novatec.testit.livingdoc.server.domain.component.ContentType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static info.novatec.testit.livingdoc.confluence.utils.HtmlUtils.stringSetToTextArea;
 
 
 /**
@@ -96,7 +90,7 @@ public class RegistrationAction extends LivingDocServerAction {
                 if (StringUtils.isEmpty(username))
                     username = getRegisteredRepository().getUsername();
                 if (StringUtils.isEmpty(pwd))
-                    pwd = getRegisteredRepository().getPassword();
+                    pwd = getRegisteredRepository().getDecryptedPassword();
 
                 checkRepositoryBaseUrl();
                 doGetSystemUnderTests();

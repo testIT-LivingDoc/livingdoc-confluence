@@ -1,14 +1,5 @@
 package info.novatec.testit.livingdoc.server.domain.dao.hibernate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.database.hibernate.hsqldb.AbstractDBUnitHibernateMemoryTest;
@@ -17,6 +8,11 @@ import info.novatec.testit.livingdoc.server.domain.Repository;
 import info.novatec.testit.livingdoc.server.domain.RepositoryType;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 
 public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTest {
@@ -136,7 +132,8 @@ public class HibernateRepositoryDaoTest extends AbstractDBUnitHibernateMemoryTes
         assertEquals("TEST-URL-2", loadedRepo.getBaseTestUrl());
         assertEquals("BASE-URL-2", loadedRepo.getBaseUrl());
         assertEquals("LD", loadedRepo.getUsername());
-        assertEquals("LD", loadedRepo.getPassword());
+        assertNotEquals("LD", loadedRepo.getPassword());
+        assertEquals("LD", loadedRepo.getDecryptedPassword());
         assertEquals(ContentType.TEST, loadedRepo.getContentType());
         assertEquals("PROJECT-2", loadedRepo.getProject().getName());
 

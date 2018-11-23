@@ -16,33 +16,11 @@
  * http://www.fsf.org. */
 package info.novatec.testit.livingdoc.server;
 
-import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
-
-import info.novatec.testit.livingdoc.server.database.hibernate.DefaultRunners;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import info.novatec.testit.livingdoc.report.XmlReport;
 import info.novatec.testit.livingdoc.repository.DocumentRepository;
 import info.novatec.testit.livingdoc.server.database.SessionService;
-import info.novatec.testit.livingdoc.server.domain.DocumentNode;
-import info.novatec.testit.livingdoc.server.domain.Execution;
-import info.novatec.testit.livingdoc.server.domain.Project;
-import info.novatec.testit.livingdoc.server.domain.Reference;
-import info.novatec.testit.livingdoc.server.domain.ReferenceNode;
-import info.novatec.testit.livingdoc.server.domain.Repository;
-import info.novatec.testit.livingdoc.server.domain.Requirement;
-import info.novatec.testit.livingdoc.server.domain.RequirementSummary;
-import info.novatec.testit.livingdoc.server.domain.Runner;
-import info.novatec.testit.livingdoc.server.domain.Specification;
-import info.novatec.testit.livingdoc.server.domain.SystemUnderTest;
+import info.novatec.testit.livingdoc.server.database.hibernate.DefaultRunners;
+import info.novatec.testit.livingdoc.server.domain.*;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import info.novatec.testit.livingdoc.server.domain.dao.DocumentDao;
 import info.novatec.testit.livingdoc.server.domain.dao.ProjectDao;
@@ -50,6 +28,16 @@ import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
 import info.novatec.testit.livingdoc.server.domain.dao.SystemUnderTestDao;
 import info.novatec.testit.livingdoc.server.rpc.xmlrpc.XmlRpcDataMarshaller;
 import info.novatec.testit.livingdoc.server.transfer.SpecificationLocation;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
+
+import static info.novatec.testit.livingdoc.server.LivingDocServerErrorKey.*;
 
 
 public class LivingDocPersistenceService {
@@ -1009,7 +997,7 @@ public class LivingDocPersistenceService {
                 specificationLocation.setRepositoryTypeClassName(specification.getRepository().getType().getClassName());
                 specificationLocation.setBaseTestUrl(specification.getRepository().getBaseTestUrl());
                 specificationLocation.setUsername(StringUtils.stripToEmpty(specification.getRepository().getUsername()));
-                specificationLocation.setPassword(StringUtils.stripToEmpty(specification.getRepository().getPassword()));
+                specificationLocation.setPassword(StringUtils.stripToEmpty(specification.getRepository().getDecryptedPassword()));
                 specificationLocation.setSpecificationName(specification.getName());
                 locations.add(specificationLocation);
             }
@@ -1033,7 +1021,7 @@ public class LivingDocPersistenceService {
             sessionService.startSession();
 
             String user = repo.getUsername();
-            String pwd = repo.getPassword();
+            String pwd = repo.getDecryptedPassword();
 
             repo = loadRepository(repo.getUid());
 

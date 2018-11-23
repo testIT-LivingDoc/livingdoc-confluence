@@ -1,12 +1,5 @@
 package info.novatec.testit.livingdoc.server.domain.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Property;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.SimpleExpression;
-
 import info.novatec.testit.livingdoc.server.LivingDocServerErrorKey;
 import info.novatec.testit.livingdoc.server.LivingDocServerException;
 import info.novatec.testit.livingdoc.server.database.SessionService;
@@ -16,6 +9,12 @@ import info.novatec.testit.livingdoc.server.domain.RepositoryType;
 import info.novatec.testit.livingdoc.server.domain.component.ContentType;
 import info.novatec.testit.livingdoc.server.domain.dao.ProjectDao;
 import info.novatec.testit.livingdoc.server.domain.dao.RepositoryDao;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
+
+import java.util.List;
 
 
 public class HibernateRepositoryDao implements RepositoryDao {
@@ -183,7 +182,7 @@ public class HibernateRepositoryDao implements RepositoryDao {
         repositoryToUpdate.setContentType(repository.getContentType());
         repositoryToUpdate.setName(repository.getName());
         repositoryToUpdate.setUsername(repository.getUsername());
-        repositoryToUpdate.setPassword(repository.getPassword());
+        repositoryToUpdate.setPassword(repository.getDecryptedPassword());
 
         sessionService.getSession().update(repositoryToUpdate);
     }
